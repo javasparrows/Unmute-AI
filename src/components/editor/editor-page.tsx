@@ -3,7 +3,8 @@
 import { useState, useRef, useCallback } from "react";
 import type { LanguageCode, TranslationSource } from "@/types";
 import { useTranslation } from "@/hooks/use-translation";
-import { useParagraphSync } from "@/hooks/use-paragraph-sync";
+import { useSentenceSync } from "@/hooks/use-sentence-sync";
+import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { historyStore } from "@/lib/history-store";
 import { EditorPanel } from "./editor-panel";
@@ -30,8 +31,6 @@ export function EditorPage() {
 
   // Loop prevention: tracks which panel initiated the translation
   const translationSourceRef = useRef<TranslationSource>(null);
-  const leftComposingRef = useRef(false);
-  const rightComposingRef = useRef(false);
 
   const {
     isTranslating,
@@ -43,10 +42,18 @@ export function EditorPage() {
   } = useTranslation();
 
   const {
-    activeParagraphIndex,
+    activeSentenceIndex,
     activePanel,
-    handleCursorChange,
-  } = useParagraphSync();
+    setSentence,
+    clearHighlight,
+  } = useSentenceSync();
+
+  const {
+    leftRef: leftScrollRef,
+    rightRef: rightScrollRef,
+    handleLeftScroll,
+    handleRightScroll,
+  } = useScrollSync();
 
   // Apply streamed translation to the correct panel
   const prevTranslatedRef = useRef("");
@@ -77,19 +84,23 @@ export function EditorPage() {
     [leftLang, rightLang, journal, translate],
   );
 
-  const handleLeftCursorChange = useCallback(
-    (cursorPosition: number) => {
-      handleCursorChange(leftText, cursorPosition, "left");
+  const handleLeftSentence = useCallback(
+    (index: number) => {
+      setSentence(index, "left");
     },
-    [leftText, handleCursorChange],
+    [setSentence],
   );
 
-  const handleRightCursorChange = useCallback(
-    (cursorPosition: number) => {
-      handleCursorChange(rightText, cursorPosition, "right");
+  const handleRightSentence = useCallback(
+    (index: number) => {
+      setSentence(index, "right");
     },
-    [rightText, handleCursorChange],
+    [setSentence],
   );
+
+  const handleBlur = useCallback(() => {
+    clearHighlight();
+  }, [clearHighlight]);
 
   // Auto-detect language on paste
   const handlePaste = useCallback(
@@ -159,6 +170,27 @@ export function EditorPage() {
     setTranslatedText("");
   }, [cancelTranslation, setTranslatedText]);
 
+  // Scroll sync: attach listeners via callback refs
+  const setLeftEditorRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      leftScrollRef.current = node;
+      if (node) {
+        node.addEventListener("scroll", handleLeftScroll, { passive: true });
+      }
+    },
+    [leftScrollRef, handleLeftScroll],
+  );
+
+  const setRightEditorRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      rightScrollRef.current = node;
+      if (node) {
+        node.addEventListener("scroll", handleRightScroll, { passive: true });
+      }
+    },
+    [rightScrollRef, handleRightScroll],
+  );
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -223,25 +255,25 @@ export function EditorPage() {
       <div className="flex flex-1 min-h-0">
         <EditorPanel
           label="原文"
-          value={leftText}
-          onChange={handleLeftChange}
-          onCursorChange={handleLeftCursorChange}
+          content={leftText}
+          onTextChange={handleLeftChange}
+          onSentenceChange={handleLeftSentence}
+          onBlur={handleBlur}
           onPaste={handlePaste}
-          activeParagraphIndex={activePanel === "left" ? activeParagraphIndex : activePanel === "right" ? activeParagraphIndex : null}
-          showHighlight={activeParagraphIndex !== null}
+          activeSentenceIndex={activeSentenceIndex}
           placeholder="ここにテキストを入力またはペースト..."
-          isComposingRef={leftComposingRef}
+          containerRef={setLeftEditorRef}
         />
         <Separator orientation="vertical" />
         <EditorPanel
           label="翻訳"
-          value={rightText}
-          onChange={handleRightChange}
-          onCursorChange={handleRightCursorChange}
-          activeParagraphIndex={activePanel === "right" ? activeParagraphIndex : activePanel === "left" ? activeParagraphIndex : null}
-          showHighlight={activeParagraphIndex !== null}
+          content={rightText}
+          onTextChange={handleRightChange}
+          onSentenceChange={handleRightSentence}
+          onBlur={handleBlur}
+          activeSentenceIndex={activeSentenceIndex}
           placeholder="翻訳がここに表示されます..."
-          isComposingRef={rightComposingRef}
+          containerRef={setRightEditorRef}
         />
       </div>
     </div>
