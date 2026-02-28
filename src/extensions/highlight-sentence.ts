@@ -52,7 +52,18 @@ function getSentenceRanges(doc: ProseMirrorNode): SentenceRange[] {
 export function getSentenceIndexAtPosition(
   doc: ProseMirrorNode,
   pos: number,
+  externalRanges?: SentenceRange[] | null,
 ): number {
+  if (externalRanges && externalRanges.length > 0) {
+    // External ranges are char-offset based; convert to PM positions (+1)
+    for (let i = externalRanges.length - 1; i >= 0; i--) {
+      if (pos >= externalRanges[i].from + 1) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
   const ranges = getSentenceRanges(doc);
   for (let i = ranges.length - 1; i >= 0; i--) {
     if (pos >= ranges[i].from) {
@@ -153,7 +164,12 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
 
             if (indexMeta !== undefined) {
               if (indexMeta === null || indexMeta < 0) {
-                return emptyState;
+                // Clear highlight but preserve externalRanges
+                return {
+                  index: null,
+                  externalRanges: nextRanges,
+                  decorations: DecorationSet.empty,
+                };
               }
               nextIndex = indexMeta;
               changed = true;

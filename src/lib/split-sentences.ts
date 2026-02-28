@@ -56,6 +56,24 @@ export function joinSentences(sentences: string[]): string {
 }
 
 /**
+ * Compute char-offset ranges for non-separator tokens.
+ * Used for sentence highlighting in editors.
+ */
+export function computeSentenceRanges(
+  tokens: string[],
+): { from: number; to: number }[] {
+  const ranges: { from: number; to: number }[] = [];
+  let offset = 0;
+  for (const token of tokens) {
+    if (!isSeparator(token)) {
+      ranges.push({ from: offset, to: offset + token.length });
+    }
+    offset += token.length;
+  }
+  return ranges;
+}
+
+/**
  * Compare two sentence lists and return indices of changed sentences.
  * Only compares non-separator tokens.
  */
@@ -68,11 +86,9 @@ export function detectChangedSentences(
   const prevSentences = prev.filter((s) => !isSeparator(s));
   const currSentences = curr.filter((s) => !isSeparator(s));
 
-  const maxLen = Math.max(prevSentences.length, currSentences.length);
-
-  for (let i = 0; i < maxLen; i++) {
+  for (let i = 0; i < currSentences.length; i++) {
     const p = prevSentences[i] ?? "";
-    const c = currSentences[i] ?? "";
+    const c = currSentences[i];
     if (p !== c) {
       changed.push(i);
     }
