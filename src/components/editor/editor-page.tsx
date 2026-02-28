@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import type { LanguageCode, TranslationSource, TranslationProvider } from "@/types";
 import { useSentenceTranslation } from "@/hooks/use-sentence-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useCostTracking } from "@/hooks/use-cost-tracking";
+import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { historyStore } from "@/lib/history-store";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
@@ -26,8 +27,8 @@ import {
 } from "@/components/ui/tooltip";
 
 export function EditorPage() {
-  const [leftText, setLeftText] = useState("");
-  const [rightText, setRightText] = useState("");
+  const [leftText, setLeftText] = useLocalStorage("editor-left-text", "");
+  const [rightText, setRightText] = useLocalStorage("editor-right-text", "");
   const [leftLang, setLeftLang] = useLocalStorage<LanguageCode>("left-lang", "ja");
   const [rightLang, setRightLang] = useLocalStorage<LanguageCode>("right-lang", "en");
   const [journal, setJournal] = useLocalStorage("journal", "general");
@@ -50,9 +51,26 @@ export function EditorPage() {
     cancelTranslation,
     translatedText,
     setTranslatedText,
-    translatedSentenceRanges,
+    translatedSentenceRanges: hookTranslatedRanges,
     error,
   } = useSentenceTranslation({ onUsage: addUsage });
+
+  // Compute sentence ranges directly from current text (always available, even after reload)
+  const sourceSentenceRanges = useMemo(
+    () => computeSentenceRanges(splitSentences(leftText)),
+    [leftText],
+  );
+  // Fallback: re-parse translated text (used after reload when hook ranges are empty)
+  const fallbackTranslatedRanges = useMemo(
+    () => computeSentenceRanges(splitSentences(rightText)),
+    [rightText],
+  );
+  // Prefer hook's token-based ranges (preserves 1:1 source-translation mapping)
+  // Fall back to re-parsed ranges only after page reload
+  const translatedSentenceRanges =
+    hookTranslatedRanges.length > 0
+      ? hookTranslatedRanges
+      : fallbackTranslatedRanges;
 
   const {
     activeSentenceIndex,
@@ -284,6 +302,7 @@ export function EditorPage() {
           onBlur={handleBlur}
           onPaste={handlePaste}
           activeSentenceIndex={activeSentenceIndex}
+          sentenceRanges={sourceSentenceRanges}
           placeholder="ここにテキストを入力またはペースト..."
           containerRef={setLeftEditorRef}
         />

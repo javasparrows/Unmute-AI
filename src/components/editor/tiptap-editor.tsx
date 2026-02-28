@@ -75,7 +75,14 @@ export function TipTapEditor({
     onSelectionUpdate({ editor }) {
       if (isSyncingContentRef.current) return;
       const { from } = editor.state.selection;
-      const index = getSentenceIndexAtPosition(editor.state.doc, from);
+      const pluginState = highlightPluginKey.getState(editor.state) as
+        | { externalRanges: SentenceRange[] | null }
+        | undefined;
+      const index = getSentenceIndexAtPosition(
+        editor.state.doc,
+        from,
+        pluginState?.externalRanges,
+      );
       onSentenceChange(index);
     },
     onBlur() {
