@@ -23,7 +23,7 @@ export function TranslationStatus({ isTranslating, error }: TranslationStatusPro
         "flex items-center gap-2 text-sm px-3 py-1.5 rounded-md transition-all duration-300",
         isTranslating
           ? "text-primary bg-primary/10"
-          : "text-muted-foreground bg-transparent",
+          : "opacity-70 bg-transparent",
       )}
     >
       {isTranslating && (
