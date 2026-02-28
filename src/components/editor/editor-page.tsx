@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useCallback, useMemo } from "react";
-import type { LanguageCode, TranslationSource, TranslationProvider } from "@/types";
-import { useSentenceTranslation } from "@/hooks/use-sentence-translation";
+import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
+import type { LanguageCode, TranslationProvider } from "@/types";
+import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -37,44 +38,41 @@ export function EditorPage() {
     "deepl",
   );
 
-  // Loop prevention: tracks which panel initiated the translation
-  const translationSourceRef = useRef<TranslationSource>(null);
-  // Track latest left text for re-translation after language detection
+  // Track latest text values for sync callbacks
   const leftTextRef = useRef(leftText);
   leftTextRef.current = leftText;
+  const rightTextRef = useRef(rightText);
+  rightTextRef.current = rightText;
 
   const { costs, addUsage } = useCostTracking();
 
   const {
-    isTranslating,
-    translate,
-    cancelTranslation,
-    translatedText,
-    setTranslatedText,
-    translatedSentenceRanges: hookTranslatedRanges,
+    isSyncing,
     error,
-  } = useSentenceTranslation({ onUsage: addUsage });
+    syncLeftToRight,
+    syncRightToLeft,
+    initSnapshots,
+  } = useSyncTranslation({ onUsage: addUsage });
 
-  // Compute sentence ranges directly from current text (always available, even after reload)
+  // Track translated sentence ranges from last sync
+  const translatedRangesRef = useRef<{ from: number; to: number }[]>([]);
+
+  // Compute sentence ranges directly from current text
   const sourceSentenceRanges = useMemo(
     () => computeSentenceRanges(splitSentences(leftText)),
     [leftText],
   );
-  // Fallback: re-parse translated text (used after reload when hook ranges are empty)
   const fallbackTranslatedRanges = useMemo(
     () => computeSentenceRanges(splitSentences(rightText)),
     [rightText],
   );
-  // Prefer hook's token-based ranges (preserves 1:1 source-translation mapping)
-  // Fall back to re-parsed ranges only after page reload
   const translatedSentenceRanges =
-    hookTranslatedRanges.length > 0
-      ? hookTranslatedRanges
+    translatedRangesRef.current.length > 0
+      ? translatedRangesRef.current
       : fallbackTranslatedRanges;
 
   const {
     activeSentenceIndex,
-    activePanel,
     setSentence,
     clearHighlight,
   } = useSentenceSync();
@@ -86,34 +84,51 @@ export function EditorPage() {
     handleRightScroll,
   } = useScrollSync();
 
-  // Apply streamed translation to the correct panel
-  const prevTranslatedRef = useRef("");
-  if (translatedText !== prevTranslatedRef.current) {
-    prevTranslatedRef.current = translatedText;
-    if (translationSourceRef.current === "left") {
-      setRightText(translatedText);
-    } else if (translationSourceRef.current === "right") {
-      setLeftText(translatedText);
-    }
-  }
-
+  // Text change handlers — save only, no translation
   const handleLeftChange = useCallback(
     (value: string) => {
       setLeftText(value);
-      translationSourceRef.current = "left";
-      translate(value, leftLang, rightLang, journal, provider);
     },
-    [leftLang, rightLang, journal, provider, translate],
+    [],
   );
 
   const handleRightChange = useCallback(
     (value: string) => {
       setRightText(value);
-      translationSourceRef.current = "right";
-      translate(value, rightLang, leftLang, journal, provider);
     },
-    [leftLang, rightLang, journal, provider, translate],
+    [],
   );
+
+  // Sync handlers
+  const handleSyncLeftToRight = useCallback(async () => {
+    const result = await syncLeftToRight(
+      leftTextRef.current,
+      rightTextRef.current,
+      leftLang,
+      rightLang,
+      journal,
+      provider,
+    );
+    if (result) {
+      setRightText(result.text);
+      translatedRangesRef.current = result.sentenceRanges;
+    }
+  }, [leftLang, rightLang, journal, provider, syncLeftToRight]);
+
+  const handleSyncRightToLeft = useCallback(async () => {
+    const result = await syncRightToLeft(
+      leftTextRef.current,
+      rightTextRef.current,
+      leftLang,
+      rightLang,
+      journal,
+      provider,
+    );
+    if (result) {
+      setLeftText(result.text);
+      translatedRangesRef.current = result.sentenceRanges;
+    }
+  }, [leftLang, rightLang, journal, provider, syncRightToLeft]);
 
   const handleLeftSentence = useCallback(
     (index: number) => {
@@ -146,23 +161,16 @@ export function EditorPage() {
 
         // If detected language differs from left panel, swap
         if (language !== leftLang) {
-          const newTargetLang = language === rightLang ? leftLang : rightLang;
           setLeftLang(language);
           if (language === rightLang) {
             setRightLang(leftLang);
           }
-          // Re-trigger translation with correct language params.
-          // The debounced translate from handleLeftChange used stale langs,
-          // so we cancel it and call again with the detected languages.
-          cancelTranslation();
-          translationSourceRef.current = "left";
-          translate(leftTextRef.current, language, newTargetLang, journal, provider);
         }
       } catch {
         // Silently fail — language detection is optional
       }
     },
-    [leftLang, rightLang, setLeftLang, setRightLang, cancelTranslation, translate, journal, provider],
+    [leftLang, rightLang, setLeftLang, setRightLang],
   );
 
   const handleSaveHistory = useCallback(() => {
@@ -178,15 +186,14 @@ export function EditorPage() {
 
   const handleRestoreHistory = useCallback(
     (entry: { sourceText: string; translatedText: string; sourceLang: LanguageCode; targetLang: LanguageCode; journal?: string }) => {
-      cancelTranslation();
-      translationSourceRef.current = null;
       setLeftText(entry.sourceText);
       setRightText(entry.translatedText);
       setLeftLang(entry.sourceLang);
       setRightLang(entry.targetLang);
       if (entry.journal) setJournal(entry.journal);
+      initSnapshots(entry.sourceText, entry.translatedText);
     },
-    [cancelTranslation, setLeftLang, setRightLang, setJournal],
+    [setLeftLang, setRightLang, setJournal, initSnapshots],
   );
 
   const handleSwapLanguages = useCallback(() => {
@@ -196,16 +203,15 @@ export function EditorPage() {
     setRightLang(tmpLang);
     setLeftText(rightText);
     setRightText(tmpText);
-    translationSourceRef.current = null;
-  }, [leftLang, rightLang, leftText, rightText, setLeftLang, setRightLang]);
+    initSnapshots(rightText, tmpText);
+  }, [leftLang, rightLang, leftText, rightText, setLeftLang, setRightLang, initSnapshots]);
 
   const handleClear = useCallback(() => {
-    cancelTranslation();
-    translationSourceRef.current = null;
     setLeftText("");
     setRightText("");
-    setTranslatedText("");
-  }, [cancelTranslation, setTranslatedText]);
+    translatedRangesRef.current = [];
+    initSnapshots("", "");
+  }, [initSnapshots]);
 
   // Scroll sync: attach listeners via callback refs
   const setLeftEditorRef = useCallback(
@@ -236,7 +242,7 @@ export function EditorPage() {
           <h1 className="text-lg font-semibold tracking-tight">
             Translation Editor
           </h1>
-          <TranslationStatus isTranslating={isTranslating} error={error} />
+          <TranslationStatus isTranslating={isSyncing} error={error} />
           <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
           <CostDisplay costs={costs} />
         </div>
@@ -292,7 +298,7 @@ export function EditorPage() {
         </Tooltip>
       </div>
 
-      {/* Editor panels */}
+      {/* Editor panels with sync buttons */}
       <div className="flex flex-1 min-h-0">
         <EditorPanel
           label="原文"
@@ -306,7 +312,47 @@ export function EditorPage() {
           placeholder="ここにテキストを入力またはペースト..."
           containerRef={setLeftEditorRef}
         />
-        <Separator orientation="vertical" />
+
+        {/* Sync buttons column */}
+        <div className="flex flex-col items-center justify-center gap-3 px-2 bg-muted/30 border-x">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleSyncLeftToRight}
+                disabled={isSyncing || !leftText.trim()}
+                className="h-10 w-10 rounded-full"
+              >
+                {isSyncing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right">原文の変更を翻訳に反映</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleSyncRightToLeft}
+                disabled={isSyncing || !rightText.trim()}
+                className="h-10 w-10 rounded-full"
+              >
+                {isSyncing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ArrowLeft className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">翻訳の変更を原文に反映</TooltipContent>
+          </Tooltip>
+        </div>
+
         <EditorPanel
           label="翻訳"
           content={rightText}
