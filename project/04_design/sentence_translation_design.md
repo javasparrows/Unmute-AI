@@ -266,3 +266,51 @@ OPENAI_API_KEY=...
 
 未設定のプロバイダはファクトリで `Error: DEEPL_API_KEY is not configured` を返す。
 UI側では設定済みのプロバイダのみ選択可能にする。
+
+---
+
+## 7. コスト追跡
+
+### localStorage スキーマ
+
+```typescript
+// key: "translation-costs"
+interface TranslationCosts {
+  deepl: { characters: number; lastReset: string };   // lastReset: "YYYY-MM"
+  gemini: { inputTokens: number; outputTokens: number; lastReset: string };
+}
+```
+
+### 月次リセット
+
+- `getSnapshot()` 時に `lastReset` の月と現在月 (`YYYY-MM`) を比較
+- 異なる場合、該当プロバイダのカウンターを `0` にリセットし `lastReset` を更新
+- DeepL と Gemini は独立してリセット判定
+
+### 料金計算
+
+| | DeepL Free | Gemini 2.5 Flash Lite |
+|---|---|---|
+| 課金単位 | 文字数 | トークン数 |
+| 無料枠 | 500,000文字/月 | なし (従量課金) |
+| Input料金 | 無料枠内: ¥0 | $0.075 / 1M tokens |
+| Output料金 | - | $0.30 / 1M tokens |
+| 表示 | プログレスバー (使用率%) | 推定コスト ($) |
+
+### API response `usage` フィールド
+
+```typescript
+// SentenceTranslationResponse に追加
+interface SentenceTranslationResponse {
+  translations: string[];
+  usage?: {
+    provider: "deepl" | "gemini";
+    characters?: number;      // DeepL: 課金文字数
+    inputTokens?: number;     // Gemini: 入力トークン数
+    outputTokens?: number;    // Gemini: 出力トークン数
+  };
+}
+```
+
+- DeepL: `billedCharacters = texts.reduce((sum, t) => sum + t.length, 0)`
+- Gemini: `result.usage.inputTokens` / `result.usage.outputTokens` (Vercel AI SDK)

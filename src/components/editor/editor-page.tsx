@@ -1,16 +1,19 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import type { LanguageCode, TranslationSource } from "@/types";
+import type { LanguageCode, TranslationSource, TranslationProvider } from "@/types";
 import { useSentenceTranslation } from "@/hooks/use-sentence-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { useCostTracking } from "@/hooks/use-cost-tracking";
 import { historyStore } from "@/lib/history-store";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
+import { CostDisplay } from "./cost-display";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
+import { ProviderSelector } from "../settings/provider-selector";
 import { SettingsPanel } from "../settings/settings-panel";
 import { HistoryPanel } from "../history/history-panel";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
@@ -28,12 +31,18 @@ export function EditorPage() {
   const [leftLang, setLeftLang] = useLocalStorage<LanguageCode>("left-lang", "ja");
   const [rightLang, setRightLang] = useLocalStorage<LanguageCode>("right-lang", "en");
   const [journal, setJournal] = useLocalStorage("journal", "general");
+  const [provider, setProvider] = useLocalStorage<TranslationProvider>(
+    "translation-provider",
+    "deepl",
+  );
 
   // Loop prevention: tracks which panel initiated the translation
   const translationSourceRef = useRef<TranslationSource>(null);
   // Track latest left text for re-translation after language detection
   const leftTextRef = useRef(leftText);
   leftTextRef.current = leftText;
+
+  const { costs, addUsage } = useCostTracking();
 
   const {
     isTranslating,
@@ -42,7 +51,7 @@ export function EditorPage() {
     translatedText,
     setTranslatedText,
     error,
-  } = useSentenceTranslation();
+  } = useSentenceTranslation({ onUsage: addUsage });
 
   const {
     activeSentenceIndex,
@@ -73,18 +82,18 @@ export function EditorPage() {
     (value: string) => {
       setLeftText(value);
       translationSourceRef.current = "left";
-      translate(value, leftLang, rightLang, journal);
+      translate(value, leftLang, rightLang, journal, provider);
     },
-    [leftLang, rightLang, journal, translate],
+    [leftLang, rightLang, journal, provider, translate],
   );
 
   const handleRightChange = useCallback(
     (value: string) => {
       setRightText(value);
       translationSourceRef.current = "right";
-      translate(value, rightLang, leftLang, journal);
+      translate(value, rightLang, leftLang, journal, provider);
     },
-    [leftLang, rightLang, journal, translate],
+    [leftLang, rightLang, journal, provider, translate],
   );
 
   const handleLeftSentence = useCallback(
@@ -128,13 +137,13 @@ export function EditorPage() {
           // so we cancel it and call again with the detected languages.
           cancelTranslation();
           translationSourceRef.current = "left";
-          translate(leftTextRef.current, language, newTargetLang, journal);
+          translate(leftTextRef.current, language, newTargetLang, journal, provider);
         }
       } catch {
         // Silently fail — language detection is optional
       }
     },
-    [leftLang, rightLang, setLeftLang, setRightLang, cancelTranslation, translate, journal],
+    [leftLang, rightLang, setLeftLang, setRightLang, cancelTranslation, translate, journal, provider],
   );
 
   const handleSaveHistory = useCallback(() => {
@@ -209,6 +218,8 @@ export function EditorPage() {
             Translation Editor
           </h1>
           <TranslationStatus isTranslating={isTranslating} error={error} />
+          <Separator orientation="vertical" className="h-6" />
+          <CostDisplay costs={costs} />
         </div>
         <div className="flex items-center gap-2">
           <StructureCheckDialog
@@ -244,6 +255,8 @@ export function EditorPage() {
         <LanguageSelector value={rightLang} onChange={setRightLang} />
         <Separator orientation="vertical" className="h-6" />
         <JournalSelector value={journal} onChange={setJournal} />
+        <Separator orientation="vertical" className="h-6" />
+        <ProviderSelector value={provider} onChange={setProvider} />
         <Separator orientation="vertical" className="h-6" />
         <Tooltip>
           <TooltipTrigger asChild>
