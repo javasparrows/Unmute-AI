@@ -5,31 +5,67 @@
 ```
 [ブラウザ (Next.js Client)]
   ├── 左パネル (原文エディタ)
+  ├── 同期ボタン列 (→ / ←)
   ├── 右パネル (翻訳エディタ)
   ├── 言語セレクター
   ├── ジャーナルセレクター
+  ├── プロバイダセレクター
   ├── 履歴パネル
   └── 構成チェックダイアログ
         │
         ▼
 [Next.js API Routes (Server)]
-  ├── POST /api/translate        — ストリーミング翻訳
-  ├── POST /api/detect-language  — 言語自動検出
-  └── POST /api/check-structure  — 論理構成チェック
+  ├── POST /api/translate-sentence  — 文単位翻訳 (最大4並列で呼び出し)
+  ├── POST /api/align-sentences     — 文アラインメント (翻訳後に実行)
+  ├── POST /api/translate           — ストリーミング翻訳 (レガシー)
+  ├── POST /api/detect-language     — 言語自動検出
+  └── POST /api/check-structure     — 論理構成チェック
         │
         ▼
-[Gemini API (gemini-2.5-flash-lite)]
+[翻訳プロバイダ]
+  ├── DeepL API (translate/v2)      — /api/translate-sentence から呼び出し
+  └── Gemini API (gemini-2.5-flash-lite) — /api/translate-sentence, /api/align-sentences から呼び出し
 ```
 
-## 双方向翻訳フロー
+## 双方向手動同期翻訳フロー
 
-1. ユーザーが一方のパネルを編集
-2. デバウンス（800ms）後にAPIリクエスト発火
-3. ストリーミングレスポンスで反対側のパネルをリアルタイム更新
-4. `translationSource` フラグで無限ループを防止
+```
+┌─────────────┐ ┌──┐ ┌─────────────┐
+│             │ │→ │ │             │
+│   原文      │ │  │ │   翻訳      │
+│             │ │← │ │             │
+└─────────────┘ └──┘ └─────────────┘
+```
+
+1. ユーザーが一方のパネルを編集（テキスト保存のみ、翻訳は発生しない）
+2. ユーザーが同期ボタン（→ or ←）を押下
+3. 前回同期時のスナップショットと現在のテキストを比較し、変更された文のみを検出
+4. 変更文をチャンク分割し、最大4並列で `/api/translate-sentence` に送信
+5. `Promise.all` + `flatMap` で翻訳結果を元の順序に復元
+6. もう一方のパネルに翻訳結果を反映（未変更文はそのまま保持）
+7. `/api/align-sentences` でソース↔ターゲットのN:M文アラインメントを取得
+8. アラインメントマップを保存 → ハイライト同期に使用
+9. スナップショットを更新
+
+## ハイライト同期（アラインメントベース）
+
+- 翻訳後にLLMが文の意味的対応を分析し、N:Mアラインメントを構築
+- 一方のパネルでクリック → マップで逆引き → 対応文を他方でハイライト
+- 翻訳で文が統合・分割されても正しく動作
+
+```
+例: 原文3文 → 翻訳2文 (S1+S2 が T1 に統合)
+
+alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
+
+翻訳パネルで T1 クリック → targetToSource(1) = [1,2]
+→ 原文パネルで S1 と S2 を同時ハイライト ✓
+```
 
 ## データフロー
 
 - テキスト状態: クライアント側のReact state
-- 言語設定・ジャーナル設定: localStorage に永続化
+- アラインメントマップ: クライアント側の React ref（同期のたびに更新）
+- 言語設定・ジャーナル設定・プロバイダ設定: localStorage に永続化
 - 修正履歴: localStorage に保存（最大50件、2MB制限）
+- コスト追跡: localStorage に永続化（月次自動リセット）
