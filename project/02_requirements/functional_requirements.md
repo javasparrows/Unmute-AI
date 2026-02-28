@@ -42,3 +42,32 @@
 
 - 段落ごとの論理構成をチェックできる機能
 - Gemini APIに投げて分析結果を表示する
+
+## FR-8: DB永続化 (Database Persistence)
+
+- ドキュメントデータはPostgreSQL (Cloud SQL) に永続化される
+- Prisma ORMを使用してタイプセーフなDB操作を実現
+- ページロード時にDBから最新バージョンを自動読み込み
+- sentence rangesもバージョンに含めて保存し、リロード時のマッピング精度を保証
+
+## FR-9: バージョン管理 (Version Management)
+
+- 「保存」ボタンで現在の状態を新しいバージョンとしてDBに保存
+- 保存項目: 原文, 翻訳, 言語, journal, provider, leftRanges, rightRanges
+- バージョン履歴パネルで過去バージョンの一覧表示
+- 任意のバージョンをクリックしてその時点の状態に復元
+- バージョン番号は自動インクリメント (v1, v2, v3, ...)
+
+## FR-10: ユーザー認証 (User Authentication)
+
+- Google OAuth 2.0によるユーザー認証 (Auth.js v5)
+- 未認証ユーザーは /login ページにリダイレクト
+- ユーザーごとにドキュメントを分離
+- セッション管理はAuth.js + Prisma Adapterによる永続セッション
+
+## FR-11: 複数ドキュメント管理 (Multi-Document Management)
+
+- ダッシュボード (/) でドキュメント一覧を表示
+- 新規ドキュメント作成、削除、名前変更
+- 各ドキュメントにバージョン履歴を持つ
+- ドキュメント間の切り替えはURL遷移 (/documents/[id])

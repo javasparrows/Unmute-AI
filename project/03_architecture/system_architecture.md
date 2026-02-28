@@ -69,3 +69,35 @@ alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
 - 言語設定・ジャーナル設定・プロバイダ設定: localStorage に永続化
 - 修正履歴: localStorage に保存（最大50件、2MB制限）
 - コスト追跡: localStorage に永続化（月次自動リセット）
+
+## DB層・認証フロー
+
+### データベース
+
+- **PostgreSQL** (Cloud SQL) via Prisma ORM
+- **Prisma Adapter** (`@prisma/adapter-pg`) for direct PG connections
+- テーブル: User, Account, Session, VerificationToken, Document, DocumentVersion
+
+### 認証フロー
+
+```
+ブラウザ → /login → Google OAuth 2.0 → Auth.js callback → Session作成 → /（ダッシュボード）
+```
+
+- Auth.js v5 + PrismaAdapter
+- JWT-lessセッション (DB Session)
+- middleware.tsで全ルートを保護、未認証は/loginへリダイレクト
+
+### Server Actions
+
+- `createDocument` / `getDocuments` / `deleteDocument` / `renameDocument`
+- `saveVersion` / `getVersions` / `getVersion`
+- すべてのActionは認証チェック + ドキュメント所有権検証
+
+### データフロー
+
+```
+ページロード: DB (最新バージョン) → Server Component → Client Component (useState)
+保存: Client State → Server Action (saveVersion) → DB
+復元: Version Panel → Server Action (getVersion) → Client State更新
+```

@@ -135,3 +135,22 @@
   ]
 }
 ```
+
+## Server Actions (App Router)
+
+### ドキュメント管理 (`src/app/actions/document.ts`)
+
+| Action | 引数 | 戻り値 | 説明 |
+|---|---|---|---|
+| `getDocuments` | なし | Document[] | 認証ユーザーの全ドキュメント |
+| `createDocument` | なし | redirect | 新規作成→エディタへ遷移 |
+| `deleteDocument` | documentId | void | ドキュメント削除 (cascade) |
+| `renameDocument` | documentId, title | void | タイトル変更 |
+
+### バージョン管理 (`src/app/actions/version.ts`)
+
+| Action | 引数 | 戻り値 | 説明 |
+|---|---|---|---|
+| `saveVersion` | {documentId, sourceText, translatedText, sourceLang, targetLang, journal, provider, leftRanges, rightRanges} | {versionNumber} | 新バージョン保存 |
+| `getVersions` | documentId | VersionSummary[] | バージョン一覧 |
+| `getVersion` | documentId, versionNumber | DocumentVersion | 特定バージョン取得 |
