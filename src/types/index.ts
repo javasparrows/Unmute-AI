@@ -50,12 +50,29 @@ export interface StructureCheckResult {
 
 export type TranslationSource = "left" | "right" | null;
 
+export type TranslationProvider = "deepl" | "gemini";
+
+export interface TranslationUsage {
+  provider: TranslationProvider;
+  characters?: number; // DeepL
+  inputTokens?: number; // Gemini
+  outputTokens?: number; // Gemini
+}
+
+export interface TranslationCosts {
+  deepl: { characters: number; lastReset: string };
+  gemini: { inputTokens: number; outputTokens: number; lastReset: string };
+}
+
 export interface SentenceTranslationRequest {
   sentences: string[];
   sourceLang: LanguageCode;
   targetLang: LanguageCode;
+  provider?: TranslationProvider;
+  journal?: string;
 }
 
 export interface SentenceTranslationResponse {
   translations: string[];
+  usage?: TranslationUsage;
 }
