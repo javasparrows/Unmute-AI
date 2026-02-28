@@ -69,7 +69,7 @@
   --border: oklch(0.90 0.03 290);
   --input: oklch(0.90 0.03 290);
   --ring: oklch(0.55 0.18 285);
-  --highlight: oklch(0.88 0.08 285);
+  --highlight: oklch(0.82 0.12 280);
   --highlight-foreground: oklch(0.30 0.06 285);
   --chart-1: oklch(0.55 0.18 285);
   --chart-2: oklch(0.65 0.15 300);
@@ -85,4 +85,39 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* TipTap editor styles */
+.tiptap {
+  outline: none;
+  height: 100%;
+  padding: 1rem;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.625;
+  overflow-y: auto;
+}
+
+.tiptap p {
+  margin: 0;
+}
+
+.tiptap p + p {
+  margin-top: 1em;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  pointer-events: none;
+  height: 0;
+}
+
+.sentence-highlight {
+  background-color: oklch(0.82 0.12 280 / 0.35);
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
