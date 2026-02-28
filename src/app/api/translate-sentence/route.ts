@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
-import type { SentenceTranslationRequest, SentenceTranslationResponse } from "@/types";
+import type {
+  SentenceTranslationRequest,
+  SentenceTranslationResponse,
+  TranslationUsage,
+} from "@/types";
 import { translateWithDeepL } from "@/lib/deepl";
+import { translateWithGemini } from "@/lib/gemini-translate";
 
 export async function POST(request: Request) {
   try {
-    const { sentences, sourceLang, targetLang } =
-      (await request.json()) as SentenceTranslationRequest;
+    const {
+      sentences,
+      sourceLang,
+      targetLang,
+      provider = "deepl",
+      journal,
+    } = (await request.json()) as SentenceTranslationRequest;
 
     if (!sentences || !sourceLang || !targetLang) {
       return NextResponse.json(
@@ -25,15 +35,36 @@ export async function POST(request: Request) {
       }
     }
 
-    // Translate non-empty sentences in batch
-    const translated =
-      textsToTranslate.length > 0
-        ? await translateWithDeepL({
-            texts: textsToTranslate,
-            sourceLang,
-            targetLang,
-          })
-        : [];
+    let translated: string[] = [];
+    let usage: TranslationUsage | undefined;
+
+    if (textsToTranslate.length > 0) {
+      if (provider === "gemini") {
+        const result = await translateWithGemini({
+          texts: textsToTranslate,
+          sourceLang,
+          targetLang,
+          journalId: journal,
+        });
+        translated = result.translations;
+        usage = {
+          provider: "gemini",
+          inputTokens: result.inputTokens,
+          outputTokens: result.outputTokens,
+        };
+      } else {
+        const result = await translateWithDeepL({
+          texts: textsToTranslate,
+          sourceLang,
+          targetLang,
+        });
+        translated = result.translations;
+        usage = {
+          provider: "deepl",
+          characters: result.billedCharacters,
+        };
+      }
+    }
 
     // Rebuild full translations array with empty strings for empty inputs
     const translations: string[] = sentences.map(() => "");
@@ -41,7 +72,10 @@ export async function POST(request: Request) {
       translations[nonEmptyIndices[i]] = translated[i];
     }
 
-    return NextResponse.json({ translations } satisfies SentenceTranslationResponse);
+    return NextResponse.json({
+      translations,
+      usage,
+    } satisfies SentenceTranslationResponse);
   } catch (error) {
     console.error("Sentence translation error:", error);
     return NextResponse.json(

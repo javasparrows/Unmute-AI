@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import type { LanguageCode, SentenceTranslationResponse } from "@/types";
+import type {
+  LanguageCode,
+  TranslationProvider,
+  TranslationUsage,
+  SentenceTranslationResponse,
+} from "@/types";
 import {
   splitSentences,
   joinSentences,
@@ -12,6 +17,7 @@ import { useDebouncedCallback } from "./use-debounce";
 
 interface UseSentenceTranslationOptions {
   debounceMs?: number;
+  onUsage?: (usage: TranslationUsage) => void;
 }
 
 interface UseSentenceTranslationReturn {
@@ -21,6 +27,7 @@ interface UseSentenceTranslationReturn {
     sourceLang: LanguageCode,
     targetLang: LanguageCode,
     journal?: string,
+    provider?: TranslationProvider,
   ) => void;
   cancelTranslation: () => void;
   translatedText: string;
@@ -31,7 +38,7 @@ interface UseSentenceTranslationReturn {
 export function useSentenceTranslation(
   options: UseSentenceTranslationOptions = {},
 ): UseSentenceTranslationReturn {
-  const { debounceMs = 800 } = options;
+  const { debounceMs = 800, onUsage } = options;
   const [isTranslating, setIsTranslating] = useState(false);
   const [translatedText, setTranslatedText] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +50,10 @@ export function useSentenceTranslation(
     sourceLang: LanguageCode;
     targetLang: LanguageCode;
     journal?: string;
+    provider?: TranslationProvider;
   } | null>(null);
+  const onUsageRef = useRef(onUsage);
+  onUsageRef.current = onUsage;
 
   const doTranslate = useCallback(
     async (
@@ -51,6 +61,7 @@ export function useSentenceTranslation(
       sourceLang: LanguageCode,
       targetLang: LanguageCode,
       journal?: string,
+      provider?: TranslationProvider,
     ) => {
       // Cancel previous request
       if (abortControllerRef.current) {
@@ -67,14 +78,15 @@ export function useSentenceTranslation(
 
       const currentSentences = splitSentences(text);
 
-      // Check if language/journal changed → full re-translate
+      // Check if language/journal/provider changed → full re-translate
       const paramsChanged =
         prevParamsRef.current === null ||
         prevParamsRef.current.sourceLang !== sourceLang ||
         prevParamsRef.current.targetLang !== targetLang ||
-        prevParamsRef.current.journal !== journal;
+        prevParamsRef.current.journal !== journal ||
+        prevParamsRef.current.provider !== provider;
 
-      prevParamsRef.current = { sourceLang, targetLang, journal };
+      prevParamsRef.current = { sourceLang, targetLang, journal, provider };
 
       // Extract non-separator sentences
       const currentTextSentences = currentSentences.filter(
@@ -138,6 +150,8 @@ export function useSentenceTranslation(
             sentences: trimmedSentences,
             sourceLang,
             targetLang,
+            provider,
+            journal,
           }),
           signal: controller.signal,
         });
@@ -153,6 +167,11 @@ export function useSentenceTranslation(
         const data = (await response.json()) as SentenceTranslationResponse;
 
         if (controller.signal.aborted) return;
+
+        // Report usage
+        if (data.usage && onUsageRef.current) {
+          onUsageRef.current(data.usage);
+        }
 
         // Restore leading whitespace to translated sentences
         const translationsWithWhitespace = data.translations.map(
