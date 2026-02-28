@@ -4,8 +4,13 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow login page and auth API
-  if (pathname === "/login" || pathname.startsWith("/api/auth")) {
+  // Allow public pages and auth API
+  if (
+    pathname === "/login" ||
+    pathname === "/pricing" ||
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/api/webhooks")
+  ) {
     return NextResponse.next();
   }
 

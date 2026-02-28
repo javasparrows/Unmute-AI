@@ -39,6 +39,11 @@ interface InitialVersion {
   rightRanges: { from: number; to: number }[] | null;
 }
 
+interface PlanLimitsProps {
+  allowedProviders: TranslationProvider[];
+  allowedJournalIds: string[] | "all";
+}
+
 interface EditorPageClientProps {
   documentId: string;
   documentTitle: string;
@@ -48,6 +53,7 @@ interface EditorPageClientProps {
     email?: string | null;
     image?: string | null;
   };
+  planLimits?: PlanLimitsProps;
 }
 
 export function EditorPageClient({
@@ -55,6 +61,7 @@ export function EditorPageClient({
   documentTitle,
   initialVersion,
   user,
+  planLimits,
 }: EditorPageClientProps) {
   const [leftText, setLeftText] = useState(initialVersion?.sourceText ?? "");
   const [rightText, setRightText] = useState(initialVersion?.translatedText ?? "");
@@ -349,9 +356,17 @@ export function EditorPageClient({
         </Tooltip>
         <LanguageSelector value={rightLang} onChange={setRightLang} />
         <Separator orientation="vertical" className="h-6" />
-        <JournalSelector value={journal} onChange={setJournal} />
+        <JournalSelector
+          value={journal}
+          onChange={setJournal}
+          allowedJournalIds={planLimits?.allowedJournalIds}
+        />
         <Separator orientation="vertical" className="h-6" />
-        <ProviderSelector value={provider} onChange={setProvider} />
+        <ProviderSelector
+          value={provider}
+          onChange={setProvider}
+          allowedProviders={planLimits?.allowedProviders}
+        />
         <Separator orientation="vertical" className="h-6" />
         <Tooltip>
           <TooltipTrigger asChild>

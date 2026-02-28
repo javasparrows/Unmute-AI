@@ -3,6 +3,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
+import { getUserPlanById } from "@/lib/user-plan";
+import { checkVersionLimit } from "@/app/actions/usage";
 
 async function getUserId(): Promise<string> {
   const session = await auth();
@@ -31,6 +33,14 @@ export async function saveVersion(data: {
 }) {
   const userId = await getUserId();
   await verifyDocumentOwnership(data.documentId, userId);
+
+  const { plan } = await getUserPlanById(userId);
+  const limitCheck = await checkVersionLimit(userId, plan, data.documentId);
+  if (!limitCheck.allowed) {
+    throw new Error(
+      `バージョン数の上限（${limitCheck.max}個）に達しました。プランをアップグレードしてください。`,
+    );
+  }
 
   const lastVersion = await prisma.documentVersion.findFirst({
     where: { documentId: data.documentId },

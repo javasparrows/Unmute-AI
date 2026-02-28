@@ -10,8 +10,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       session.user.id = user.id;
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { plan: true },
+      });
+      session.user.plan = dbUser?.plan ?? "FREE";
       return session;
     },
   },

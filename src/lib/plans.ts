@@ -1,0 +1,105 @@
+import type { Plan } from "@/generated/prisma/client";
+import type { TranslationProvider } from "@/types";
+
+export interface PlanLimits {
+  translationCharsPerMonth: number; // -1 = unlimited
+  maxDocuments: number; // -1 = unlimited
+  maxVersionsPerDoc: number; // -1 = unlimited
+  structureChecksPerMonth: number; // -1 = unlimited
+  allowedProviders: TranslationProvider[];
+  allowedJournalIds: string[] | "all";
+}
+
+export interface PlanInfo {
+  id: Plan;
+  name: string;
+  price: number; // monthly JPY, 0 for free
+  description: string;
+  limits: PlanLimits;
+  stripePriceId: string | null;
+  features: string[];
+}
+
+export const PLANS: Record<Plan, PlanInfo> = {
+  FREE: {
+    id: "FREE",
+    name: "Free",
+    price: 0,
+    description: "基本的な翻訳機能を無料で",
+    stripePriceId: null,
+    limits: {
+      translationCharsPerMonth: 10_000,
+      maxDocuments: 3,
+      maxVersionsPerDoc: 5,
+      structureChecksPerMonth: 3,
+      allowedProviders: ["deepl"],
+      allowedJournalIds: ["general"],
+    },
+    features: [
+      "月10,000文字の翻訳",
+      "最大3ドキュメント",
+      "バージョン5個/ドキュメント",
+      "DeepLのみ",
+      "General Academicスタイル",
+      "月3回の構成チェック",
+    ],
+  },
+  PRO: {
+    id: "PRO",
+    name: "Pro",
+    price: 980,
+    description: "研究者向けの充実した翻訳環境",
+    stripePriceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
+    limits: {
+      translationCharsPerMonth: 100_000,
+      maxDocuments: 20,
+      maxVersionsPerDoc: 50,
+      structureChecksPerMonth: 30,
+      allowedProviders: ["deepl", "gemini"],
+      allowedJournalIds: "all",
+    },
+    features: [
+      "月100,000文字の翻訳",
+      "最大20ドキュメント",
+      "バージョン50個/ドキュメント",
+      "DeepL + Gemini",
+      "全8種ジャーナルスタイル",
+      "月30回の構成チェック",
+    ],
+  },
+  MAX: {
+    id: "MAX",
+    name: "Max",
+    price: 2_980,
+    description: "無制限の翻訳・全機能アクセス",
+    stripePriceId: process.env.STRIPE_MAX_PRICE_ID ?? null,
+    limits: {
+      translationCharsPerMonth: -1,
+      maxDocuments: -1,
+      maxVersionsPerDoc: -1,
+      structureChecksPerMonth: -1,
+      allowedProviders: ["deepl", "gemini"],
+      allowedJournalIds: "all",
+    },
+    features: [
+      "無制限の翻訳",
+      "無制限のドキュメント",
+      "無制限のバージョン",
+      "DeepL + Gemini",
+      "全8種ジャーナルスタイル",
+      "無制限の構成チェック",
+    ],
+  },
+};
+
+export function getPlanInfo(plan: Plan): PlanInfo {
+  return PLANS[plan];
+}
+
+export function getPlanByPriceId(priceId: string): PlanInfo | undefined {
+  return Object.values(PLANS).find((p) => p.stripePriceId === priceId);
+}
+
+export function isUnlimited(value: number): boolean {
+  return value === -1;
+}
