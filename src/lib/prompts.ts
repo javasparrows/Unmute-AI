@@ -66,3 +66,35 @@ Respond in JSON format:
 
 Respond in ${language.name}. Output ONLY valid JSON, no markdown fences.`;
 }
+
+export function buildSentenceTranslationPrompt(
+  sentences: string[],
+  sourceLang: LanguageCode,
+  targetLang: LanguageCode,
+  journalId?: string,
+): { system: string; user: string } {
+  const source = getLanguage(sourceLang);
+  const target = getLanguage(targetLang);
+  const journal = journalId ? getJournal(journalId) : getJournal("general");
+
+  const system = `You are an expert academic translator specializing in scientific papers.
+
+Translate each sentence from ${source.name} to ${target.name}.
+You will receive a JSON array of sentences. Return a JSON array of translated sentences with the SAME length.
+
+CRITICAL RULES:
+1. Maintain a strict 1:1 correspondence. Input has N sentences, output must have exactly N sentences.
+2. Do NOT merge or split sentences.
+3. Do NOT add any explanation, notes, or commentary.
+4. Output ONLY a valid JSON array of strings. No markdown fences, no extra text.
+5. Preserve any formatting and special characters within each sentence.
+
+STYLE GUIDE (${journal.name}):
+${journal.styleGuide}
+
+Translate naturally and idiomatically for academic publication. Maintain technical accuracy while ensuring readability.`;
+
+  const user = JSON.stringify(sentences);
+
+  return { system, user };
+}

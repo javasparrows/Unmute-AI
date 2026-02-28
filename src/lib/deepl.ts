@@ -19,17 +19,24 @@ function toDeepLLang(code: LanguageCode): string {
   return map[code];
 }
 
+export interface DeepLTranslationResult {
+  translations: string[];
+  billedCharacters: number;
+}
+
 export async function translateWithDeepL(params: {
   texts: string[];
   sourceLang: LanguageCode;
   targetLang: LanguageCode;
-}): Promise<string[]> {
+}): Promise<DeepLTranslationResult> {
   const apiKey = process.env.DEEPL_API_KEY;
   if (!apiKey) {
     throw new Error("DEEPL_API_KEY is not set");
   }
 
-  if (params.texts.length === 0) return [];
+  if (params.texts.length === 0) {
+    return { translations: [], billedCharacters: 0 };
+  }
 
   const body = new URLSearchParams();
   for (const text of params.texts) {
@@ -56,5 +63,13 @@ export async function translateWithDeepL(params: {
     translations: { text: string }[];
   };
 
-  return data.translations.map((t) => t.text);
+  const billedCharacters = params.texts.reduce(
+    (sum, t) => sum + t.length,
+    0,
+  );
+
+  return {
+    translations: data.translations.map((t) => t.text),
+    billedCharacters,
+  };
 }
