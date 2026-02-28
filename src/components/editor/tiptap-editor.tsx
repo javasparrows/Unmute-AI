@@ -6,8 +6,10 @@ import { PlainTextOnly } from "@/extensions/plain-text-only";
 import {
   HighlightSentence,
   highlightPluginKey,
+  highlightRangesKey,
   getSentenceIndexAtPosition,
 } from "@/extensions/highlight-sentence";
+import type { SentenceRange } from "@/extensions/highlight-sentence";
 import { textToDoc, textsAreDifferent } from "@/lib/tiptap-utils";
 
 interface TipTapEditorProps {
@@ -17,6 +19,7 @@ interface TipTapEditorProps {
   onBlur?: () => void;
   onPaste?: (text: string) => void;
   activeSentenceIndex: number | null;
+  sentenceRanges?: SentenceRange[];
   placeholder?: string;
   containerRef?: (node: HTMLDivElement | null) => void;
 }
@@ -33,6 +36,7 @@ export function TipTapEditor({
   onBlur,
   onPaste,
   activeSentenceIndex,
+  sentenceRanges,
   placeholder,
   containerRef,
 }: TipTapEditorProps) {
@@ -40,6 +44,7 @@ export function TipTapEditor({
   const isInternalChangeRef = useRef(false);
   const isSyncingContentRef = useRef(false);
   const prevHighlightRef = useRef<number | null>(null);
+  const prevRangesRef = useRef<SentenceRange[] | undefined>(undefined);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -88,6 +93,18 @@ export function TipTapEditor({
     }
   }
   isInternalChangeRef.current = false;
+
+  // Update external sentence ranges when they change
+  if (editor && sentenceRanges !== prevRangesRef.current) {
+    prevRangesRef.current = sentenceRanges;
+    const editorRef = editor;
+    const ranges = sentenceRanges ?? null;
+    setTimeout(() => {
+      if (editorRef.isDestroyed) return;
+      const tr = editorRef.state.tr.setMeta(highlightRangesKey, ranges);
+      editorRef.view.dispatch(tr);
+    }, 0);
+  }
 
   // Update highlight decoration when activeSentenceIndex changes
   // Deferred via setTimeout to avoid setState-during-render
