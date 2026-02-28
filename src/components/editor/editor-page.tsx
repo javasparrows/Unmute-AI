@@ -240,7 +240,7 @@ export function EditorPage() {
       <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
         <div className="flex items-center gap-3">
           <h1 className="text-lg font-semibold tracking-tight">
-            Translation Editor
+            Lexora
           </h1>
           <TranslationStatus isTranslating={isSyncing} error={error} />
           <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />

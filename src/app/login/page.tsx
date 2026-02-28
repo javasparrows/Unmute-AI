@@ -5,18 +5,18 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-sm space-y-8 px-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Translation Editor
+          <h1 className="text-3xl font-serif font-bold tracking-tight">
+            Lexora
           </h1>
           <p className="text-muted-foreground">
-            学術論文の翻訳をサポートするエディタ
+            Academic translation, reimagined.
           </p>
         </div>
 
         <form
           action={async () => {
             "use server";
-            await signIn("google", { redirectTo: "/" });
+            await signIn("google", { redirectTo: "/dashboard" });
           }}
         >
           <button
@@ -41,7 +41,7 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            Googleでログイン
+            Continue with Google
           </button>
         </form>
       </div>

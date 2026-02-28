@@ -17,16 +17,25 @@ const providers: { id: TranslationProvider; name: string }[] = [
 interface ProviderSelectorProps {
   value: TranslationProvider;
   onChange: (value: TranslationProvider) => void;
+  allowedProviders?: TranslationProvider[];
 }
 
-export function ProviderSelector({ value, onChange }: ProviderSelectorProps) {
+export function ProviderSelector({
+  value,
+  onChange,
+  allowedProviders,
+}: ProviderSelectorProps) {
+  const available = allowedProviders
+    ? providers.filter((p) => allowedProviders.includes(p.id))
+    : providers;
+
   return (
     <Select value={value} onValueChange={(v) => onChange(v as TranslationProvider)}>
       <SelectTrigger className="w-[130px] h-8 text-sm">
         <SelectValue placeholder="翻訳エンジン" />
       </SelectTrigger>
       <SelectContent>
-        {providers.map((provider) => (
+        {available.map((provider) => (
           <SelectItem key={provider.id} value={provider.id}>
             {provider.name}
           </SelectItem>

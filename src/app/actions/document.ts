@@ -3,6 +3,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { getUserPlanById } from "@/lib/user-plan";
+import { checkDocumentLimit } from "@/app/actions/usage";
 
 async function getUserId(): Promise<string> {
   const session = await auth();
@@ -27,6 +29,14 @@ export async function getDocuments() {
 
 export async function createDocument() {
   const userId = await getUserId();
+  const { plan } = await getUserPlanById(userId);
+  const limitCheck = await checkDocumentLimit(userId, plan);
+  if (!limitCheck.allowed) {
+    throw new Error(
+      `ドキュメント数の上限（${limitCheck.max}件）に達しました。プランをアップグレードしてください。`,
+    );
+  }
+
   const doc = await prisma.document.create({
     data: {
       userId,

@@ -1,8 +1,9 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { UserMenu } from "@/components/auth/user-menu";
 import { EditorPageClient } from "@/components/editor/editor-page-client";
+import { getUserPlanById } from "@/lib/user-plan";
+import { getPlanInfo } from "@/lib/plans";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -26,6 +27,8 @@ export default async function DocumentEditorPage({ params }: Props) {
   if (!document) notFound();
 
   const latestVersion = document.versions[0] ?? null;
+  const { plan } = await getUserPlanById(session.user.id);
+  const planInfo = getPlanInfo(plan);
 
   return (
     <EditorPageClient
@@ -47,6 +50,10 @@ export default async function DocumentEditorPage({ params }: Props) {
           : null
       }
       user={session.user}
+      planLimits={{
+        allowedProviders: planInfo.limits.allowedProviders,
+        allowedJournalIds: planInfo.limits.allowedJournalIds,
+      }}
     />
   );
 }

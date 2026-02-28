@@ -1,9 +1,20 @@
 import { generateText } from "ai";
 import { translationModel } from "@/lib/gemini";
 import { buildStructureCheckPrompt } from "@/lib/prompts";
+import { auth } from "@/lib/auth";
+import { getUserPlanById } from "@/lib/user-plan";
+import {
+  checkStructureCheckLimit,
+  recordStructureCheckUsage,
+} from "@/app/actions/usage";
 import type { LanguageCode, StructureCheckResult } from "@/types";
 
 export async function POST(request: Request) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = (await request.json()) as { text: string; lang: LanguageCode };
   const { text, lang } = body;
 
@@ -14,11 +25,27 @@ export async function POST(request: Request) {
     );
   }
 
+  const { plan } = await getUserPlanById(session.user.id);
+  const limitCheck = await checkStructureCheckLimit(session.user.id, plan);
+  if (!limitCheck.allowed) {
+    return Response.json(
+      {
+        error: "構成チェックの上限に達しました",
+        code: "STRUCTURE_CHECK_LIMIT",
+        remaining: limitCheck.remaining,
+      },
+      { status: 429 },
+    );
+  }
+
   const { text: result } = await generateText({
     model: translationModel,
     system: buildStructureCheckPrompt(lang),
     prompt: text,
   });
+
+  // Record usage after successful check
+  await recordStructureCheckUsage(session.user.id);
 
   try {
     // Strip markdown code fences if present

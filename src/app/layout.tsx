@@ -20,8 +20,8 @@ const fontMono = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Translation Editor",
-  description: "Real-time bidirectional translation editor for academic writing",
+  title: "Lexora",
+  description: "Your research deserves to be heard. AI-powered academic translation partner.",
 };
 
 export default function RootLayout({

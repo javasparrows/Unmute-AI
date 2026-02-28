@@ -6,9 +6,20 @@ import type {
 } from "@/types";
 import { translateWithDeepL } from "@/lib/deepl";
 import { translateWithGemini } from "@/lib/gemini-translate";
+import { auth } from "@/lib/auth";
+import { getUserPlanById } from "@/lib/user-plan";
+import {
+  checkTranslationLimit,
+  recordTranslationUsage,
+} from "@/app/actions/usage";
 
 export async function POST(request: Request) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const {
       sentences,
       sourceLang,
@@ -24,6 +35,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const { plan, limits } = await getUserPlanById(session.user.id);
+
+    // Check provider access
+    if (!limits.allowedProviders.includes(provider)) {
+      return NextResponse.json(
+        { error: `${provider}はお使いのプランでは利用できません` },
+        { status: 403 },
+      );
+    }
+
     // Filter out empty sentences, keep track of indices
     const nonEmptyIndices: number[] = [];
     const textsToTranslate: string[] = [];
@@ -33,6 +54,27 @@ export async function POST(request: Request) {
         nonEmptyIndices.push(i);
         textsToTranslate.push(sentences[i]);
       }
+    }
+
+    // Check translation char limit
+    const totalChars = textsToTranslate.reduce(
+      (sum, t) => sum + t.length,
+      0,
+    );
+    const limitCheck = await checkTranslationLimit(
+      session.user.id,
+      plan,
+      totalChars,
+    );
+    if (!limitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: "翻訳文字数の上限に達しました",
+          code: "TRANSLATION_LIMIT",
+          remaining: limitCheck.remaining,
+        },
+        { status: 429 },
+      );
     }
 
     let translated: string[] = [];
@@ -64,6 +106,9 @@ export async function POST(request: Request) {
           characters: result.billedCharacters,
         };
       }
+
+      // Record usage
+      await recordTranslationUsage(session.user.id, totalChars);
     }
 
     // Rebuild full translations array with empty strings for empty inputs
