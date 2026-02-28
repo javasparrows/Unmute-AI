@@ -213,13 +213,13 @@ export function EditorPage() {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-card">
+      <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
         <div className="flex items-center gap-3">
-          <h1 className="text-lg font-semibold text-foreground tracking-tight">
+          <h1 className="text-lg font-semibold tracking-tight">
             Translation Editor
           </h1>
           <TranslationStatus isTranslating={isTranslating} error={error} />
-          <Separator orientation="vertical" className="h-6" />
+          <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
           <CostDisplay costs={costs} />
         </div>
         <div className="flex items-center gap-2">
@@ -238,7 +238,7 @@ export function EditorPage() {
       </header>
 
       {/* Language bar */}
-      <div className="flex items-center justify-center gap-3 px-6 py-2 border-b border-border bg-muted/30">
+      <div className="flex items-center justify-center gap-3 px-6 py-2 bg-card shadow-sm">
         <LanguageSelector value={leftLang} onChange={setLeftLang} />
         <Tooltip>
           <TooltipTrigger asChild>

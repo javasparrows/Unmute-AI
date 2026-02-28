@@ -27,12 +27,12 @@ export function CostDisplay({ costs }: CostDisplayProps) {
     (costs.gemini.outputTokens / 1_000_000) * GEMINI_OUTPUT_RATE;
 
   return (
-    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+    <div className="flex items-center gap-4 text-xs opacity-80">
       {/* DeepL usage */}
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="flex items-center gap-2 cursor-default">
-            <span className="font-medium text-foreground/70">DeepL</span>
+            <span className="font-medium opacity-90">DeepL</span>
             <Progress
               value={deeplPercentage}
               className="w-20 h-1.5"
@@ -55,7 +55,7 @@ export function CostDisplay({ costs }: CostDisplayProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="flex items-center gap-2 cursor-default">
-            <span className="font-medium text-foreground/70">Gemini</span>
+            <span className="font-medium opacity-90">Gemini</span>
             <span>${geminiCostUSD.toFixed(4)}</span>
           </div>
         </TooltipTrigger>
