@@ -51,7 +51,6 @@ export default async function DocumentEditorPage({ params }: Props) {
       }
       user={session.user}
       planLimits={{
-        allowedProviders: planInfo.limits.allowedProviders,
         allowedJournalIds: planInfo.limits.allowedJournalIds,
       }}
     />
