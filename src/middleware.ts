@@ -6,6 +6,7 @@ export function middleware(request: NextRequest) {
 
   // Allow public pages and auth API
   if (
+    pathname === "/" ||
     pathname === "/login" ||
     pathname === "/pricing" ||
     pathname.startsWith("/api/auth") ||

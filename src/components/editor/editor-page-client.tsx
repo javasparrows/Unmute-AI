@@ -264,7 +264,7 @@ export function EditorPageClient({
         <div className="flex items-center gap-3">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href="/">
+              <Link href="/dashboard">
                 <Button variant="ghost" size="icon" className="h-8 w-8">
                   <ArrowLeftIcon className="h-4 w-4" />
                 </Button>
