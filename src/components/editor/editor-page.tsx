@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import type { LanguageCode, TranslationSource } from "@/types";
-import { useTranslation } from "@/hooks/use-translation";
+import { useSentenceTranslation } from "@/hooks/use-sentence-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -31,6 +31,9 @@ export function EditorPage() {
 
   // Loop prevention: tracks which panel initiated the translation
   const translationSourceRef = useRef<TranslationSource>(null);
+  // Track latest left text for re-translation after language detection
+  const leftTextRef = useRef(leftText);
+  leftTextRef.current = leftText;
 
   const {
     isTranslating,
@@ -39,7 +42,7 @@ export function EditorPage() {
     translatedText,
     setTranslatedText,
     error,
-  } = useTranslation();
+  } = useSentenceTranslation();
 
   const {
     activeSentenceIndex,
@@ -115,17 +118,23 @@ export function EditorPage() {
 
         // If detected language differs from left panel, swap
         if (language !== leftLang) {
+          const newTargetLang = language === rightLang ? leftLang : rightLang;
           setLeftLang(language);
-          // Set the other panel to the previous left language
           if (language === rightLang) {
             setRightLang(leftLang);
           }
+          // Re-trigger translation with correct language params.
+          // The debounced translate from handleLeftChange used stale langs,
+          // so we cancel it and call again with the detected languages.
+          cancelTranslation();
+          translationSourceRef.current = "left";
+          translate(leftTextRef.current, language, newTargetLang, journal);
         }
       } catch {
         // Silently fail — language detection is optional
       }
     },
-    [leftLang, rightLang, setLeftLang, setRightLang],
+    [leftLang, rightLang, setLeftLang, setRightLang, cancelTranslation, translate, journal],
   );
 
   const handleSaveHistory = useCallback(() => {
