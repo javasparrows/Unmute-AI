@@ -1,63 +1,267 @@
 import Link from "next/link";
-import { auth } from "@/lib/auth";
-import { getDocuments, createDocument } from "@/app/actions/document";
-import { UserMenu } from "@/components/auth/user-menu";
-import { DocumentList } from "@/components/dashboard/document-list";
-import { Badge } from "@/components/ui/badge";
-import { getUserPlanById } from "@/lib/user-plan";
-import { getPlanInfo, isUnlimited } from "@/lib/plans";
+import {
+  ArrowRight,
+  Languages,
+  BookOpen,
+  Layers,
+  GitBranch,
+  DollarSign,
+  FileCheck,
+  Clock,
+  XCircle,
+  Wallet,
+} from "lucide-react";
+import { SiteHeader } from "@/components/layout/site-header";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 
-export default async function DashboardPage() {
-  const session = await auth();
-  const documents = await getDocuments();
+const features = [
+  {
+    icon: Languages,
+    title: "Real-time Bidirectional Translation",
+    description:
+      "Edit source and translation side by side. Changes sync instantly with sentence-level precision.",
+  },
+  {
+    icon: BookOpen,
+    title: "Journal-Specific Styling",
+    description:
+      "Choose from 8 academic journal styles. Your translation matches the target publication's conventions.",
+  },
+  {
+    icon: Layers,
+    title: "Multi-Provider Engine",
+    description:
+      "DeepL for precision, Gemini for context. Switch providers per document to get the best result.",
+  },
+  {
+    icon: FileCheck,
+    title: "AI Paper Structure Check",
+    description:
+      "Automatic IMRAD structure validation. Catch missing sections before submission.",
+  },
+  {
+    icon: GitBranch,
+    title: "Version Control",
+    description:
+      "Save and restore versions of your translation. Never lose progress on a revision.",
+  },
+  {
+    icon: DollarSign,
+    title: "Transparent Cost Tracking",
+    description:
+      "See exactly what each translation costs in real time. No surprise bills.",
+  },
+];
 
-  const plan = session?.user?.id
-    ? (await getUserPlanById(session.user.id)).plan
-    : "FREE";
-  const planInfo = getPlanInfo(plan);
-  const docLimit = planInfo.limits.maxDocuments;
+const problems = [
+  {
+    icon: Clock,
+    stat: "40%",
+    label: "of research time",
+    description: "spent on language, not science",
+  },
+  {
+    icon: XCircle,
+    stat: "1 in 4",
+    label: "papers rejected",
+    description: "due to language quality issues",
+  },
+  {
+    icon: Wallet,
+    stat: "$1,200+",
+    label: "per paper",
+    description: "for professional translation services",
+  },
+];
 
+export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
-      <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
-        <div className="flex items-center gap-3">
-          <h1 className="text-lg font-semibold tracking-tight">
-            Translation Editor
+      <SiteHeader />
+
+      {/* Hero */}
+      <section className="bg-secondary py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+            Your research deserves
+            <br />
+            to be heard.
           </h1>
-          <Link href="/pricing">
-            <Badge
-              variant={plan === "FREE" ? "outline" : "default"}
-              className="cursor-pointer hover:opacity-80"
-            >
-              {planInfo.name}
-            </Badge>
-          </Link>
-        </div>
-        {session?.user && <UserMenu user={session.user} />}
-      </header>
-
-      <main className="mx-auto max-w-4xl px-6 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <h2 className="text-xl font-semibold">マイドキュメント</h2>
-            {!isUnlimited(docLimit) && (
-              <span className="text-sm text-muted-foreground">
-                {documents.length} / {docLimit}
-              </span>
-            )}
+          <p className="mt-6 text-lg text-secondary-foreground/70 max-w-2xl mx-auto leading-relaxed">
+            AI-powered academic translation that understands journal styles,
+            paper structure, and your intent. Write in your language, publish in
+            any.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Link href="/login">
+              <Button size="lg" className="gap-2">
+                Get Started — Free
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/pricing">
+              <Button variant="outline" size="lg">
+                View Pricing
+              </Button>
+            </Link>
           </div>
-          <form action={createDocument}>
-            <button
-              type="submit"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
-            >
-              + 新規作成
-            </button>
-          </form>
         </div>
+      </section>
 
-        <DocumentList documents={documents} />
-      </main>
+      {/* Problem */}
+      <section className="py-24">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-16">
+            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+              Publishing in English shouldn&apos;t be
+              <br />
+              the hardest part of your research.
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
+              Non-native English speakers face systemic barriers in academic
+              publishing. The cost is measured in time, money, and lost
+              discoveries.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {problems.map((problem) => (
+              <div key={problem.stat} className="text-center">
+                <problem.icon className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
+                <div className="text-4xl font-bold">{problem.stat}</div>
+                <div className="text-sm font-medium mt-1">{problem.label}</div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {problem.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Solution */}
+      <section className="bg-secondary py-24">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+            Not a grammar checker.
+            <br />
+            Your academic translation partner.
+          </h2>
+          <p className="mt-6 text-secondary-foreground/70 text-lg max-w-2xl mx-auto leading-relaxed">
+            Lexora doesn&apos;t just translate words. It understands the
+            structure of academic writing, adapts to journal-specific
+            conventions, and preserves your research intent across languages.
+          </p>
+
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 text-left">
+            <div>
+              <div className="text-2xl font-bold">Contextual</div>
+              <p className="mt-2 text-sm text-secondary-foreground/70">
+                Powered by multiple AI providers that understand academic
+                context, not just vocabulary.
+              </p>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">Bidirectional</div>
+              <p className="mt-2 text-sm text-secondary-foreground/70">
+                Edit in either language. Changes propagate sentence-by-sentence
+                in real time.
+              </p>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">Transparent</div>
+              <p className="mt-2 text-sm text-secondary-foreground/70">
+                Every API call tracked. See costs before they happen. No
+                lock-in, no surprises.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="py-24">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="text-center mb-16">
+            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+              Everything you need to publish globally
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg">
+              Purpose-built for researchers, by researchers.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature) => (
+              <Card key={feature.title} className="border-0 shadow-none bg-card">
+                <CardHeader>
+                  <feature.icon className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle className="text-base">{feature.title}</CardTitle>
+                  <CardDescription>{feature.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social Mission */}
+      <section className="bg-secondary py-24">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
+            Language should never
+            <br />
+            limit science.
+          </h2>
+          <p className="mt-6 text-secondary-foreground/70 text-lg max-w-xl mx-auto">
+            Great research happens everywhere. We believe the world&apos;s best
+            ideas deserve an equal voice, regardless of the language they were
+            born in.
+          </p>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-24">
+        <div className="mx-auto max-w-3xl px-6 text-center">
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+            Start writing for the world.
+          </h2>
+          <p className="mt-4 text-muted-foreground text-lg">
+            Free to start. No credit card required.
+          </p>
+          <div className="mt-8">
+            <Link href="/login">
+              <Button size="lg" className="gap-2">
+                Get Started — Free
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t py-8">
+        <div className="mx-auto max-w-5xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+          <div className="font-serif font-bold text-foreground">Lexora</div>
+          <div className="flex items-center gap-6">
+            <Link href="/pricing" className="hover:text-foreground transition-colors">
+              Pricing
+            </Link>
+            <span>Terms</span>
+            <span>Privacy</span>
+          </div>
+          <div>&copy; {new Date().getFullYear()} Lexora</div>
+        </div>
+      </footer>
     </div>
   );
 }
