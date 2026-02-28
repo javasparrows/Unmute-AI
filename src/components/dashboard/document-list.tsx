@@ -34,6 +34,7 @@ function formatDate(date: Date) {
 function DocumentCard({ doc }: { doc: DocumentItem }) {
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
+  const [displayTitle, setDisplayTitle] = useState(doc.title);
   const [editTitle, setEditTitle] = useState(doc.title);
   const inputRef = useRef<HTMLInputElement>(null);
   const latestVersion = doc.versions[0]?.versionNumber ?? 0;
@@ -48,21 +49,22 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
   const handleStartEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setEditTitle(doc.title);
+    setEditTitle(displayTitle);
     setIsEditing(true);
     requestAnimationFrame(() => inputRef.current?.select());
   };
 
   const handleSave = () => {
     const trimmed = editTitle.trim();
-    if (trimmed && trimmed !== doc.title) {
+    if (trimmed && trimmed !== displayTitle) {
+      setDisplayTitle(trimmed);
       startTransition(() => renameDocument(doc.id, trimmed));
     }
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditTitle(doc.title);
+    setEditTitle(displayTitle);
     setIsEditing(false);
   };
 
@@ -138,7 +140,7 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
         <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
         <div className="min-w-0">
           <p className="font-medium truncate">
-            {doc.title}
+            {displayTitle}
             {latestVersion > 0 && (
               <span className="ml-2 text-xs text-muted-foreground">
                 (v{latestVersion})

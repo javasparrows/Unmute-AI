@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { getUserPlanById } from "@/lib/user-plan";
 import { checkDocumentLimit } from "@/app/actions/usage";
 
@@ -59,6 +60,7 @@ export async function deleteDocument(documentId: string) {
   await prisma.document.delete({
     where: { id: documentId, userId },
   });
+  revalidatePath("/dashboard");
 }
 
 export async function renameDocument(documentId: string, title: string) {
@@ -67,4 +69,5 @@ export async function renameDocument(documentId: string, title: string) {
     where: { id: documentId, userId },
     data: { title },
   });
+  revalidatePath("/dashboard");
 }
