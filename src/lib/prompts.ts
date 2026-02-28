@@ -21,6 +21,14 @@ CRITICAL RULES:
 3. Do NOT add any explanation, notes, or commentary.
 4. Output ONLY the translated text.
 5. Preserve any formatting, line breaks within paragraphs, and special characters.
+6. PRESERVE ALL LaTeX COMMANDS EXACTLY AS-IS. Do NOT translate, modify, or remove any LaTeX markup including:
+   - Citations: \\cite{...}, \\citep{...}, \\citet{...}, \\citealp{...}
+   - References: \\ref{...}, \\eqref{...}, \\autoref{...}, \\cref{...}, \\label{...}
+   - Math: $...$, $$...$$, \\(...\\), \\[...\\], \\begin{equation}...\\end{equation}
+   - Formatting: \\textbf{...}, \\textit{...}, \\emph{...}, \\underline{...}
+   - Environments: \\begin{...}...\\end{...}
+   - Any command starting with backslash: \\commandname{...} or \\commandname[...]{...}
+   Place LaTeX commands in the grammatically correct position in the translated sentence.
 
 STYLE GUIDE (${journal.name}):
 ${journal.styleGuide}
@@ -88,6 +96,14 @@ CRITICAL RULES:
 3. Do NOT add any explanation, notes, or commentary.
 4. Output ONLY a valid JSON array of strings. No markdown fences, no extra text.
 5. Preserve any formatting and special characters within each sentence.
+6. PRESERVE ALL LaTeX COMMANDS EXACTLY AS-IS. Do NOT translate, modify, or remove any LaTeX markup including:
+   - Citations: \\cite{...}, \\citep{...}, \\citet{...}, \\citealp{...}
+   - References: \\ref{...}, \\eqref{...}, \\autoref{...}, \\cref{...}, \\label{...}
+   - Math: $...$, $$...$$, \\(...\\), \\[...\\], \\begin{equation}...\\end{equation}
+   - Formatting: \\textbf{...}, \\textit{...}, \\emph{...}, \\underline{...}
+   - Environments: \\begin{...}...\\end{...}
+   - Any command starting with backslash: \\commandname{...} or \\commandname[...]{...}
+   Place LaTeX commands in the grammatically correct position in the translated sentence.
 
 STYLE GUIDE (${journal.name}):
 ${journal.styleGuide}
