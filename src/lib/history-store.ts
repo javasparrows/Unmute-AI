@@ -8,6 +8,7 @@ type Listener = () => void;
 
 let listeners: Listener[] = [];
 let cachedEntries: HistoryEntry[] | null = null;
+const EMPTY_ENTRIES: HistoryEntry[] = [];
 
 function notifyListeners() {
   cachedEntries = null;
@@ -61,7 +62,7 @@ export const historyStore = {
   },
 
   getServerSnapshot(): HistoryEntry[] {
-    return [];
+    return EMPTY_ENTRIES;
   },
 
   subscribe(listener: Listener): () => void {
