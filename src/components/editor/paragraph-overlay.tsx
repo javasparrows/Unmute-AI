@@ -56,7 +56,7 @@ export function ParagraphOverlay({
   return (
     <div
       ref={mirrorRef}
-      className="absolute inset-0 pointer-events-none overflow-hidden whitespace-pre-wrap break-words font-sans text-base leading-relaxed p-4"
+      className="absolute inset-0 pointer-events-none overflow-hidden whitespace-pre-wrap break-words font-sans text-base leading-relaxed p-4 text-transparent"
       style={{
         transform: `translateY(-${scrollTop}px)`,
         // Match textarea typography exactly

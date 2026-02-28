@@ -21,11 +21,16 @@ export async function POST(request: Request) {
   });
 
   try {
-    const parsed = JSON.parse(result) as StructureCheckResult;
+    // Strip markdown code fences if present
+    const cleaned = result
+      .replace(/^```(?:json)?\s*\n?/i, "")
+      .replace(/\n?```\s*$/i, "")
+      .trim();
+    const parsed = JSON.parse(cleaned) as StructureCheckResult;
     return Response.json(parsed);
   } catch {
     return Response.json(
-      { error: "Failed to parse structure check result" },
+      { error: "Failed to parse structure check result", raw: result },
       { status: 500 },
     );
   }
