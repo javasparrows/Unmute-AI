@@ -7,6 +7,7 @@ import type {
   TranslationUsage,
   SentenceTranslationResponse,
 } from "@/types";
+import type { SentenceRange } from "@/extensions/highlight-sentence";
 import {
   splitSentences,
   joinSentences,
@@ -32,7 +33,23 @@ interface UseSentenceTranslationReturn {
   cancelTranslation: () => void;
   translatedText: string;
   setTranslatedText: (text: string) => void;
+  translatedSentenceRanges: SentenceRange[];
   error: string | null;
+}
+
+/**
+ * Compute char-offset ranges for non-separator tokens in the translated token array.
+ */
+function computeSentenceRanges(tokens: string[]): SentenceRange[] {
+  const ranges: SentenceRange[] = [];
+  let offset = 0;
+  for (const token of tokens) {
+    if (!isSeparator(token)) {
+      ranges.push({ from: offset, to: offset + token.length });
+    }
+    offset += token.length;
+  }
+  return ranges;
 }
 
 export function useSentenceTranslation(
@@ -41,6 +58,7 @@ export function useSentenceTranslation(
   const { debounceMs = 800, onUsage } = options;
   const [isTranslating, setIsTranslating] = useState(false);
   const [translatedText, setTranslatedText] = useState("");
+  const [translatedSentenceRanges, setTranslatedSentenceRanges] = useState<SentenceRange[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -72,6 +90,7 @@ export function useSentenceTranslation(
         prevSentencesRef.current = [];
         translatedSentencesRef.current = [];
         setTranslatedText("");
+        setTranslatedSentenceRanges([]);
         setIsTranslating(false);
         return;
       }
@@ -212,7 +231,9 @@ export function useSentenceTranslation(
           }
         }
 
-        setTranslatedText(joinSentences(translatedSentencesRef.current));
+        const joined = joinSentences(translatedSentencesRef.current);
+        setTranslatedText(joined);
+        setTranslatedSentenceRanges(computeSentenceRanges(translatedSentencesRef.current));
         setIsTranslating(false);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
@@ -242,6 +263,7 @@ export function useSentenceTranslation(
     cancelTranslation,
     translatedText,
     setTranslatedText,
+    translatedSentenceRanges,
     error,
   };
 }

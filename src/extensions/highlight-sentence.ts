@@ -4,14 +4,16 @@ import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 
 export const highlightPluginKey = new PluginKey("highlightSentence");
+export const highlightRangesKey = new PluginKey("highlightRanges");
 
-interface SentenceRange {
+export interface SentenceRange {
   from: number;
   to: number;
 }
 
 interface HighlightState {
   index: number | null;
+  externalRanges: SentenceRange[] | null;
   decorations: DecorationSet;
 }
 
@@ -64,7 +66,25 @@ function buildDecorations(
   doc: ProseMirrorNode,
   sentenceIndex: number,
   className: string,
+  externalRanges: SentenceRange[] | null,
 ): DecorationSet {
+  if (externalRanges) {
+    // Use external char-offset ranges, converting to PM positions (+1 offset)
+    if (sentenceIndex < 0 || sentenceIndex >= externalRanges.length) {
+      return DecorationSet.empty;
+    }
+    const range = externalRanges[sentenceIndex];
+    const from = range.from + 1;
+    const to = range.to + 1;
+    // Clamp to document size
+    const maxPos = doc.content.size;
+    if (from >= maxPos) return DecorationSet.empty;
+    return DecorationSet.create(doc, [
+      Decoration.inline(from, Math.min(to, maxPos), { class: className }),
+    ]);
+  }
+
+  // Fallback: regex-based detection (for left/source editor)
   const ranges = getSentenceRanges(doc);
   if (sentenceIndex < 0 || sentenceIndex >= ranges.length) {
     return DecorationSet.empty;
@@ -100,6 +120,7 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
     const className = this.options.className;
     const emptyState: HighlightState = {
       index: null,
+      externalRanges: null,
       decorations: DecorationSet.empty,
     };
 
@@ -111,27 +132,59 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
             return emptyState;
           },
           apply(tr, prev, _oldState, newState): HighlightState {
-            const meta = tr.getMeta(highlightPluginKey);
+            // Check for external ranges update
+            const rangesMeta = tr.getMeta(highlightRangesKey) as
+              | SentenceRange[]
+              | null
+              | undefined;
+            const indexMeta = tr.getMeta(highlightPluginKey) as
+              | number
+              | null
+              | undefined;
 
-            if (meta !== undefined) {
-              if (meta === null || meta < 0) return emptyState;
+            let nextRanges = prev.externalRanges;
+            let nextIndex = prev.index;
+            let changed = false;
+
+            if (rangesMeta !== undefined) {
+              nextRanges = rangesMeta;
+              changed = true;
+            }
+
+            if (indexMeta !== undefined) {
+              if (indexMeta === null || indexMeta < 0) {
+                return emptyState;
+              }
+              nextIndex = indexMeta;
+              changed = true;
+            }
+
+            if (changed && nextIndex !== null) {
               return {
-                index: meta as number,
+                index: nextIndex,
+                externalRanges: nextRanges,
                 decorations: buildDecorations(
                   newState.doc,
-                  meta as number,
+                  nextIndex,
                   className,
+                  nextRanges,
                 ),
               };
+            }
+
+            if (changed) {
+              return { ...prev, externalRanges: nextRanges };
             }
 
             if (tr.docChanged && prev.index !== null) {
               return {
                 index: prev.index,
+                externalRanges: prev.externalRanges,
                 decorations: buildDecorations(
                   newState.doc,
                   prev.index,
                   className,
+                  prev.externalRanges,
                 ),
               };
             }

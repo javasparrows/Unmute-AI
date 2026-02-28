@@ -50,6 +50,7 @@ export function EditorPage() {
     cancelTranslation,
     translatedText,
     setTranslatedText,
+    translatedSentenceRanges,
     error,
   } = useSentenceTranslation({ onUsage: addUsage });
 
@@ -294,6 +295,7 @@ export function EditorPage() {
           onSentenceChange={handleRightSentence}
           onBlur={handleBlur}
           activeSentenceIndex={activeSentenceIndex}
+          sentenceRanges={translatedSentenceRanges}
           placeholder="翻訳がここに表示されます..."
           containerRef={setRightEditorRef}
         />

@@ -1,6 +1,7 @@
 "use client";
 
 import { TipTapEditor } from "./tiptap-editor";
+import type { SentenceRange } from "@/extensions/highlight-sentence";
 
 interface EditorPanelProps {
   label: string;
@@ -10,6 +11,7 @@ interface EditorPanelProps {
   onBlur: () => void;
   onPaste?: (text: string) => void;
   activeSentenceIndex: number | null;
+  sentenceRanges?: SentenceRange[];
   placeholder?: string;
   containerRef?: (node: HTMLDivElement | null) => void;
 }
@@ -22,6 +24,7 @@ export function EditorPanel({
   onBlur,
   onPaste,
   activeSentenceIndex,
+  sentenceRanges,
   placeholder,
   containerRef,
 }: EditorPanelProps) {
@@ -37,6 +40,7 @@ export function EditorPanel({
         onBlur={onBlur}
         onPaste={onPaste}
         activeSentenceIndex={activeSentenceIndex}
+        sentenceRanges={sentenceRanges}
         placeholder={placeholder}
         containerRef={containerRef}
       />
