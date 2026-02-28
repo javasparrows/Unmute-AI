@@ -1,9 +1,9 @@
 "use client";
 
-import { useTransition } from "react";
+import { useTransition, useState, useRef } from "react";
 import Link from "next/link";
-import { FileText, Trash2 } from "lucide-react";
-import { deleteDocument } from "@/app/actions/document";
+import { FileText, Trash2, Pencil, Check, X } from "lucide-react";
+import { deleteDocument, renameDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -33,6 +33,9 @@ function formatDate(date: Date) {
 
 function DocumentCard({ doc }: { doc: DocumentItem }) {
   const [isPending, startTransition] = useTransition();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(doc.title);
+  const inputRef = useRef<HTMLInputElement>(null);
   const latestVersion = doc.versions[0]?.versionNumber ?? 0;
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -42,10 +45,94 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
     startTransition(() => deleteDocument(doc.id));
   };
 
+  const handleStartEdit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditTitle(doc.title);
+    setIsEditing(true);
+    requestAnimationFrame(() => inputRef.current?.select());
+  };
+
+  const handleSave = () => {
+    const trimmed = editTitle.trim();
+    if (trimmed && trimmed !== doc.title) {
+      startTransition(() => renameDocument(doc.id, trimmed));
+    }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditTitle(doc.title);
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === "Escape") {
+      handleCancel();
+    }
+  };
+
+  if (isEditing) {
+    return (
+      <div className="flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm ring-2 ring-primary/20">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
+          <input
+            ref={inputRef}
+            type="text"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleSave}
+            className="flex-1 bg-transparent text-sm font-medium outline-none border-b border-primary/40 pb-0.5"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+        <div className="flex items-center gap-1 shrink-0 ml-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-primary"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleSave();
+                }}
+              >
+                <Check className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>保存</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleCancel();
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>キャンセル</TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Link
       href={`/documents/${doc.id}`}
-      className="flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/50"
+      className="group flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/50"
     >
       <div className="flex items-center gap-3 min-w-0">
         <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
@@ -64,20 +151,36 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
         </div>
       </div>
 
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
-            onClick={handleDelete}
-            disabled={isPending}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>削除</TooltipContent>
-      </Tooltip>
+      <div className="flex items-center gap-1 shrink-0">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={handleStartEdit}
+              disabled={isPending}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>名前を変更</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={handleDelete}
+              disabled={isPending}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>削除</TooltipContent>
+        </Tooltip>
+      </div>
     </Link>
   );
 }
