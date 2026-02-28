@@ -49,3 +49,13 @@ export interface StructureCheckResult {
 }
 
 export type TranslationSource = "left" | "right" | null;
+
+export interface SentenceTranslationRequest {
+  sentences: string[];
+  sourceLang: LanguageCode;
+  targetLang: LanguageCode;
+}
+
+export interface SentenceTranslationResponse {
+  translations: string[];
+}
