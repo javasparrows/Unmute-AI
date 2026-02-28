@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback } from "react";
 import type {
   LanguageCode,
-  TranslationProvider,
   TranslationUsage,
   SentenceTranslationResponse,
 } from "@/types";
@@ -33,7 +32,6 @@ interface UseSyncTranslationReturn {
     leftLang: LanguageCode,
     rightLang: LanguageCode,
     journal?: string,
-    provider?: TranslationProvider,
   ) => Promise<SyncResult | null>;
   syncRightToLeft: (
     leftText: string,
@@ -41,7 +39,6 @@ interface UseSyncTranslationReturn {
     leftLang: LanguageCode,
     rightLang: LanguageCode,
     journal?: string,
-    provider?: TranslationProvider,
   ) => Promise<SyncResult | null>;
   initSnapshots: (leftText: string, rightText: string) => void;
 }
@@ -76,7 +73,6 @@ export function useSyncTranslation(
       sourceSnapshot: React.RefObject<string[]>,
       targetSnapshot: React.RefObject<string[]>,
       journal?: string,
-      provider?: TranslationProvider,
     ): Promise<SyncResult | null> => {
       // Cancel any in-flight request
       if (abortControllerRef.current) {
@@ -133,7 +129,6 @@ export function useSyncTranslation(
             sentences: trimmedSentences,
             sourceLang,
             targetLang,
-            provider,
             journal,
           }),
           signal: controller.signal,
@@ -232,7 +227,6 @@ export function useSyncTranslation(
       leftLang: LanguageCode,
       rightLang: LanguageCode,
       journal?: string,
-      provider?: TranslationProvider,
     ) => {
       return syncDirection(
         leftText,
@@ -242,7 +236,6 @@ export function useSyncTranslation(
         leftSnapshotRef,
         rightSnapshotRef,
         journal,
-        provider,
       );
     },
     [syncDirection],
@@ -255,7 +248,6 @@ export function useSyncTranslation(
       leftLang: LanguageCode,
       rightLang: LanguageCode,
       journal?: string,
-      provider?: TranslationProvider,
     ) => {
       return syncDirection(
         rightText,
@@ -265,7 +257,6 @@ export function useSyncTranslation(
         rightSnapshotRef,
         leftSnapshotRef,
         journal,
-        provider,
       );
     },
     [syncDirection],

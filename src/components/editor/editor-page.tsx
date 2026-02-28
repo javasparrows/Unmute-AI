@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useMemo } from "react";
 import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
-import type { LanguageCode, TranslationProvider } from "@/types";
+import type { LanguageCode } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
@@ -15,7 +15,6 @@ import { TranslationStatus } from "./translation-status";
 import { CostDisplay } from "./cost-display";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
-import { ProviderSelector } from "../settings/provider-selector";
 import { SettingsPanel } from "../settings/settings-panel";
 import { HistoryPanel } from "../history/history-panel";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
@@ -33,10 +32,6 @@ export function EditorPage() {
   const [leftLang, setLeftLang] = useLocalStorage<LanguageCode>("left-lang", "ja");
   const [rightLang, setRightLang] = useLocalStorage<LanguageCode>("right-lang", "en");
   const [journal, setJournal] = useLocalStorage("journal", "general");
-  const [provider, setProvider] = useLocalStorage<TranslationProvider>(
-    "translation-provider",
-    "deepl",
-  );
 
   // Track latest text values for sync callbacks
   const leftTextRef = useRef(leftText);
@@ -107,13 +102,12 @@ export function EditorPage() {
       leftLang,
       rightLang,
       journal,
-      provider,
     );
     if (result) {
       setRightText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
     }
-  }, [leftLang, rightLang, journal, provider, syncLeftToRight]);
+  }, [leftLang, rightLang, journal, syncLeftToRight]);
 
   const handleSyncRightToLeft = useCallback(async () => {
     const result = await syncRightToLeft(
@@ -122,13 +116,12 @@ export function EditorPage() {
       leftLang,
       rightLang,
       journal,
-      provider,
     );
     if (result) {
       setLeftText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
     }
-  }, [leftLang, rightLang, journal, provider, syncRightToLeft]);
+  }, [leftLang, rightLang, journal, syncRightToLeft]);
 
   const handleLeftSentence = useCallback(
     (index: number) => {
@@ -280,8 +273,6 @@ export function EditorPage() {
         <LanguageSelector value={rightLang} onChange={setRightLang} />
         <Separator orientation="vertical" className="h-6" />
         <JournalSelector value={journal} onChange={setJournal} />
-        <Separator orientation="vertical" className="h-6" />
-        <ProviderSelector value={provider} onChange={setProvider} />
         <Separator orientation="vertical" className="h-6" />
         <Tooltip>
           <TooltipTrigger asChild>

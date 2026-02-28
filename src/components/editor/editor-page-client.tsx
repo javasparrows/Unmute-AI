@@ -3,7 +3,7 @@
 import { useRef, useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2 } from "lucide-react";
-import type { LanguageCode, TranslationProvider } from "@/types";
+import type { LanguageCode } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
@@ -14,7 +14,7 @@ import { TranslationStatus } from "./translation-status";
 import { CostDisplay } from "./cost-display";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
-import { ProviderSelector } from "../settings/provider-selector";
+
 import { SettingsPanel } from "../settings/settings-panel";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { SaveButton } from "./save-button";
@@ -40,7 +40,6 @@ interface InitialVersion {
 }
 
 interface PlanLimitsProps {
-  allowedProviders: TranslationProvider[];
   allowedJournalIds: string[] | "all";
 }
 
@@ -72,9 +71,6 @@ export function EditorPageClient({
     (initialVersion?.targetLang as LanguageCode) ?? "en",
   );
   const [journal, setJournal] = useState(initialVersion?.journal ?? "general");
-  const [provider, setProvider] = useState<TranslationProvider>(
-    (initialVersion?.provider as TranslationProvider) ?? "deepl",
-  );
   const [currentVersionNumber, setCurrentVersionNumber] = useState(
     initialVersion?.versionNumber ?? 1,
   );
@@ -144,13 +140,12 @@ export function EditorPageClient({
       leftLang,
       rightLang,
       journal,
-      provider,
     );
     if (result) {
       setRightText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
     }
-  }, [leftLang, rightLang, journal, provider, syncLeftToRight]);
+  }, [leftLang, rightLang, journal, syncLeftToRight]);
 
   const handleSyncRightToLeft = useCallback(async () => {
     const result = await syncRightToLeft(
@@ -159,13 +154,12 @@ export function EditorPageClient({
       leftLang,
       rightLang,
       journal,
-      provider,
     );
     if (result) {
       setLeftText(result.text);
       sourceRangesRef.current = result.sentenceRanges;
     }
-  }, [leftLang, rightLang, journal, provider, syncRightToLeft]);
+  }, [leftLang, rightLang, journal, syncRightToLeft]);
 
   const handleLeftSentence = useCallback(
     (index: number) => setSentence(index, "left"),
@@ -228,7 +222,6 @@ export function EditorPageClient({
       setLeftLang((version.sourceLang as LanguageCode) ?? "ja");
       setRightLang((version.targetLang as LanguageCode) ?? "en");
       if (version.journal) setJournal(version.journal);
-      if (version.provider) setProvider(version.provider as TranslationProvider);
       sourceRangesRef.current = version.leftRanges ?? [];
       translatedRangesRef.current = version.rightRanges ?? [];
       setCurrentVersionNumber(version.versionNumber);
@@ -297,7 +290,6 @@ export function EditorPageClient({
             sourceLang={leftLang}
             targetLang={rightLang}
             journal={journal}
-            provider={provider}
             leftRanges={
               sourceRangesRef.current.length > 0
                 ? sourceRangesRef.current
@@ -360,12 +352,6 @@ export function EditorPageClient({
           value={journal}
           onChange={setJournal}
           allowedJournalIds={planLimits?.allowedJournalIds}
-        />
-        <Separator orientation="vertical" className="h-6" />
-        <ProviderSelector
-          value={provider}
-          onChange={setProvider}
-          allowedProviders={planLimits?.allowedProviders}
         />
         <Separator orientation="vertical" className="h-6" />
         <Tooltip>

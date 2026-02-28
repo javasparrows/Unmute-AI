@@ -36,9 +36,9 @@ const features = [
   },
   {
     icon: Layers,
-    title: "Multi-Provider Engine",
+    title: "LaTeX-Aware Translation",
     description:
-      "DeepL for precision, Gemini for context. Switch providers per document to get the best result.",
+      "Preserves \\cite{}, \\ref{}, equations, and all LaTeX commands intact. Your markup stays untouched.",
   },
   {
     icon: FileCheck,
@@ -164,8 +164,8 @@ export default function LandingPage() {
             <div>
               <div className="text-2xl font-bold">Contextual</div>
               <p className="mt-2 text-sm text-secondary-foreground/70">
-                Powered by multiple AI providers that understand academic
-                context, not just vocabulary.
+                Powered by Gemini 2.5 Flash, understanding academic context
+                and preserving LaTeX markup, not just vocabulary.
               </p>
             </div>
             <div>

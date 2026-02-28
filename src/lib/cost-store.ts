@@ -12,10 +12,10 @@ function currentMonth(): string {
 }
 
 function defaultCosts(): TranslationCosts {
-  const month = currentMonth();
   return {
-    deepl: { characters: 0, lastReset: month },
-    gemini: { inputTokens: 0, outputTokens: 0, lastReset: month },
+    inputTokens: 0,
+    outputTokens: 0,
+    lastReset: currentMonth(),
   };
 }
 
@@ -31,7 +31,12 @@ function readFromStorage(): TranslationCosts {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultCosts();
-    return JSON.parse(raw) as TranslationCosts;
+    const parsed = JSON.parse(raw);
+    // Migration: if old format with deepl/gemini keys, reset
+    if (parsed.deepl || parsed.gemini) {
+      return defaultCosts();
+    }
+    return parsed as TranslationCosts;
   } catch {
     return defaultCosts();
   }
@@ -51,28 +56,11 @@ function writeToStorage(costs: TranslationCosts) {
  */
 function withMonthlyReset(costs: TranslationCosts): TranslationCosts {
   const month = currentMonth();
-  let changed = false;
-
-  if (costs.deepl.lastReset !== month) {
-    costs = {
-      ...costs,
-      deepl: { characters: 0, lastReset: month },
-    };
-    changed = true;
+  if (costs.lastReset !== month) {
+    const reset = defaultCosts();
+    writeToStorage(reset);
+    return reset;
   }
-
-  if (costs.gemini.lastReset !== month) {
-    costs = {
-      ...costs,
-      gemini: { inputTokens: 0, outputTokens: 0, lastReset: month },
-    };
-    changed = true;
-  }
-
-  if (changed) {
-    writeToStorage(costs);
-  }
-
   return costs;
 }
 
@@ -97,17 +85,10 @@ export const costStore = {
     };
   },
 
-  addDeepLUsage(characters: number) {
+  addUsage(inputTokens: number, outputTokens: number) {
     const costs = withMonthlyReset(readFromStorage());
-    costs.deepl.characters += characters;
-    writeToStorage(costs);
-    notifyListeners();
-  },
-
-  addGeminiUsage(inputTokens: number, outputTokens: number) {
-    const costs = withMonthlyReset(readFromStorage());
-    costs.gemini.inputTokens += inputTokens;
-    costs.gemini.outputTokens += outputTokens;
+    costs.inputTokens += inputTokens;
+    costs.outputTokens += outputTokens;
     writeToStorage(costs);
     notifyListeners();
   },

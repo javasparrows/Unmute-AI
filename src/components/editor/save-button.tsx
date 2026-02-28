@@ -18,7 +18,6 @@ interface SaveButtonProps {
   sourceLang: string;
   targetLang: string;
   journal: string;
-  provider: string;
   leftRanges: { from: number; to: number }[];
   rightRanges: { from: number; to: number }[];
   onSaved: (versionNumber: number) => void;
@@ -31,7 +30,6 @@ export function SaveButton({
   sourceLang,
   targetLang,
   journal,
-  provider,
   leftRanges,
   rightRanges,
   onSaved,
@@ -47,7 +45,7 @@ export function SaveButton({
         sourceLang,
         targetLang,
         journal,
-        provider,
+        provider: "gemini",
         leftRanges,
         rightRanges,
       });

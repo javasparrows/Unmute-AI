@@ -4,7 +4,6 @@ import type {
   SentenceTranslationResponse,
   TranslationUsage,
 } from "@/types";
-import { translateWithDeepL } from "@/lib/deepl";
 import { translateWithGemini } from "@/lib/gemini-translate";
 import { auth } from "@/lib/auth";
 import { getUserPlanById } from "@/lib/user-plan";
@@ -24,7 +23,6 @@ export async function POST(request: Request) {
       sentences,
       sourceLang,
       targetLang,
-      provider = "deepl",
       journal,
     } = (await request.json()) as SentenceTranslationRequest;
 
@@ -35,15 +33,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { plan, limits } = await getUserPlanById(session.user.id);
-
-    // Check provider access
-    if (!limits.allowedProviders.includes(provider)) {
-      return NextResponse.json(
-        { error: `${provider}はお使いのプランでは利用できません` },
-        { status: 403 },
-      );
-    }
+    const { plan } = await getUserPlanById(session.user.id);
 
     // Filter out empty sentences, keep track of indices
     const nonEmptyIndices: number[] = [];
@@ -81,31 +71,17 @@ export async function POST(request: Request) {
     let usage: TranslationUsage | undefined;
 
     if (textsToTranslate.length > 0) {
-      if (provider === "gemini") {
-        const result = await translateWithGemini({
-          texts: textsToTranslate,
-          sourceLang,
-          targetLang,
-          journalId: journal,
-        });
-        translated = result.translations;
-        usage = {
-          provider: "gemini",
-          inputTokens: result.inputTokens,
-          outputTokens: result.outputTokens,
-        };
-      } else {
-        const result = await translateWithDeepL({
-          texts: textsToTranslate,
-          sourceLang,
-          targetLang,
-        });
-        translated = result.translations;
-        usage = {
-          provider: "deepl",
-          characters: result.billedCharacters,
-        };
-      }
+      const result = await translateWithGemini({
+        texts: textsToTranslate,
+        sourceLang,
+        targetLang,
+        journalId: journal,
+      });
+      translated = result.translations;
+      usage = {
+        inputTokens: result.inputTokens,
+        outputTokens: result.outputTokens,
+      };
 
       // Record usage
       await recordTranslationUsage(session.user.id, totalChars);

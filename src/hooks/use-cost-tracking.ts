@@ -18,14 +18,7 @@ export function useCostTracking(): UseCostTrackingReturn {
   );
 
   const addUsage = useCallback((usage: TranslationUsage) => {
-    if (usage.provider === "deepl" && usage.characters != null) {
-      costStore.addDeepLUsage(usage.characters);
-    } else if (usage.provider === "gemini") {
-      costStore.addGeminiUsage(
-        usage.inputTokens ?? 0,
-        usage.outputTokens ?? 0,
-      );
-    }
+    costStore.addUsage(usage.inputTokens, usage.outputTokens);
   }, []);
 
   const reset = useCallback(() => {

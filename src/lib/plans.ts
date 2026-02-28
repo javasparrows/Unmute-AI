@@ -1,12 +1,10 @@
 import type { Plan } from "@/generated/prisma/client";
-import type { TranslationProvider } from "@/types";
 
 export interface PlanLimits {
   translationCharsPerMonth: number; // -1 = unlimited
   maxDocuments: number; // -1 = unlimited
   maxVersionsPerDoc: number; // -1 = unlimited
   structureChecksPerMonth: number; // -1 = unlimited
-  allowedProviders: TranslationProvider[];
   allowedJournalIds: string[] | "all";
 }
 
@@ -32,14 +30,13 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: 3,
       maxVersionsPerDoc: 5,
       structureChecksPerMonth: 3,
-      allowedProviders: ["deepl"],
       allowedJournalIds: ["general"],
     },
     features: [
       "月10,000文字の翻訳",
       "最大3ドキュメント",
       "バージョン5個/ドキュメント",
-      "DeepLのみ",
+      "Gemini 2.5 Flash",
       "General Academicスタイル",
       "月3回の構成チェック",
     ],
@@ -55,14 +52,13 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: 20,
       maxVersionsPerDoc: 50,
       structureChecksPerMonth: 30,
-      allowedProviders: ["deepl", "gemini"],
       allowedJournalIds: "all",
     },
     features: [
       "月100,000文字の翻訳",
       "最大20ドキュメント",
       "バージョン50個/ドキュメント",
-      "DeepL + Gemini",
+      "Gemini 2.5 Flash",
       "全8種ジャーナルスタイル",
       "月30回の構成チェック",
     ],
@@ -78,14 +74,13 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: -1,
       maxVersionsPerDoc: -1,
       structureChecksPerMonth: -1,
-      allowedProviders: ["deepl", "gemini"],
       allowedJournalIds: "all",
     },
     features: [
       "無制限の翻訳",
       "無制限のドキュメント",
       "無制限のバージョン",
-      "DeepL + Gemini",
+      "Gemini 2.5 Flash",
       "全8種ジャーナルスタイル",
       "無制限の構成チェック",
     ],

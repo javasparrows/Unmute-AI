@@ -9,7 +9,6 @@
   ├── 右パネル (翻訳エディタ)
   ├── 言語セレクター
   ├── ジャーナルセレクター
-  ├── プロバイダセレクター
   ├── 履歴パネル
   └── 構成チェックダイアログ
         │
@@ -23,8 +22,7 @@
         │
         ▼
 [翻訳プロバイダ]
-  ├── DeepL API (translate/v2)      — /api/translate-sentence から呼び出し
-  └── Gemini API (gemini-2.5-flash-lite) — /api/translate-sentence, /api/align-sentences から呼び出し
+  └── Gemini API (gemini-2.5-flash) — /api/translate-sentence, /api/align-sentences から呼び出し
 ```
 
 ## 双方向手動同期翻訳フロー
@@ -66,7 +64,7 @@ alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
 
 - テキスト状態: クライアント側のReact state
 - アラインメントマップ: クライアント側の React ref（同期のたびに更新）
-- 言語設定・ジャーナル設定・プロバイダ設定: localStorage に永続化
+- 言語設定・ジャーナル設定: localStorage に永続化
 - 修正履歴: localStorage に保存（最大50件、2MB制限）
 - コスト追跡: localStorage に永続化（月次自動リセット）
 
