@@ -263,8 +263,24 @@ export default function LandingPage() {
             >
               Pricing
             </Link>
-            <span>Terms</span>
-            <span>Privacy</span>
+            <Link
+              href="/terms"
+              className="hover:text-foreground transition-colors"
+            >
+              Terms
+            </Link>
+            <Link
+              href="/privacy"
+              className="hover:text-foreground transition-colors"
+            >
+              Privacy
+            </Link>
+            <Link
+              href="/legal/tokushoho"
+              className="hover:text-foreground transition-colors"
+            >
+              特商法表記
+            </Link>
           </div>
           <div>&copy; {new Date().getFullYear()} Unmute AI</div>
         </div>
