@@ -2,7 +2,7 @@
 
 ## フロントエンド / フレームワーク
 
-- **Next.js** (App Router) — `writing_paper_other_language/` ディレクトリ内に構築
+- **Next.js** (App Router)
 - **TypeScript**
 - **Tailwind CSS** + **shadcn/ui**
 
@@ -11,6 +11,12 @@
 - **Gemini API** (gemini-2.5-flash-lite)
 - `GEMINI_API_KEY` を環境変数からロード
 - Vercel AI SDK (`ai` + `@ai-sdk/google`) を使用
+
+## データベース
+
+- **Vercel Postgres** (Neon Serverless PostgreSQL)
+- **Prisma ORM** + `@prisma/adapter-neon` (サーバーレス対応)
+- リージョン: ap-southeast-1 (Singapore)
 
 ## ドメイン
 
@@ -22,9 +28,8 @@
 
 ## デプロイ / インフラ
 
-- **Google Cloud Run** — Next.js standalone モードで実行
-- **Artifact Registry** — Docker イメージの保管 (europe-west1)
-- **Cloud SQL** (PostgreSQL) — データベース
-- **Secret Manager** — ランタイムシークレット管理
-- **GitHub Actions** — CI/CD パイプライン
-- **Workload Identity Federation** — GitHub → GCP keyless認証
+- **Vercel** — Next.js のホスティング + 自動デプロイ
+- **Vercel Postgres (Neon)** — サーバーレス PostgreSQL
+- **Vercel Environment Variables** — シークレット管理
+- Git push to main → 自動プロダクションデプロイ
+- PR → 自動プレビューデプロイ

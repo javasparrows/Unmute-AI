@@ -2,62 +2,51 @@
 
 ## デプロイ先
 
-- Google Cloud Run (europe-west1)
-- プロジェクト: `translater-488810`
-- サービス名: `unmute-ai`
+- Vercel
+- プロジェクト: `unmute-ai`
+- ドメイン: `unmute-ai.com`
 
-## CI/CD パイプライン
+## 自動デプロイ
 
-### 自動デプロイ (deploy.yml)
+Vercel の GitHub 連携により、以下が自動実行される:
 
-mainブランチへのpushで自動実行:
+- **main ブランチへの push** → プロダクションデプロイ
+- **PR 作成** → プレビューデプロイ
 
-1. GCP認証 (Workload Identity Federation)
-2. Cloud SQL Auth Proxy起動
-3. `prisma migrate deploy` (失敗時はデプロイ中止)
-4. Docker build → Artifact Registry へ push
-5. Cloud Run へデプロイ
+ビルドコマンド: `prisma generate && next build`
 
-### PR検証 (ci.yml)
+## データベース
 
-mainへのPRで自動実行:
+- **Vercel Postgres (Neon)** — ap-southeast-1 (Singapore)
+- Prisma ORM + `@prisma/adapter-neon`
 
-1. `yarn install`
-2. `prisma generate`
-3. `yarn lint`
-4. `yarn build`
+### マイグレーション
 
-## 環境変数・シークレット
+マイグレーションはローカルから実行:
 
-### GitHub Secrets (必須)
+```bash
+npx prisma migrate deploy
+```
 
-| Secret名 | 用途 |
-|----------|------|
-| `GCP_WORKLOAD_IDENTITY_PROVIDER` | WIFプロバイダーリソース名 |
-| `GCP_SERVICE_ACCOUNT_EMAIL` | GCPサービスアカウントメール |
-| `CLOUD_SQL_CONNECTION_NAME` | Cloud SQLインスタンス接続名 |
-| `DATABASE_URL` | マイグレーション用DB接続文字列 (127.0.0.1経由) |
+`prisma.config.ts` が `DATABASE_URL_UNPOOLED` (直接接続) を使用してマイグレーションを実行する。
 
-### Cloud Run ランタイム環境変数
+## 環境変数
 
-GCP Secret Manager で管理し、Cloud Run サービスに紐付け:
+Vercel ダッシュボード (Settings > Environment Variables) で管理:
 
-- `GEMINI_API_KEY`: Gemini APIキー
-- `DATABASE_URL`: Cloud SQL接続文字列
-- `AUTH_SECRET`: Auth.jsセッション暗号化キー
-- `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET`: Google OAuth 2.0
-
-## GCP前提条件 (手動・1回限り)
-
-1. API有効化: Cloud Run, Artifact Registry, Cloud SQL Admin, Secret Manager, IAM
-2. Artifact Registry リポジトリ作成 (`unmute-ai`, europe-west1)
-3. Service Account作成 + 必要なロール付与
-4. Workload Identity Federation設定 (GitHub Actions連携)
-5. GCP Secret Manager にランタイムシークレット登録
-6. GitHub リポジトリに Secrets 登録
+| 変数名 | 用途 |
+|--------|------|
+| `DATABASE_URL` | Neon pooling 接続文字列 |
+| `DATABASE_URL_UNPOOLED` | Neon 直接接続文字列 (マイグレーション用) |
+| `GEMINI_API_KEY` | Gemini APIキー |
+| `AUTH_SECRET` | Auth.js セッション暗号化キー |
+| `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | Google OAuth 2.0 |
+| `AUTH_TRUST_HOST` | `true` |
+| `STRIPE_SECRET_KEY` | Stripe シークレットキー |
+| `STRIPE_WEBHOOK_SECRET` | Stripe Webhook シークレット |
+| `STRIPE_PRO_PRICE_ID` / `STRIPE_MAX_PRICE_ID` | Stripe 料金プラン ID |
 
 ## ビルド
 
-- `yarn build` でプロダクションビルド (Next.js standalone output)
-- Docker マルチステージビルド: dependencies → builder (prisma generate + build) → runner
-- Node.js 24 LTS ベースイメージ
+- `prisma generate && next build` (Vercel のビルドコマンド)
+- Dockerfile 不要（Vercel がネイティブに Next.js をビルド・実行）

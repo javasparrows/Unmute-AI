@@ -7,7 +7,7 @@
 - [x] **Task 3**: Prisma 接続設定を Vercel Postgres 向けに変更
 - [x] **Task 4**: next.config.ts から `output: "standalone"` を削除
 - [x] **Task 5**: Vercel に環境変数を設定
-- [ ] **Task 6**: Vercel でデプロイ確認
+- [x] **Task 6**: Vercel でデプロイ確認
 - [ ] **Task 7**: カスタムドメイン `unmute-ai.com` を Vercel に設定
 - [ ] **Task 8**: 不要ファイル削除 (Dockerfile, .dockerignore, deploy.yml, ci.yml, gcp-resource-rename.md)
 - [ ] **Task 9**: project/ ドキュメントを Vercel 構成に更新
