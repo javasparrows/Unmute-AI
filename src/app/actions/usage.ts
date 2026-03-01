@@ -113,6 +113,34 @@ export async function checkVersionLimit(
   };
 }
 
+export async function recordApiUsage(params: {
+  userId: string;
+  type: "translation" | "structure_check";
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  sourceChars?: number;
+  translatedChars?: number;
+  sourceLang?: string;
+  targetLang?: string;
+  documentId?: string;
+}): Promise<void> {
+  await prisma.apiUsageLog.create({
+    data: {
+      userId: params.userId,
+      type: params.type,
+      model: params.model,
+      inputTokens: params.inputTokens,
+      outputTokens: params.outputTokens,
+      sourceChars: params.sourceChars ?? 0,
+      translatedChars: params.translatedChars ?? 0,
+      sourceLang: params.sourceLang,
+      targetLang: params.targetLang,
+      documentId: params.documentId,
+    },
+  });
+}
+
 export async function getUsageSummary(userId: string, plan: Plan) {
   const usage = await getOrCreateUsageRecord(userId);
   const limits = getPlanInfo(plan).limits;

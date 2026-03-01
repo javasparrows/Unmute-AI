@@ -10,6 +10,7 @@ import { getUserPlanById } from "@/lib/user-plan";
 import {
   checkTranslationLimit,
   recordTranslationUsage,
+  recordApiUsage,
 } from "@/app/actions/usage";
 
 export async function POST(request: Request) {
@@ -85,6 +86,22 @@ export async function POST(request: Request) {
 
       // Record usage
       await recordTranslationUsage(session.user.id, totalChars);
+
+      const translatedChars = translated.reduce(
+        (sum, t) => sum + t.length,
+        0,
+      );
+      await recordApiUsage({
+        userId: session.user.id,
+        type: "translation",
+        model: "gemini-2.5-flash",
+        inputTokens: result.inputTokens,
+        outputTokens: result.outputTokens,
+        sourceChars: totalChars,
+        translatedChars,
+        sourceLang,
+        targetLang,
+      });
     }
 
     // Rebuild full translations array with empty strings for empty inputs

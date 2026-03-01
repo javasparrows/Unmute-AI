@@ -27,6 +27,7 @@ model User {
   sessions             Session[]
   documents            Document[]
   usageRecords         UsageRecord[]
+  apiUsageLogs         ApiUsageLog[]
   plan                 Plan           @default(FREE)
   stripeCustomerId     String?        @unique
   stripeSubscriptionId String?        @unique
@@ -115,4 +116,23 @@ model UsageRecord {
 
   @@unique([userId, month])
   @@index([userId])
+}
+
+model ApiUsageLog {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // "translation" | "structure_check"
+  model           String   // e.g. "gemini-2.5-flash"
+  inputTokens     Int
+  outputTokens    Int
+  sourceChars     Int      @default(0)
+  translatedChars Int      @default(0)
+  sourceLang      String?
+  targetLang      String?
+  documentId      String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([userId, type])
 }
