@@ -99,3 +99,24 @@ alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
 保存: Client State → Server Action (saveVersion) → DB
 復元: Version Panel → Server Action (getVersion) → Client State更新
 ```
+
+## デプロイアーキテクチャ
+
+```
+Push to main
+    │
+    ▼
+GitHub Actions Runner
+    ├── 1. Checkout
+    ├── 2. GCP認証 (Workload Identity Federation)
+    ├── 3. Cloud SQL Auth Proxy起動
+    ├── 4. prisma migrate deploy (失敗時はここで停止)
+    ├── 5. Docker build (prisma generate含む)
+    ├── 6. Artifact Registry へ push
+    └── 7. Cloud Run へデプロイ
+```
+
+- **Cloud Run**: Next.js standalone モードで実行
+- **Artifact Registry**: Docker イメージの保管 (`europe-west1-docker.pkg.dev`)
+- **Cloud SQL Auth Proxy**: マイグレーション時のDB接続に使用
+- **Workload Identity Federation**: GitHub Actions → GCP の keyless 認証

@@ -43,6 +43,9 @@ COPY . .
 
 ENV NODE_ENV=production
 
+# Generate Prisma client (src/generated/prisma is in .gitignore)
+RUN npx prisma generate
+
 # Build Next.js application
 RUN if [ -f package-lock.json ]; then \
     npm run build; \

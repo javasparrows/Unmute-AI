@@ -10,7 +10,10 @@
 
 ## NFR-3: デプロイ
 
-- Vercelにデプロイ予定
+- Google Cloud Run にデプロイ
+- GitHub Actions による CI/CD パイプライン（main push → 自動デプロイ）
+- Prismaマイグレーションはデプロイ前にCI/CDパイプライン内で実行
+- Workload Identity Federation による keyless GCP認証
 
 ## NFR-4: データ保存
 
