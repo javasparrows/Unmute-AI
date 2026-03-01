@@ -7,9 +7,12 @@ import {
   GitBranch,
   DollarSign,
   FileCheck,
-  Clock,
-  XCircle,
-  Wallet,
+  PenLine,
+  LayoutTemplate,
+  Sparkles,
+  Shield,
+  Brain,
+  Zap,
 } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
@@ -18,8 +21,52 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
 } from "@/components/ui/card";
+
+const steps = [
+  {
+    icon: PenLine,
+    number: "01",
+    title: "Draft Freely",
+    description:
+      "Write your paper in any language you think in. No mental translation required.",
+  },
+  {
+    icon: LayoutTemplate,
+    number: "02",
+    title: "Structure Instantly",
+    description:
+      "AI translates and adapts to your target journal's style in real time, sentence by sentence.",
+  },
+  {
+    icon: Sparkles,
+    number: "03",
+    title: "Refine & Submit",
+    description:
+      "Edit in either language. Polish your manuscript and submit with confidence.",
+  },
+];
+
+const coreValues = [
+  {
+    icon: Brain,
+    title: "Academic Precision",
+    description:
+      "Trained on academic conventions. Understands IMRAD structure, LaTeX markup, and journal-specific styling.",
+  },
+  {
+    icon: Zap,
+    title: "Zero Cognitive Load",
+    description:
+      "Think in your language, publish in any. No more context-switching between writing and translating.",
+  },
+  {
+    icon: Shield,
+    title: "Security & Privacy",
+    description:
+      "Your research stays yours. Transparent API usage, no data retention, full cost visibility.",
+  },
+];
 
 const features = [
   {
@@ -60,55 +107,29 @@ const features = [
   },
 ];
 
-const problems = [
-  {
-    icon: Clock,
-    stat: "40%",
-    label: "of research time",
-    description: "spent on language, not science",
-  },
-  {
-    icon: XCircle,
-    stat: "1 in 4",
-    label: "papers rejected",
-    description: "due to language quality issues",
-  },
-  {
-    icon: Wallet,
-    stat: "$1,200+",
-    label: "per paper",
-    description: "for professional translation services",
-  },
-];
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
       {/* Hero */}
-      <section className="bg-secondary py-24 sm:py-32">
+      <section className="bg-secondary py-28 sm:py-36">
         <div className="mx-auto max-w-4xl px-6 text-center">
-          <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Your research deserves
+          <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-secondary-foreground">
+            Focus on the research.
             <br />
-            to be heard.
+            <span className="text-primary">We handle the language.</span>
           </h1>
           <p className="mt-6 text-lg text-secondary-foreground/70 max-w-2xl mx-auto leading-relaxed">
             AI-powered academic translation that understands journal styles,
             paper structure, and your intent. Write in your language, publish in
             any.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-10">
             <Link href="/login">
-              <Button size="lg" className="gap-2">
-                Get Started — Free
+              <Button size="lg" className="gap-2 text-base px-8 py-6">
+                Start Writing for Free
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/pricing">
-              <Button variant="outline" size="lg">
-                View Pricing
               </Button>
             </Link>
           </div>
@@ -117,28 +138,46 @@ export default function LandingPage() {
 
       {/* Problem */}
       <section className="py-24">
+        <div className="mx-auto max-w-4xl px-6 text-center">
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+            Don&apos;t let the language barrier
+            <br />
+            slow your intellect.
+          </h2>
+          <p className="mt-6 text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+            Non-native English speakers face systemic barriers in academic
+            publishing. Up to 40% of research time is spent wrestling with
+            language instead of advancing science.
+          </p>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="bg-secondary py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
-            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-              Publishing in English shouldn&apos;t be
-              <br />
-              the hardest part of your research.
+            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl text-secondary-foreground">
+              How It Works
             </h2>
-            <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-              Non-native English speakers face systemic barriers in academic
-              publishing. The cost is measured in time, money, and lost
-              discoveries.
+            <p className="mt-4 text-secondary-foreground/70 text-lg">
+              From draft to submission in three steps.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {problems.map((problem) => (
-              <div key={problem.stat} className="text-center">
-                <problem.icon className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
-                <div className="text-4xl font-bold">{problem.stat}</div>
-                <div className="text-sm font-medium mt-1">{problem.label}</div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  {problem.description}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {steps.map((step) => (
+              <div key={step.number} className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-6">
+                  <step.icon className="h-8 w-8 text-primary" />
+                </div>
+                <div className="text-sm font-mono text-primary mb-2">
+                  {step.number}
+                </div>
+                <h3 className="text-xl font-bold text-secondary-foreground mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-secondary-foreground/70 leading-relaxed">
+                  {step.description}
                 </p>
               </div>
             ))}
@@ -146,61 +185,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Solution */}
-      <section className="bg-secondary py-24">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-            Not a grammar checker.
-            <br />
-            Your academic translation partner.
-          </h2>
-          <p className="mt-6 text-secondary-foreground/70 text-lg max-w-2xl mx-auto leading-relaxed">
-            Lexora doesn&apos;t just translate words. It understands the
-            structure of academic writing, adapts to journal-specific
-            conventions, and preserves your research intent across languages.
-          </p>
-
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8 text-left">
-            <div>
-              <div className="text-2xl font-bold">Contextual</div>
-              <p className="mt-2 text-sm text-secondary-foreground/70">
-                Powered by Gemini 2.5 Flash, understanding academic context
-                and preserving LaTeX markup, not just vocabulary.
-              </p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold">Bidirectional</div>
-              <p className="mt-2 text-sm text-secondary-foreground/70">
-                Edit in either language. Changes propagate sentence-by-sentence
-                in real time.
-              </p>
-            </div>
-            <div>
-              <div className="text-2xl font-bold">Transparent</div>
-              <p className="mt-2 text-sm text-secondary-foreground/70">
-                Every API call tracked. See costs before they happen. No
-                lock-in, no surprises.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
+      {/* Core Features */}
       <section id="features" className="py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-              Everything you need to publish globally
+              Built for researchers, by researchers.
             </h2>
-            <p className="mt-4 text-muted-foreground text-lg">
-              Purpose-built for researchers, by researchers.
-            </p>
           </div>
 
+          {/* Core values */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {coreValues.map((value) => (
+              <div
+                key={value.title}
+                className="text-center p-6 rounded-2xl bg-accent/50"
+              >
+                <value.icon className="h-10 w-10 text-primary mx-auto mb-4" />
+                <h3 className="text-lg font-bold mb-2">{value.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {value.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Feature cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
-              <Card key={feature.title} className="border-0 shadow-none bg-card">
+              <Card
+                key={feature.title}
+                className="border-0 shadow-none bg-card"
+              >
                 <CardHeader>
                   <feature.icon className="h-8 w-8 text-primary mb-2" />
                   <CardTitle className="text-base">{feature.title}</CardTitle>
@@ -212,35 +228,23 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Social Mission */}
+      {/* Bottom CTA */}
       <section className="bg-secondary py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
-            Language should never
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight text-secondary-foreground">
+            Evaluated by merit,
             <br />
-            limit science.
+            not by fluency.
           </h2>
           <p className="mt-6 text-secondary-foreground/70 text-lg max-w-xl mx-auto">
             Great research happens everywhere. We believe the world&apos;s best
             ideas deserve an equal voice, regardless of the language they were
             born in.
           </p>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-            Start writing for the world.
-          </h2>
-          <p className="mt-4 text-muted-foreground text-lg">
-            Free to start. No credit card required.
-          </p>
-          <div className="mt-8">
+          <div className="mt-10">
             <Link href="/login">
-              <Button size="lg" className="gap-2">
-                Get Started — Free
+              <Button size="lg" className="gap-2 text-base px-8 py-6">
+                Try Unmute AI Today
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -251,15 +255,18 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="mx-auto max-w-5xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="font-serif font-bold text-foreground">Lexora</div>
+          <div className="font-serif font-bold text-foreground">Unmute AI</div>
           <div className="flex items-center gap-6">
-            <Link href="/pricing" className="hover:text-foreground transition-colors">
+            <Link
+              href="/pricing"
+              className="hover:text-foreground transition-colors"
+            >
               Pricing
             </Link>
             <span>Terms</span>
             <span>Privacy</span>
           </div>
-          <div>&copy; {new Date().getFullYear()} Lexora</div>
+          <div>&copy; {new Date().getFullYear()} Unmute AI</div>
         </div>
       </footer>
     </div>

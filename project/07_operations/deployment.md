@@ -6,6 +6,8 @@
 - プロジェクト: `translater-488810`
 - サービス名: `lexora`
 
+> **注記**: UI上のサービス名は「Unmute AI」だが、GCPリソース名 (Cloud Run サービス名 `lexora`、Artifact Registry リポジトリ名 `lexora`) は既存インフラを維持するため変更しない。`.github/workflows/deploy.yml` 内の `SERVICE_NAME: lexora` / `AR_REPOSITORY: lexora` もそのまま。
+
 ## CI/CD パイプライン
 
 ### 自動デプロイ (deploy.yml)

@@ -12,6 +12,10 @@
 - `GEMINI_API_KEY` を環境変数からロード
 - Vercel AI SDK (`ai` + `@ai-sdk/google`) を使用
 
+## ドメイン
+
+- `unmute-ai.com`
+
 ## 参考
 
 - https://nextjs.org/docs/app/guides/ai-agents
