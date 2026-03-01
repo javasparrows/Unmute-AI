@@ -4,9 +4,7 @@
 
 - Google Cloud Run (europe-west1)
 - プロジェクト: `translater-488810`
-- サービス名: `lexora`
-
-> **注記**: UI上のサービス名は「Unmute AI」だが、GCPリソース名 (Cloud Run サービス名 `lexora`、Artifact Registry リポジトリ名 `lexora`) は既存インフラを維持するため変更しない。`.github/workflows/deploy.yml` 内の `SERVICE_NAME: lexora` / `AR_REPOSITORY: lexora` もそのまま。
+- サービス名: `unmute-ai`
 
 ## CI/CD パイプライン
 
@@ -52,7 +50,7 @@ GCP Secret Manager で管理し、Cloud Run サービスに紐付け:
 ## GCP前提条件 (手動・1回限り)
 
 1. API有効化: Cloud Run, Artifact Registry, Cloud SQL Admin, Secret Manager, IAM
-2. Artifact Registry リポジトリ作成 (`lexora`, europe-west1)
+2. Artifact Registry リポジトリ作成 (`unmute-ai`, europe-west1)
 3. Service Account作成 + 必要なロール付与
 4. Workload Identity Federation設定 (GitHub Actions連携)
 5. GCP Secret Manager にランタイムシークレット登録
