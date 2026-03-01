@@ -6,10 +6,10 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-8 px-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-serif font-bold tracking-tight">
-            Lexora
+            Unmute AI
           </h1>
           <p className="text-muted-foreground">
-            Academic translation, reimagined.
+            Focus on the research. We handle the language.
           </p>
         </div>
 

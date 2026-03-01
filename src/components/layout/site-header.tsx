@@ -10,7 +10,7 @@ export async function SiteHeader() {
     <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
       <div className="flex items-center gap-6">
         <Link href="/" className="text-lg font-serif font-bold tracking-tight">
-          Lexora
+          Unmute AI
         </Link>
         <nav className="hidden sm:flex items-center gap-4 text-sm">
           <Link
