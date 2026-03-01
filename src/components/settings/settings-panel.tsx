@@ -37,7 +37,7 @@ export function SettingsPanel() {
           </div>
           <div>
             <h3 className="text-sm font-medium mb-2">バージョン</h3>
-            <p className="text-sm text-muted-foreground">Lexora v0.1.0</p>
+            <p className="text-sm text-muted-foreground">Unmute AI v0.1.0</p>
           </div>
         </div>
       </SheetContent>

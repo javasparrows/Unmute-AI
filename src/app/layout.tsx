@@ -20,8 +20,8 @@ const fontMono = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Lexora",
-  description: "Your research deserves to be heard. AI-powered academic translation partner.",
+  title: "Unmute AI",
+  description: "Focus on the research. We handle the language. AI-powered academic translation for researchers worldwide.",
 };
 
 export default function RootLayout({
