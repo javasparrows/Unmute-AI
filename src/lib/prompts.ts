@@ -2,6 +2,17 @@ import type { LanguageCode } from "@/types";
 import { getLanguage } from "./languages";
 import { getJournal } from "./journals";
 
+function buildLanguageSpecificRules(targetLang: LanguageCode): string {
+  if (targetLang === "ja") {
+    return `
+JAPANESE-SPECIFIC RULES:
+- Use だ・である調 (da/dearu style, also known as 常体). This is the standard writing style for Japanese academic papers.
+- Do NOT use です・ます調 (desu/masu style, also known as 敬体).
+- Examples: 「〜である。」「〜した。」「〜と考えられる。」「〜を示す。」`;
+  }
+  return "";
+}
+
 export function buildTranslationPrompt(
   sourceLang: LanguageCode,
   targetLang: LanguageCode,
@@ -10,6 +21,7 @@ export function buildTranslationPrompt(
   const source = getLanguage(sourceLang);
   const target = getLanguage(targetLang);
   const journal = journalId ? getJournal(journalId) : getJournal("general");
+  const langRules = buildLanguageSpecificRules(targetLang);
 
   return `You are an expert academic translator specializing in scientific papers.
 
@@ -29,7 +41,7 @@ CRITICAL RULES:
    - Environments: \\begin{...}...\\end{...}
    - Any command starting with backslash: \\commandname{...} or \\commandname[...]{...}
    Place LaTeX commands in the grammatically correct position in the translated sentence.
-
+${langRules}
 STYLE GUIDE (${journal.name}):
 ${journal.styleGuide}
 
@@ -84,6 +96,7 @@ export function buildSentenceTranslationPrompt(
   const source = getLanguage(sourceLang);
   const target = getLanguage(targetLang);
   const journal = journalId ? getJournal(journalId) : getJournal("general");
+  const langRules = buildLanguageSpecificRules(targetLang);
 
   const system = `You are an expert academic translator specializing in scientific papers.
 
@@ -104,7 +117,7 @@ CRITICAL RULES:
    - Environments: \\begin{...}...\\end{...}
    - Any command starting with backslash: \\commandname{...} or \\commandname[...]{...}
    Place LaTeX commands in the grammatically correct position in the translated sentence.
-
+${langRules}
 STYLE GUIDE (${journal.name}):
 ${journal.styleGuide}
 
