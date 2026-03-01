@@ -11,8 +11,8 @@ concurrency:
 env:
   GCP_PROJECT_ID: translater-488810
   GCP_REGION: europe-west1
-  SERVICE_NAME: lexora
-  AR_REPOSITORY: lexora
+  SERVICE_NAME: unmute-ai
+  AR_REPOSITORY: unmute-ai
 
 permissions:
   contents: read
