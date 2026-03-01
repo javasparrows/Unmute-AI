@@ -72,8 +72,8 @@ alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
 
 ### データベース
 
-- **PostgreSQL** (Cloud SQL) via Prisma ORM
-- **Prisma Adapter** (`@prisma/adapter-pg`) for direct PG connections
+- **PostgreSQL** (Vercel Postgres / Neon) via Prisma ORM
+- **Prisma Adapter** (`@prisma/adapter-neon`) for serverless connections
 - テーブル: User, Account, Session, VerificationToken, Document, DocumentVersion
 
 ### 認証フロー
@@ -106,17 +106,13 @@ alignment: [{source:[0], target:[0]}, {source:[1,2], target:[1]}]
 Push to main
     │
     ▼
-GitHub Actions Runner
-    ├── 1. Checkout
-    ├── 2. GCP認証 (Workload Identity Federation)
-    ├── 3. Cloud SQL Auth Proxy起動
-    ├── 4. prisma migrate deploy (失敗時はここで停止)
-    ├── 5. Docker build (prisma generate含む)
-    ├── 6. Artifact Registry へ push
-    └── 7. Cloud Run へデプロイ
+Vercel
+    ├── 1. yarn install
+    ├── 2. prisma generate (build scriptに含む)
+    └── 3. next build → デプロイ
 ```
 
-- **Cloud Run**: Next.js standalone モードで実行
-- **Artifact Registry**: Docker イメージの保管 (`europe-west1-docker.pkg.dev`)
-- **Cloud SQL Auth Proxy**: マイグレーション時のDB接続に使用
-- **Workload Identity Federation**: GitHub Actions → GCP の keyless 認証
+- **Vercel**: Next.js ホスティング + 自動デプロイ
+- **Vercel Postgres (Neon)**: サーバーレス PostgreSQL (ap-southeast-1)
+- **Vercel Environment Variables**: シークレット管理
+- Prisma マイグレーションはローカルで `prisma migrate deploy` を実行
