@@ -6,6 +6,7 @@ import { getUserPlanById } from "@/lib/user-plan";
 import {
   checkStructureCheckLimit,
   recordStructureCheckUsage,
+  recordApiUsage,
 } from "@/app/actions/usage";
 import type { LanguageCode, StructureCheckResult } from "@/types";
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { text: result } = await generateText({
+  const { text: result, usage } = await generateText({
     model: translationModel,
     system: buildStructureCheckPrompt(lang),
     prompt: text,
@@ -46,6 +47,15 @@ export async function POST(request: Request) {
 
   // Record usage after successful check
   await recordStructureCheckUsage(session.user.id);
+
+  await recordApiUsage({
+    userId: session.user.id,
+    type: "structure_check",
+    model: "gemini-2.5-flash",
+    inputTokens: usage.inputTokens ?? 0,
+    outputTokens: usage.outputTokens ?? 0,
+    sourceChars: text.length,
+  });
 
   try {
     // Strip markdown code fences if present
