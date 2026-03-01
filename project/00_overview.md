@@ -13,4 +13,4 @@
 
 - Next.js (App Router)
 - Gemini API (gemini-2.5-flash-lite)
-- Vercelにデプロイ予定
+- Google Cloud Run にデプロイ (GitHub Actions CI/CD)

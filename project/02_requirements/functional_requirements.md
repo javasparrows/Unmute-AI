@@ -21,6 +21,7 @@
 ## FR-3: フォーマット保持
 
 - 改行、段落、スペースなどはそのまま反映されるようにプロンプトを設計する
+- 日本語への翻訳時は「だ・である調」（常体）を使用する（学術論文の標準的な文体）
 
 ## FR-4: カーソル連動（アラインメントベース）
 
@@ -72,3 +73,19 @@
 - 新規ドキュメント作成、削除、名前変更
 - 各ドキュメントにバージョン履歴を持つ
 - ドキュメント間の切り替えはURL遷移 (/documents/[id])
+
+## FR-12: API使用量詳細ログ (API Usage Logging)
+
+- API呼び出しごとに詳細なログを `ApiUsageLog` テーブルに記録する
+- 記録項目: userId, type, model, inputTokens, outputTokens, sourceChars, translatedChars, sourceLang, targetLang, documentId, createdAt
+- 対象エンドポイント:
+  - `POST /api/translate-sentence` → type="translation"
+  - `POST /api/check-structure` → type="structure_check"
+- 既存の `UsageRecord`（月次プラン制限チェック用）とは独立して運用する
+- SaaS運用のコスト分析・ユーザー別使用量追跡に活用する
+
+## FR-13: CI/CD自動デプロイ (Continuous Deployment)
+
+- mainブランチへのpushで自動的にCloud Runへデプロイされる
+- デプロイ前にPrismaマイグレーションが自動実行される（失敗時はデプロイ中止）
+- PRに対してlint + buildの自動チェックが実行される

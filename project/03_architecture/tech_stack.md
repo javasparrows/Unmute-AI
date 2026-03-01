@@ -16,6 +16,11 @@
 
 - https://nextjs.org/docs/app/guides/ai-agents
 
-## デプロイ
+## デプロイ / インフラ
 
-- **Vercel** にデプロイ予定
+- **Google Cloud Run** — Next.js standalone モードで実行
+- **Artifact Registry** — Docker イメージの保管 (europe-west1)
+- **Cloud SQL** (PostgreSQL) — データベース
+- **Secret Manager** — ランタイムシークレット管理
+- **GitHub Actions** — CI/CD パイプライン
+- **Workload Identity Federation** — GitHub → GCP keyless認証
