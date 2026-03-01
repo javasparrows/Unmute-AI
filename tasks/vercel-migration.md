@@ -8,11 +8,11 @@
 - [x] **Task 4**: next.config.ts から `output: "standalone"` を削除
 - [x] **Task 5**: Vercel に環境変数を設定
 - [x] **Task 6**: Vercel でデプロイ確認
-- [ ] **Task 7**: カスタムドメイン `unmute-ai.com` を Vercel に設定
-- [ ] **Task 8**: 不要ファイル削除 (Dockerfile, .dockerignore, deploy.yml, ci.yml, gcp-resource-rename.md)
-- [ ] **Task 9**: project/ ドキュメントを Vercel 構成に更新
-- [ ] **Task 10**: GCP リソース全削除
-- [ ] **Task 11**: 最終確認 & git commit/merge
+- [x] **Task 7**: カスタムドメイン `unmute-ai.com` を Vercel に設定
+- [x] **Task 8**: 不要ファイル削除 (Dockerfile, .dockerignore, deploy.yml, ci.yml, gcp-resource-rename.md)
+- [x] **Task 9**: project/ ドキュメントを Vercel 構成に更新
+- [x] **Task 10**: GCP リソース全削除 (Cloud Run, AR, Cloud SQL, Secret Manager)
+- [x] **Task 11**: 最終確認 & git commit/merge
 
 ---
 
