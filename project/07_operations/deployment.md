@@ -4,7 +4,8 @@
 
 - Vercel
 - プロジェクト: `unmute-ai`
-- ドメイン: `unmute-ai.com`
+- ドメイン: `www.unmute-ai.com` (プライマリ)、`unmute-ai.com` → www へ 307 リダイレクト
+- リージョン: `hnd1` (東京) — `vercel.json` で指定
 
 ## 自動デプロイ
 
@@ -46,7 +47,27 @@ Vercel ダッシュボード (Settings > Environment Variables) で管理:
 | `STRIPE_WEBHOOK_SECRET` | Stripe Webhook シークレット |
 | `STRIPE_PRO_PRICE_ID` / `STRIPE_MAX_PRICE_ID` | Stripe 料金プラン ID |
 
+## リージョン設定
+
+`vercel.json` で Serverless Functions のリージョンを東京に限定:
+
+```json
+{
+  "regions": ["hnd1"]
+}
+```
+
+- 日本のユーザーがメインターゲットのためレイテンシを最適化
+- Middleware は全 Edge ロケーションにグローバルデプロイされる (リージョン指定不可)
+- Static Assets は Vercel CDN から全世界に配信
+
 ## ビルド
 
 - `prisma generate && next build` (Vercel のビルドコマンド)
 - Dockerfile 不要（Vercel がネイティブに Next.js をビルド・実行）
+
+## 認証設定
+
+Auth.js v5 + Google OAuth の詳細設定・トラブルシューティングは以下を参照:
+
+→ [auth-and-oauth-setup.md](./auth-and-oauth-setup.md)
