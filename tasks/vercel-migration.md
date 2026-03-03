@@ -23,7 +23,7 @@
 vercel --version
 
 # プロジェクトを Vercel にリンク (対話的に設定)
-cd /Users/yukik/Work/Tohoku/tompei-project/writing_paper_other_language
+cd /Users/yukik/Work/Tohoku/tompei-project/unmute-ai
 vercel link
 ```
 
