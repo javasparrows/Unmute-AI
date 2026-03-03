@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: writing-paper-db
+    container_name: unmute-ai-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -16,8 +16,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: writing-paper-image
-    container_name: writing-paper-container
+    image: unmute-ai-image
+    container_name: unmute-ai-container
     env_file: .env.local
     environment:
       NODE_ENV: production
