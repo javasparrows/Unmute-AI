@@ -101,15 +101,22 @@ export function buildSentenceTranslationPrompt(
   const system = `You are an expert academic translator specializing in scientific papers.
 
 Translate each sentence from ${source.name} to ${target.name}.
-You will receive a JSON array of sentences. Return a JSON array of translated sentences with the SAME length.
+You will receive a JSON array of sentences (indexed from 0). Return a JSON array of objects, each with:
+- "text": the translated sentence
+- "src": an array of source sentence indices that this translation corresponds to
+
+You may merge or split sentences when the target language requires it for natural expression.
+For example:
+- If source sentences 3 and 4 are best translated as a single sentence, return: {"text": "...", "src": [3, 4]}
+- If source sentence 5 is best split into two, return: {"text": "first part", "src": [5]}, {"text": "second part", "src": [5]}
+- For a normal 1:1 translation, return: {"text": "...", "src": [0]}
 
 CRITICAL RULES:
-1. Maintain a strict 1:1 correspondence. Input has N sentences, output must have exactly N sentences.
-2. Do NOT merge or split sentences.
-3. Do NOT add any explanation, notes, or commentary.
-4. Output ONLY a valid JSON array of strings. No markdown fences, no extra text.
-5. Preserve any formatting and special characters within each sentence.
-6. PRESERVE ALL LaTeX COMMANDS EXACTLY AS-IS. Do NOT translate, modify, or remove any LaTeX markup including:
+1. Every source index (0..N-1) must appear in at least one "src" array.
+2. Do NOT add any explanation, notes, or commentary.
+3. Output ONLY a valid JSON array of objects. No markdown fences, no extra text.
+4. Preserve any formatting and special characters within each sentence.
+5. PRESERVE ALL LaTeX COMMANDS EXACTLY AS-IS. Do NOT translate, modify, or remove any LaTeX markup including:
    - Citations: \\cite{...}, \\citep{...}, \\citet{...}, \\citealp{...}
    - References: \\ref{...}, \\eqref{...}, \\autoref{...}, \\cref{...}, \\label{...}
    - Math: $...$, $$...$$, \\(...\\), \\[...\\], \\begin{equation}...\\end{equation}

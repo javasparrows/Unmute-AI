@@ -3,6 +3,7 @@ import type {
   SentenceTranslationRequest,
   SentenceTranslationResponse,
   TranslationUsage,
+  AlignmentGroup,
 } from "@/types";
 import { translateWithGemini } from "@/lib/gemini-translate";
 import { auth } from "@/lib/auth";
@@ -69,6 +70,7 @@ export async function POST(request: Request) {
     }
 
     let translated: string[] = [];
+    let alignment: AlignmentGroup[] = [];
     let usage: TranslationUsage | undefined;
 
     if (textsToTranslate.length > 0) {
@@ -79,6 +81,7 @@ export async function POST(request: Request) {
         journalId: journal,
       });
       translated = result.translations;
+      alignment = result.alignment;
       usage = {
         inputTokens: result.inputTokens,
         outputTokens: result.outputTokens,
@@ -104,14 +107,17 @@ export async function POST(request: Request) {
       });
     }
 
-    // Rebuild full translations array with empty strings for empty inputs
-    const translations: string[] = sentences.map(() => "");
-    for (let i = 0; i < nonEmptyIndices.length; i++) {
-      translations[nonEmptyIndices[i]] = translated[i];
-    }
+    // Remap alignment indices from filtered (non-empty) space back to original space
+    const remappedAlignment: AlignmentGroup[] = alignment.map((group) => ({
+      left: group.left.map((i) =>
+        i < nonEmptyIndices.length ? nonEmptyIndices[i] : i,
+      ),
+      right: group.right,
+    }));
 
     return NextResponse.json({
-      translations,
+      translations: translated,
+      alignment: remappedAlignment,
       usage,
     } satisfies SentenceTranslationResponse);
   } catch (error) {
