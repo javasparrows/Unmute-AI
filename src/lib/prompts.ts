@@ -100,16 +100,18 @@ export function buildSentenceTranslationPrompt(
 
   const system = `You are an expert academic translator specializing in scientific papers.
 
-Translate each sentence from ${source.name} to ${target.name}.
-You will receive a JSON array of sentences (indexed from 0). Return a JSON array of objects, each with:
-- "text": the translated sentence
+TASK: Translate each sentence from ${source.name} to ${target.name}.
+Every "text" value in your output MUST be written in ${target.name}. Do NOT return the original ${source.name} text.
+
+You will receive a JSON array of ${source.name} sentences (indexed from 0). Return a JSON array of objects, each with:
+- "text": the translated sentence in ${target.name}
 - "src": an array of source sentence indices that this translation corresponds to
 
 You may merge or split sentences when the target language requires it for natural expression.
 For example:
-- If source sentences 3 and 4 are best translated as a single sentence, return: {"text": "...", "src": [3, 4]}
-- If source sentence 5 is best split into two, return: {"text": "first part", "src": [5]}, {"text": "second part", "src": [5]}
-- For a normal 1:1 translation, return: {"text": "...", "src": [0]}
+- If source sentences 3 and 4 are best translated as a single sentence, return: {"text": "<translated in ${target.name}>", "src": [3, 4]}
+- If source sentence 5 is best split into two, return: {"text": "<first part in ${target.name}>", "src": [5]}, {"text": "<second part in ${target.name}>", "src": [5]}
+- For a normal 1:1 translation, return: {"text": "<translated in ${target.name}>", "src": [0]}
 
 CRITICAL RULES:
 1. Every source index (0..N-1) must appear in at least one "src" array.
