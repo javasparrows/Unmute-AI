@@ -12,7 +12,7 @@ export interface SentenceRange {
 }
 
 interface HighlightState {
-  index: number | null;
+  indices: number[] | null;
   externalRanges: SentenceRange[] | null;
   decorations: DecorationSet;
 }
@@ -75,36 +75,39 @@ export function getSentenceIndexAtPosition(
 
 function buildDecorations(
   doc: ProseMirrorNode,
-  sentenceIndex: number,
+  sentenceIndices: number[],
   className: string,
   externalRanges: SentenceRange[] | null,
 ): DecorationSet {
+  const decorations: Decoration[] = [];
+
   if (externalRanges) {
     // Use external char-offset ranges, converting to PM positions (+1 offset)
-    if (sentenceIndex < 0 || sentenceIndex >= externalRanges.length) {
-      return DecorationSet.empty;
-    }
-    const range = externalRanges[sentenceIndex];
-    const from = range.from + 1;
-    const to = range.to + 1;
-    // Clamp to document size
     const maxPos = doc.content.size;
-    if (from >= maxPos) return DecorationSet.empty;
-    return DecorationSet.create(doc, [
-      Decoration.inline(from, Math.min(to, maxPos), { class: className }),
-    ]);
+    for (const idx of sentenceIndices) {
+      if (idx < 0 || idx >= externalRanges.length) continue;
+      const range = externalRanges[idx];
+      const from = range.from + 1;
+      const to = range.to + 1;
+      if (from >= maxPos) continue;
+      decorations.push(
+        Decoration.inline(from, Math.min(to, maxPos), { class: className }),
+      );
+    }
+  } else {
+    // Fallback: regex-based detection (for left/source editor)
+    const ranges = getSentenceRanges(doc);
+    for (const idx of sentenceIndices) {
+      if (idx < 0 || idx >= ranges.length) continue;
+      const range = ranges[idx];
+      decorations.push(
+        Decoration.inline(range.from, range.to, { class: className }),
+      );
+    }
   }
 
-  // Fallback: regex-based detection (for left/source editor)
-  const ranges = getSentenceRanges(doc);
-  if (sentenceIndex < 0 || sentenceIndex >= ranges.length) {
-    return DecorationSet.empty;
-  }
-
-  const range = ranges[sentenceIndex];
-  return DecorationSet.create(doc, [
-    Decoration.inline(range.from, range.to, { class: className }),
-  ]);
+  if (decorations.length === 0) return DecorationSet.empty;
+  return DecorationSet.create(doc, decorations);
 }
 
 export interface HighlightSentenceOptions {
@@ -115,8 +118,8 @@ export interface HighlightSentenceOptions {
  * ProseMirror extension for sentence-level highlighting via Decoration.inline().
  *
  * To update the highlight, dispatch a transaction with:
- *   tr.setMeta(highlightPluginKey, sentenceIndex)  // number to highlight
- *   tr.setMeta(highlightPluginKey, null)            // clear highlight
+ *   tr.setMeta(highlightPluginKey, [0, 1])      // highlight multiple sentences
+ *   tr.setMeta(highlightPluginKey, null)          // clear highlight
  */
 export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
   name: "highlightSentence",
@@ -130,7 +133,7 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
   addProseMirrorPlugins() {
     const className = this.options.className;
     const emptyState: HighlightState = {
-      index: null,
+      indices: null,
       externalRanges: null,
       decorations: DecorationSet.empty,
     };
@@ -149,12 +152,12 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
               | null
               | undefined;
             const indexMeta = tr.getMeta(highlightPluginKey) as
-              | number
+              | number[]
               | null
               | undefined;
 
             let nextRanges = prev.externalRanges;
-            let nextIndex = prev.index;
+            let nextIndices = prev.indices;
             let changed = false;
 
             if (rangesMeta !== undefined) {
@@ -163,25 +166,25 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
             }
 
             if (indexMeta !== undefined) {
-              if (indexMeta === null || indexMeta < 0) {
+              if (indexMeta === null || indexMeta.length === 0) {
                 // Clear highlight but preserve externalRanges
                 return {
-                  index: null,
+                  indices: null,
                   externalRanges: nextRanges,
                   decorations: DecorationSet.empty,
                 };
               }
-              nextIndex = indexMeta;
+              nextIndices = indexMeta;
               changed = true;
             }
 
-            if (changed && nextIndex !== null) {
+            if (changed && nextIndices !== null) {
               return {
-                index: nextIndex,
+                indices: nextIndices,
                 externalRanges: nextRanges,
                 decorations: buildDecorations(
                   newState.doc,
-                  nextIndex,
+                  nextIndices,
                   className,
                   nextRanges,
                 ),
@@ -192,13 +195,13 @@ export const HighlightSentence = Extension.create<HighlightSentenceOptions>({
               return { ...prev, externalRanges: nextRanges };
             }
 
-            if (tr.docChanged && prev.index !== null) {
+            if (tr.docChanged && prev.indices !== null) {
               return {
-                index: prev.index,
+                indices: prev.indices,
                 externalRanges: prev.externalRanges,
                 decorations: buildDecorations(
                   newState.doc,
-                  prev.index,
+                  prev.indices,
                   className,
                   prev.externalRanges,
                 ),

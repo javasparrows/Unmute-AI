@@ -3,12 +3,13 @@
 import { useRef, useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2 } from "lucide-react";
-import type { LanguageCode } from "@/types";
+import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useCostTracking } from "@/hooks/use-cost-tracking";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
+import { getGroupIndices, buildIdentityAlignment } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
 import { CostDisplay } from "./cost-display";
@@ -37,6 +38,7 @@ interface InitialVersion {
   provider: string | null;
   leftRanges: { from: number; to: number }[] | null;
   rightRanges: { from: number; to: number }[] | null;
+  sentenceAlignments: AlignmentGroup[] | null;
 }
 
 interface PlanLimitsProps {
@@ -80,6 +82,10 @@ export function EditorPageClient({
   const rightTextRef = useRef(rightText);
   rightTextRef.current = rightText;
 
+  const alignmentRef = useRef<AlignmentGroup[]>(
+    initialVersion?.sentenceAlignments ?? [],
+  );
+
   const { costs, addUsage } = useCostTracking();
 
   const {
@@ -113,8 +119,12 @@ export function EditorPageClient({
       ? translatedRangesRef.current
       : fallbackTranslatedRanges;
 
-  const { activeSentenceIndex, setSentence, clearHighlight } =
-    useSentenceSync();
+  const {
+    activeLeftIndices,
+    activeRightIndices,
+    setSentenceGroup,
+    clearHighlight,
+  } = useSentenceSync();
 
   const {
     leftRef: leftScrollRef,
@@ -144,6 +154,7 @@ export function EditorPageClient({
     if (result) {
       setRightText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
+      alignmentRef.current = result.alignment;
     }
   }, [leftLang, rightLang, journal, syncLeftToRight]);
 
@@ -158,17 +169,45 @@ export function EditorPageClient({
     if (result) {
       setLeftText(result.text);
       sourceRangesRef.current = result.sentenceRanges;
+      // For right-to-left, the alignment is reversed (left=target, right=source)
+      // Swap left/right in alignment groups
+      alignmentRef.current = result.alignment.map((g) => ({
+        left: g.right,
+        right: g.left,
+      }));
     }
   }, [leftLang, rightLang, journal, syncRightToLeft]);
 
   const handleLeftSentence = useCallback(
-    (index: number) => setSentence(index, "left"),
-    [setSentence],
+    (index: number) => {
+      const alignment = alignmentRef.current;
+      if (alignment.length > 0) {
+        const group = getGroupIndices(alignment, index, "left");
+        if (group) {
+          setSentenceGroup(group.left, group.right, "left");
+          return;
+        }
+      }
+      // Fallback: highlight same index on both sides
+      setSentenceGroup([index], [index], "left");
+    },
+    [setSentenceGroup],
   );
 
   const handleRightSentence = useCallback(
-    (index: number) => setSentence(index, "right"),
-    [setSentence],
+    (index: number) => {
+      const alignment = alignmentRef.current;
+      if (alignment.length > 0) {
+        const group = getGroupIndices(alignment, index, "right");
+        if (group) {
+          setSentenceGroup(group.left, group.right, "right");
+          return;
+        }
+      }
+      // Fallback: highlight same index on both sides
+      setSentenceGroup([index], [index], "right");
+    },
+    [setSentenceGroup],
   );
 
   const handleBlur = useCallback(() => clearHighlight(), [clearHighlight]);
@@ -200,6 +239,11 @@ export function EditorPageClient({
     setRightLang(tmpLang);
     setLeftText(rightText);
     setRightText(tmpText);
+    // Swap alignment
+    alignmentRef.current = alignmentRef.current.map((g) => ({
+      left: g.right,
+      right: g.left,
+    }));
     initSnapshots(rightText, tmpText);
   }, [leftLang, rightLang, leftText, rightText, initSnapshots]);
 
@@ -208,6 +252,7 @@ export function EditorPageClient({
     setRightText("");
     translatedRangesRef.current = [];
     sourceRangesRef.current = [];
+    alignmentRef.current = [];
     initSnapshots("", "");
   }, [initSnapshots]);
 
@@ -224,6 +269,7 @@ export function EditorPageClient({
       if (version.journal) setJournal(version.journal);
       sourceRangesRef.current = version.leftRanges ?? [];
       translatedRangesRef.current = version.rightRanges ?? [];
+      alignmentRef.current = version.sentenceAlignments ?? [];
       setCurrentVersionNumber(version.versionNumber);
       initSnapshots(version.sourceText, version.translatedText);
     },
@@ -299,6 +345,11 @@ export function EditorPageClient({
               translatedRangesRef.current.length > 0
                 ? translatedRangesRef.current
                 : computeSentenceRanges(splitSentences(rightText))
+            }
+            sentenceAlignments={
+              alignmentRef.current.length > 0
+                ? alignmentRef.current
+                : undefined
             }
             onSaved={handleVersionSaved}
           />
@@ -378,7 +429,7 @@ export function EditorPageClient({
           onSentenceChange={handleLeftSentence}
           onBlur={handleBlur}
           onPaste={handlePaste}
-          activeSentenceIndex={activeSentenceIndex}
+          activeSentenceIndices={activeLeftIndices}
           sentenceRanges={sourceSentenceRanges}
           placeholder="ここにテキストを入力またはペースト..."
           containerRef={setLeftEditorRef}
@@ -434,7 +485,7 @@ export function EditorPageClient({
           onTextChange={handleRightChange}
           onSentenceChange={handleRightSentence}
           onBlur={handleBlur}
-          activeSentenceIndex={activeSentenceIndex}
+          activeSentenceIndices={activeRightIndices}
           sentenceRanges={translatedSentenceRanges}
           placeholder="翻訳がここに表示されます..."
           containerRef={setRightEditorRef}

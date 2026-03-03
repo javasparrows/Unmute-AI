@@ -3,37 +3,52 @@
 import { useState, useCallback } from "react";
 
 interface UseSentenceSyncReturn {
-  activeSentenceIndex: number | null;
+  activeLeftIndices: number[] | null;
+  activeRightIndices: number[] | null;
   activePanel: "left" | "right" | null;
-  setSentence: (index: number, panel: "left" | "right") => void;
+  setSentenceGroup: (
+    leftIndices: number[] | null,
+    rightIndices: number[] | null,
+    panel: "left" | "right",
+  ) => void;
   clearHighlight: () => void;
 }
 
 export function useSentenceSync(): UseSentenceSyncReturn {
-  const [activeSentenceIndex, setActiveSentenceIndex] = useState<
-    number | null
-  >(null);
+  const [activeLeftIndices, setActiveLeftIndices] = useState<number[] | null>(
+    null,
+  );
+  const [activeRightIndices, setActiveRightIndices] = useState<number[] | null>(
+    null,
+  );
   const [activePanel, setActivePanel] = useState<"left" | "right" | null>(
     null,
   );
 
-  const setSentence = useCallback(
-    (index: number, panel: "left" | "right") => {
-      setActiveSentenceIndex(index);
+  const setSentenceGroup = useCallback(
+    (
+      leftIndices: number[] | null,
+      rightIndices: number[] | null,
+      panel: "left" | "right",
+    ) => {
+      setActiveLeftIndices(leftIndices);
+      setActiveRightIndices(rightIndices);
       setActivePanel(panel);
     },
     [],
   );
 
   const clearHighlight = useCallback(() => {
-    setActiveSentenceIndex(null);
+    setActiveLeftIndices(null);
+    setActiveRightIndices(null);
     setActivePanel(null);
   }, []);
 
   return {
-    activeSentenceIndex,
+    activeLeftIndices,
+    activeRightIndices,
     activePanel,
-    setSentence,
+    setSentenceGroup,
     clearHighlight,
   };
 }
