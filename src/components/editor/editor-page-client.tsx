@@ -90,6 +90,7 @@ export function EditorPageClient({
 
   const {
     isSyncing,
+    syncingDirection,
     error,
     syncLeftToRight,
     syncRightToLeft,
@@ -446,7 +447,7 @@ export function EditorPageClient({
                 disabled={isSyncing || !leftText.trim()}
                 className="h-10 w-10 rounded-full"
               >
-                {isSyncing ? (
+                {syncingDirection === "left" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <ArrowRight className="h-4 w-4" />
@@ -466,7 +467,7 @@ export function EditorPageClient({
                 disabled={isSyncing || !rightText.trim()}
                 className="h-10 w-10 rounded-full"
               >
-                {isSyncing ? (
+                {syncingDirection === "right" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <ArrowLeft className="h-4 w-4" />

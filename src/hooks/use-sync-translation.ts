@@ -26,8 +26,11 @@ interface UseSyncTranslationOptions {
   onUsage?: (usage: TranslationUsage) => void;
 }
 
+export type SyncDirection = "left" | "right" | null;
+
 interface UseSyncTranslationReturn {
   isSyncing: boolean;
+  syncingDirection: SyncDirection;
   error: string | null;
   syncLeftToRight: (
     leftText: string,
@@ -50,8 +53,9 @@ export function useSyncTranslation(
   options: UseSyncTranslationOptions = {},
 ): UseSyncTranslationReturn {
   const { onUsage } = options;
-  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncingDirection, setSyncingDirection] = useState<SyncDirection>(null);
   const [error, setError] = useState<string | null>(null);
+  const isSyncing = syncingDirection !== null;
 
   const leftSnapshotRef = useRef<string[]>([]);
   const rightSnapshotRef = useRef<string[]>([]);
@@ -67,7 +71,7 @@ export function useSyncTranslation(
     [],
   );
 
-  const syncDirection = useCallback(
+  const doSync = useCallback(
     async (
       sourceText: string,
       _targetText: string,
@@ -75,6 +79,7 @@ export function useSyncTranslation(
       targetLang: LanguageCode,
       sourceSnapshot: React.RefObject<string[]>,
       targetSnapshot: React.RefObject<string[]>,
+      direction: "left" | "right",
       journal?: string,
     ): Promise<SyncResult | null> => {
       // Cancel any in-flight request
@@ -119,7 +124,7 @@ export function useSyncTranslation(
 
       const controller = new AbortController();
       abortControllerRef.current = controller;
-      setIsSyncing(true);
+      setSyncingDirection(direction);
       setError(null);
 
       try {
@@ -233,14 +238,14 @@ export function useSyncTranslation(
         sourceSnapshot.current = currentSourceSentences;
         targetSnapshot.current = newTargetSentences;
 
-        setIsSyncing(false);
+        setSyncingDirection(null);
         return { text: resultText, sentenceRanges: resultRanges, alignment };
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
           return null;
         }
         setError(err instanceof Error ? err.message : "Translation failed");
-        setIsSyncing(false);
+        setSyncingDirection(null);
         return null;
       }
     },
@@ -255,17 +260,18 @@ export function useSyncTranslation(
       rightLang: LanguageCode,
       journal?: string,
     ) => {
-      return syncDirection(
+      return doSync(
         leftText,
         rightText,
         leftLang,
         rightLang,
         leftSnapshotRef,
         rightSnapshotRef,
+        "left",
         journal,
       );
     },
-    [syncDirection],
+    [doSync],
   );
 
   const syncRightToLeft = useCallback(
@@ -276,21 +282,23 @@ export function useSyncTranslation(
       rightLang: LanguageCode,
       journal?: string,
     ) => {
-      return syncDirection(
+      return doSync(
         rightText,
         leftText,
         rightLang,
         leftLang,
         rightSnapshotRef,
         leftSnapshotRef,
+        "right",
         journal,
       );
     },
-    [syncDirection],
+    [doSync],
   );
 
   return {
     isSyncing,
+    syncingDirection,
     error,
     syncLeftToRight,
     syncRightToLeft,
