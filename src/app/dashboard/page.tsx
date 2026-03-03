@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import { getDocuments, createDocument } from "@/app/actions/document";
+import { getDocuments } from "@/app/actions/document";
 import { SiteHeader } from "@/components/layout/site-header";
 import { DocumentList } from "@/components/dashboard/document-list";
+import { CreateDocumentButton } from "@/components/dashboard/create-document-button";
 import { Badge } from "@/components/ui/badge";
 import { getUserPlanById } from "@/lib/user-plan";
 import { getPlanInfo, isUnlimited } from "@/lib/plans";
@@ -39,14 +40,7 @@ export default async function DashboardPage() {
               </span>
             )}
           </div>
-          <form action={createDocument}>
-            <button
-              type="submit"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
-            >
-              + 新規作成
-            </button>
-          </form>
+          <CreateDocumentButton />
         </div>
 
         <DocumentList documents={documents} />
