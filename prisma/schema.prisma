@@ -29,6 +29,8 @@ model User {
   usageRecords         UsageRecord[]
   apiUsageLogs         ApiUsageLog[]
   plan                 Plan           @default(FREE)
+  planOverride         Plan?          // 管理者手動付与（NULL=無効、設定時はStripeより優先）
+  planOverrideNote     String?        // 付与理由 e.g. "開発者", "友人招待"
   stripeCustomerId     String?        @unique
   stripeSubscriptionId String?        @unique
   stripePriceId        String?

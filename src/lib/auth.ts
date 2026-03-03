@@ -15,9 +15,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.id = user.id;
       const dbUser = await prisma.user.findUnique({
         where: { id: user.id },
-        select: { plan: true },
+        select: { plan: true, planOverride: true },
       });
-      session.user.plan = dbUser?.plan ?? "FREE";
+      session.user.plan = dbUser?.planOverride ?? dbUser?.plan ?? "FREE";
       return session;
     },
   },
