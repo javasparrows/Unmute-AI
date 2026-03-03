@@ -31,7 +31,13 @@ function formatDate(date: Date) {
   }).format(date);
 }
 
-function DocumentCard({ doc }: { doc: DocumentItem }) {
+function DocumentCard({
+  doc,
+  onDelete,
+}: {
+  doc: DocumentItem;
+  onDelete: (id: string) => void;
+}) {
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(doc.title);
@@ -43,6 +49,7 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
     e.preventDefault();
     e.stopPropagation();
     if (!confirm("このドキュメントを削除しますか？")) return;
+    onDelete(doc.id);
     startTransition(() => deleteDocument(doc.id));
   };
 
@@ -188,7 +195,13 @@ function DocumentCard({ doc }: { doc: DocumentItem }) {
 }
 
 export function DocumentList({ documents }: DocumentListProps) {
-  if (documents.length === 0) {
+  const [visibleDocs, setVisibleDocs] = useState(documents);
+
+  const handleDelete = (id: string) => {
+    setVisibleDocs((prev) => prev.filter((doc) => doc.id !== id));
+  };
+
+  if (visibleDocs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
         <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
@@ -204,8 +217,8 @@ export function DocumentList({ documents }: DocumentListProps) {
 
   return (
     <div className="space-y-2">
-      {documents.map((doc) => (
-        <DocumentCard key={doc.id} doc={doc} />
+      {visibleDocs.map((doc) => (
+        <DocumentCard key={doc.id} doc={doc} onDelete={handleDelete} />
       ))}
     </div>
   );
