@@ -10,7 +10,7 @@ interface EditorPanelProps {
   onSentenceChange: (index: number) => void;
   onBlur: () => void;
   onPaste?: (text: string) => void;
-  activeSentenceIndex: number | null;
+  activeSentenceIndices: number[] | null;
   sentenceRanges?: SentenceRange[];
   placeholder?: string;
   containerRef?: (node: HTMLDivElement | null) => void;
@@ -23,7 +23,7 @@ export function EditorPanel({
   onSentenceChange,
   onBlur,
   onPaste,
-  activeSentenceIndex,
+  activeSentenceIndices,
   sentenceRanges,
   placeholder,
   containerRef,
@@ -39,7 +39,7 @@ export function EditorPanel({
         onSentenceChange={onSentenceChange}
         onBlur={onBlur}
         onPaste={onPaste}
-        activeSentenceIndex={activeSentenceIndex}
+        activeSentenceIndices={activeSentenceIndices}
         sentenceRanges={sentenceRanges}
         placeholder={placeholder}
         containerRef={containerRef}

@@ -5,6 +5,7 @@ import type {
   LanguageCode,
   TranslationUsage,
   SentenceTranslationResponse,
+  AlignmentGroup,
 } from "@/types";
 import {
   splitSentences,
@@ -13,10 +14,12 @@ import {
   computeSentenceRanges,
   isSeparator,
 } from "@/lib/split-sentences";
+import { buildIdentityAlignment } from "@/lib/alignment";
 
 interface SyncResult {
   text: string;
   sentenceRanges: { from: number; to: number }[];
+  alignment: AlignmentGroup[];
 }
 
 interface UseSyncTranslationOptions {
@@ -67,7 +70,7 @@ export function useSyncTranslation(
   const syncDirection = useCallback(
     async (
       sourceText: string,
-      targetText: string,
+      _targetText: string,
       sourceLang: LanguageCode,
       targetLang: LanguageCode,
       sourceSnapshot: React.RefObject<string[]>,
@@ -83,11 +86,10 @@ export function useSyncTranslation(
         // Source cleared → clear target
         sourceSnapshot.current = [];
         targetSnapshot.current = [];
-        return { text: "", sentenceRanges: [] };
+        return { text: "", sentenceRanges: [], alignment: [] };
       }
 
       const currentSourceSentences = splitSentences(sourceText);
-      const currentTargetSentences = splitSentences(targetText);
 
       // Detect which source sentences changed since last sync
       const changedIndices = detectChangedSentences(
@@ -106,15 +108,14 @@ export function useSyncTranslation(
         (s) => !isSeparator(s),
       );
 
-      // Collect sentences that need translation
-      const sentencesToTranslate = changedIndices.map(
-        (i) => sourceTextSentences[i],
-      );
-      const leadingWhitespace = sentencesToTranslate.map((s) => {
+      // For N:M alignment, always send all non-empty sentences for full translation
+      // so Gemini can properly decide how to merge/split across the full context
+      const allSentencesToTranslate = sourceTextSentences;
+      const leadingWhitespace = allSentencesToTranslate.map((s) => {
         const match = s.match(/^(\s+)/);
         return match ? match[1] : "";
       });
-      const trimmedSentences = sentencesToTranslate.map((s) => s.trim());
+      const trimmedSentences = allSentencesToTranslate.map((s) => s.trim());
 
       const controller = new AbortController();
       abortControllerRef.current = controller;
@@ -151,36 +152,51 @@ export function useSyncTranslation(
           onUsageRef.current(data.usage);
         }
 
-        // Restore leading whitespace
-        const translationsWithWhitespace = data.translations.map(
-          (t, i) => leadingWhitespace[i] + t,
-        );
+        // Build result text from translated sentences with paragraph separators
+        // The API returns N:M translations — just join them with spaces
+        const translatedTexts = data.translations;
 
-        // Build new target sentences:
-        // Adopt the paragraph structure (separators) from the source side,
-        // and merge translated sentences into the non-separator slots.
+        // Rebuild the target text preserving paragraph structure from source
+        // Count separators in source to reconstruct paragraph breaks
         const newTargetSentences: string[] = [];
-        const targetNonSep = currentTargetSentences.filter(
-          (s) => !isSeparator(s),
-        );
+        let translationIdx = 0;
+        let sourceNonSepIdx = 0;
 
-        let nonSepIdx = 0;
         for (const token of currentSourceSentences) {
           if (isSeparator(token)) {
             newTargetSentences.push(token);
           } else {
-            // Check if this non-separator index was translated
-            const changedPos = changedIndices.indexOf(nonSepIdx);
-            if (changedPos !== -1) {
-              // Use new translation
-              newTargetSentences.push(translationsWithWhitespace[changedPos]);
-            } else {
-              // Preserve existing target sentence at this position
-              newTargetSentences.push(
-                nonSepIdx < targetNonSep.length ? targetNonSep[nonSepIdx] : "",
+            // Find translations that correspond to this source index
+            if (data.alignment && data.alignment.length > 0) {
+              // With alignment: find groups that include this source non-sep index
+              const groups = data.alignment.filter((g) =>
+                g.left.includes(sourceNonSepIdx),
               );
+              for (const group of groups) {
+                // Only emit translation for the first left index in the group
+                if (group.left[0] === sourceNonSepIdx) {
+                  for (const rightIdx of group.right) {
+                    if (rightIdx < translatedTexts.length) {
+                      const ws =
+                        rightIdx < leadingWhitespace.length
+                          ? leadingWhitespace[rightIdx]
+                          : "";
+                      newTargetSentences.push(ws + translatedTexts[rightIdx]);
+                    }
+                  }
+                }
+              }
+            } else {
+              // No alignment — 1:1 fallback
+              if (translationIdx < translatedTexts.length) {
+                newTargetSentences.push(
+                  leadingWhitespace[sourceNonSepIdx] +
+                    translatedTexts[translationIdx],
+                );
+                translationIdx++;
+              }
             }
-            nonSepIdx++;
+            sourceNonSepIdx++;
           }
         }
 
@@ -202,12 +218,23 @@ export function useSyncTranslation(
         const resultText = joinSentences(newTargetSentences);
         const resultRanges = computeSentenceRanges(newTargetSentences);
 
+        // Build alignment or use identity
+        const alignment =
+          data.alignment && data.alignment.length > 0
+            ? data.alignment
+            : buildIdentityAlignment(
+                Math.min(
+                  sourceTextSentences.length,
+                  translatedTexts.length,
+                ),
+              );
+
         // Update snapshots
         sourceSnapshot.current = currentSourceSentences;
         targetSnapshot.current = newTargetSentences;
 
         setIsSyncing(false);
-        return { text: resultText, sentenceRanges: resultRanges };
+        return { text: resultText, sentenceRanges: resultRanges, alignment };
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
           return null;

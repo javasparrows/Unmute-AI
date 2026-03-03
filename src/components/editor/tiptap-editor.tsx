@@ -18,7 +18,7 @@ interface TipTapEditorProps {
   onSentenceChange: (index: number) => void;
   onBlur?: () => void;
   onPaste?: (text: string) => void;
-  activeSentenceIndex: number | null;
+  activeSentenceIndices: number[] | null;
   sentenceRanges?: SentenceRange[];
   placeholder?: string;
   containerRef?: (node: HTMLDivElement | null) => void;
@@ -35,7 +35,7 @@ export function TipTapEditor({
   onSentenceChange,
   onBlur,
   onPaste,
-  activeSentenceIndex,
+  activeSentenceIndices,
   sentenceRanges,
   placeholder,
   containerRef,
@@ -43,7 +43,7 @@ export function TipTapEditor({
   const lastExternalTextRef = useRef(content);
   const isInternalChangeRef = useRef(false);
   const isSyncingContentRef = useRef(false);
-  const prevHighlightRef = useRef<number | null>(null);
+  const prevHighlightRef = useRef<number[] | null>(null);
   const prevRangesRef = useRef<SentenceRange[] | undefined>(undefined);
 
   const editor = useEditor({
@@ -113,16 +113,16 @@ export function TipTapEditor({
     }, 0);
   }
 
-  // Update highlight decoration when activeSentenceIndex changes
+  // Update highlight decoration when activeSentenceIndices changes
   // Deferred via setTimeout to avoid setState-during-render
-  if (editor && activeSentenceIndex !== prevHighlightRef.current) {
-    prevHighlightRef.current = activeSentenceIndex;
+  if (editor && activeSentenceIndices !== prevHighlightRef.current) {
+    prevHighlightRef.current = activeSentenceIndices;
     const editorRef = editor;
     setTimeout(() => {
       if (editorRef.isDestroyed) return;
       const tr = editorRef.state.tr.setMeta(
         highlightPluginKey,
-        activeSentenceIndex,
+        activeSentenceIndices,
       );
       editorRef.view.dispatch(tr);
     }, 0);

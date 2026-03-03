@@ -2,13 +2,14 @@
 
 import { useRef, useCallback, useMemo } from "react";
 import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
-import type { LanguageCode } from "@/types";
+import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useCostTracking } from "@/hooks/use-cost-tracking";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
+import { getGroupIndices } from "@/lib/alignment";
 import { historyStore } from "@/lib/history-store";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
@@ -39,6 +40,8 @@ export function EditorPage() {
   const rightTextRef = useRef(rightText);
   rightTextRef.current = rightText;
 
+  const alignmentRef = useRef<AlignmentGroup[]>([]);
+
   const { costs, addUsage } = useCostTracking();
 
   const {
@@ -67,8 +70,9 @@ export function EditorPage() {
       : fallbackTranslatedRanges;
 
   const {
-    activeSentenceIndex,
-    setSentence,
+    activeLeftIndices,
+    activeRightIndices,
+    setSentenceGroup,
     clearHighlight,
   } = useSentenceSync();
 
@@ -106,6 +110,7 @@ export function EditorPage() {
     if (result) {
       setRightText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
+      alignmentRef.current = result.alignment;
     }
   }, [leftLang, rightLang, journal, syncLeftToRight]);
 
@@ -120,21 +125,41 @@ export function EditorPage() {
     if (result) {
       setLeftText(result.text);
       translatedRangesRef.current = result.sentenceRanges;
+      alignmentRef.current = result.alignment.map((g) => ({
+        left: g.right,
+        right: g.left,
+      }));
     }
   }, [leftLang, rightLang, journal, syncRightToLeft]);
 
   const handleLeftSentence = useCallback(
     (index: number) => {
-      setSentence(index, "left");
+      const alignment = alignmentRef.current;
+      if (alignment.length > 0) {
+        const group = getGroupIndices(alignment, index, "left");
+        if (group) {
+          setSentenceGroup(group.left, group.right, "left");
+          return;
+        }
+      }
+      setSentenceGroup([index], [index], "left");
     },
-    [setSentence],
+    [setSentenceGroup],
   );
 
   const handleRightSentence = useCallback(
     (index: number) => {
-      setSentence(index, "right");
+      const alignment = alignmentRef.current;
+      if (alignment.length > 0) {
+        const group = getGroupIndices(alignment, index, "right");
+        if (group) {
+          setSentenceGroup(group.left, group.right, "right");
+          return;
+        }
+      }
+      setSentenceGroup([index], [index], "right");
     },
-    [setSentence],
+    [setSentenceGroup],
   );
 
   const handleBlur = useCallback(() => {
@@ -196,6 +221,10 @@ export function EditorPage() {
     setRightLang(tmpLang);
     setLeftText(rightText);
     setRightText(tmpText);
+    alignmentRef.current = alignmentRef.current.map((g) => ({
+      left: g.right,
+      right: g.left,
+    }));
     initSnapshots(rightText, tmpText);
   }, [leftLang, rightLang, leftText, rightText, setLeftLang, setRightLang, initSnapshots]);
 
@@ -203,6 +232,7 @@ export function EditorPage() {
     setLeftText("");
     setRightText("");
     translatedRangesRef.current = [];
+    alignmentRef.current = [];
     initSnapshots("", "");
   }, [initSnapshots]);
 
@@ -298,7 +328,7 @@ export function EditorPage() {
           onSentenceChange={handleLeftSentence}
           onBlur={handleBlur}
           onPaste={handlePaste}
-          activeSentenceIndex={activeSentenceIndex}
+          activeSentenceIndices={activeLeftIndices}
           sentenceRanges={sourceSentenceRanges}
           placeholder="ここにテキストを入力またはペースト..."
           containerRef={setLeftEditorRef}
@@ -350,7 +380,7 @@ export function EditorPage() {
           onTextChange={handleRightChange}
           onSentenceChange={handleRightSentence}
           onBlur={handleBlur}
-          activeSentenceIndex={activeSentenceIndex}
+          activeSentenceIndices={activeRightIndices}
           sentenceRanges={translatedSentenceRanges}
           placeholder="翻訳がここに表示されます..."
           containerRef={setRightEditorRef}

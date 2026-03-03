@@ -68,7 +68,18 @@ export interface SentenceTranslationRequest {
   journal?: string;
 }
 
+export interface AlignmentGroup {
+  left: number[];
+  right: number[];
+}
+
+export interface AlignedTranslationItem {
+  text: string;
+  src: number[];
+}
+
 export interface SentenceTranslationResponse {
   translations: string[];
+  alignment?: AlignmentGroup[];
   usage?: TranslationUsage;
 }
