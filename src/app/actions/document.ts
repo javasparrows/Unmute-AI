@@ -2,7 +2,6 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getUserPlanById } from "@/lib/user-plan";
 import { checkDocumentLimit } from "@/app/actions/usage";
@@ -28,7 +27,7 @@ export async function getDocuments() {
   });
 }
 
-export async function createDocument() {
+export async function createDocument(): Promise<{ id: string }> {
   const userId = await getUserId();
   const { plan } = await getUserPlanById(userId);
   const limitCheck = await checkDocumentLimit(userId, plan);
@@ -52,7 +51,7 @@ export async function createDocument() {
       },
     },
   });
-  redirect(`/documents/${doc.id}`);
+  return { id: doc.id };
 }
 
 export async function deleteDocument(documentId: string) {
