@@ -14,10 +14,10 @@ export async function getUserPlan(): Promise<{
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { plan: true },
+    select: { plan: true, planOverride: true },
   });
 
-  const plan = user?.plan ?? "FREE";
+  const plan = user?.planOverride ?? user?.plan ?? "FREE";
   return { plan, limits: getPlanInfo(plan).limits };
 }
 
@@ -27,9 +27,9 @@ export async function getUserPlanById(userId: string): Promise<{
 }> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { plan: true },
+    select: { plan: true, planOverride: true },
   });
 
-  const plan = user?.plan ?? "FREE";
+  const plan = user?.planOverride ?? user?.plan ?? "FREE";
   return { plan, limits: getPlanInfo(plan).limits };
 }
