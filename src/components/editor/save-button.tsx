@@ -20,6 +20,7 @@ interface SaveButtonProps {
   journal: string;
   leftRanges: { from: number; to: number }[];
   rightRanges: { from: number; to: number }[];
+  sentenceAlignments?: { left: number[]; right: number[] }[];
   onSaved: (versionNumber: number) => void;
 }
 
@@ -32,6 +33,7 @@ export function SaveButton({
   journal,
   leftRanges,
   rightRanges,
+  sentenceAlignments,
   onSaved,
 }: SaveButtonProps) {
   const [isPending, startTransition] = useTransition();
@@ -48,6 +50,7 @@ export function SaveButton({
         provider: "gemini",
         leftRanges,
         rightRanges,
+        sentenceAlignments,
       });
       onSaved(result.versionNumber);
     });

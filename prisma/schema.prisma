@@ -98,9 +98,10 @@ model DocumentVersion {
   targetLang     String
   journal        String?
   provider       String?
-  leftRanges     Json?
-  rightRanges    Json?
-  createdAt      DateTime @default(now())
+  leftRanges          Json?
+  rightRanges         Json?
+  sentenceAlignments  Json?
+  createdAt           DateTime @default(now())
 
   @@unique([documentId, versionNumber])
   @@index([documentId])

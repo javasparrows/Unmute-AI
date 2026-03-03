@@ -46,6 +46,7 @@ export default async function DocumentEditorPage({ params }: Props) {
               provider: latestVersion.provider,
               leftRanges: latestVersion.leftRanges as { from: number; to: number }[] | null,
               rightRanges: latestVersion.rightRanges as { from: number; to: number }[] | null,
+              sentenceAlignments: (latestVersion as Record<string, unknown>).sentenceAlignments as { left: number[]; right: number[] }[] | null,
             }
           : null
       }
