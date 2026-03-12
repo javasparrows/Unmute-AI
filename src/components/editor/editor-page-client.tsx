@@ -2,22 +2,20 @@
 
 import { useRef, useCallback, useMemo, useState, useEffect, useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil, Settings } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
-import { useCostTracking } from "@/hooks/use-cost-tracking";
+import { UserMenu } from "@/components/auth/user-menu";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { getGroupIndices } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
-import { CostDisplay } from "./cost-display";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
 
 import { renameDocument } from "@/app/actions/document";
-import { SettingsPanel } from "../settings/settings-panel";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
@@ -142,8 +140,6 @@ export function EditorPageClient({
     initialVersion?.sentenceAlignments ?? [],
   );
 
-  const { costs, addUsage } = useCostTracking();
-
   const {
     isSyncing,
     syncingDirection,
@@ -151,7 +147,7 @@ export function EditorPageClient({
     syncLeftToRight,
     syncRightToLeft,
     initSnapshots,
-  } = useSyncTranslation({ onUsage: addUsage });
+  } = useSyncTranslation({});
 
   const initialSourceTextRef = useRef(initialVersion?.sourceText ?? "");
   const initialTranslatedTextRef = useRef(initialVersion?.translatedText ?? "");
@@ -401,11 +397,6 @@ export function EditorPageClient({
             </button>
           )}
           <TranslationStatus isTranslating={isSyncing} error={error} />
-          <Separator
-            orientation="vertical"
-            className="h-6 bg-secondary-foreground/20"
-          />
-          <CostDisplay costs={costs} />
         </div>
         <div className="flex items-center gap-2">
           <StructureCheckDialog
@@ -444,24 +435,20 @@ export function EditorPageClient({
             currentVersionNumber={currentVersionNumber}
             onRestore={handleVersionRestored}
           />
-          <SettingsPanel />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href={`/settings/preferences?returnTo=/documents/${documentId}`}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 text-secondary-foreground/70 hover:text-secondary-foreground">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>設定</TooltipContent>
+          </Tooltip>
           {user && (
             <>
               <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
-              <div className="flex items-center gap-2">
-                {user.image ? (
-                  <img
-                    src={user.image}
-                    alt={user.name ?? ""}
-                    className="h-7 w-7 rounded-full"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                    {(user.name ?? user.email ?? "?").charAt(0).toUpperCase()}
-                  </div>
-                )}
-              </div>
+              <UserMenu user={user} />
             </>
           )}
         </div>
