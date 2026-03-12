@@ -30,14 +30,7 @@ export async function SiteHeader() {
 
       <div className="flex items-center gap-3">
         {session?.user ? (
-          <>
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">
-                Dashboard
-              </Button>
-            </Link>
-            <UserMenu user={session.user} />
-          </>
+          <UserMenu user={session.user} />
         ) : (
           <>
             <Link href="/login">
