@@ -13,12 +13,21 @@ export async function SiteHeader() {
           Unmute AI
         </Link>
         <nav className="hidden sm:flex items-center gap-4 text-sm">
-          <Link
-            href="/#features"
-            className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
-          >
-            Features
-          </Link>
+          {session?.user ? (
+            <Link
+              href="/dashboard"
+              className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              href="/#features"
+              className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
+            >
+              Features
+            </Link>
+          )}
           <Link
             href="/pricing"
             className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
