@@ -1,0 +1,63 @@
+name: Translation E2E
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  translation-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.E2E_DATABASE_URL }}
+      DATABASE_URL_UNPOOLED: ${{ secrets.E2E_DATABASE_URL_UNPOOLED }}
+      AUTH_SECRET: ${{ secrets.E2E_AUTH_SECRET }}
+      AUTH_GOOGLE_ID: dummy-google-client-id
+      AUTH_GOOGLE_SECRET: dummy-google-client-secret
+      GEMINI_API_KEY: ${{ secrets.E2E_GEMINI_API_KEY }}
+      MIN_TOKEN_REDUCTION_PCT: "20"
+      MIN_SPEEDUP_PCT: "0"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: yarn
+
+      - name: Validate required secrets
+        run: |
+          missing=0
+          for key in DATABASE_URL DATABASE_URL_UNPOOLED AUTH_SECRET GEMINI_API_KEY; do
+            if [ -z "${!key}" ]; then
+              echo "Missing required secret/env: $key"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Apply database migrations
+        run: yarn prisma migrate deploy
+
+      - name: Run translation E2E
+        run: yarn test:e2e:translation
+
+      - name: Upload test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: translation-test-logs
+          path: tests/logs/
+          if-no-files-found: warn

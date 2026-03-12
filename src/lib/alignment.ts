@@ -64,3 +64,155 @@ export function getGroupIndices(
   if (groupIdx === -1) return null;
   return alignment[groupIdx];
 }
+
+/**
+ * Find alignment group indices that contain any of the given source sentence indices.
+ */
+export function findAffectedGroups(
+  alignment: AlignmentGroup[],
+  changedSourceIndices: number[],
+): number[] {
+  const changedSet = new Set(changedSourceIndices);
+  const affected: number[] = [];
+  for (let g = 0; g < alignment.length; g++) {
+    if (alignment[g].left.some((idx) => changedSet.has(idx))) {
+      affected.push(g);
+    }
+  }
+  return affected;
+}
+
+/**
+ * Expand group indices to include ±1 neighbors for translation context.
+ */
+export function expandWithNeighbors(
+  groupIndices: number[],
+  totalGroups: number,
+): number[] {
+  const expanded = new Set<number>();
+  for (const idx of groupIndices) {
+    if (idx > 0) expanded.add(idx - 1);
+    expanded.add(idx);
+    if (idx < totalGroups - 1) expanded.add(idx + 1);
+  }
+  return [...expanded].sort((a, b) => a - b);
+}
+
+/**
+ * Get all source sentence indices covered by the given alignment groups.
+ */
+export function getSourceIndicesFromGroups(
+  alignment: AlignmentGroup[],
+  groupIndices: number[],
+): number[] {
+  const indices = new Set<number>();
+  for (const gIdx of groupIndices) {
+    for (const sIdx of alignment[gIdx].left) {
+      indices.add(sIdx);
+    }
+  }
+  return [...indices].sort((a, b) => a - b);
+}
+
+/**
+ * Merge partial translation results back into the existing target.
+ * Only affected groups get new translations; all other groups keep existing ones.
+ */
+export function mergePartialTranslation(params: {
+  previousAlignment: AlignmentGroup[];
+  previousTargetNonSep: string[];
+  affectedGroupIndices: number[];
+  apiTranslations: string[];
+  apiAlignment: AlignmentGroup[];
+  localToGlobalSourceMap: number[];
+}): {
+  targetNonSep: string[];
+  alignment: AlignmentGroup[];
+} {
+  const {
+    previousAlignment,
+    previousTargetNonSep,
+    affectedGroupIndices,
+    apiTranslations,
+    apiAlignment,
+    localToGlobalSourceMap,
+  } = params;
+
+  // Remap API alignment from local to global source indices
+  const globalApiAlignment = apiAlignment.map((g) => ({
+    left: g.left.map((i) =>
+      i < localToGlobalSourceMap.length ? localToGlobalSourceMap[i] : i,
+    ),
+    right: g.right,
+  }));
+
+  // Map: global source index → API alignment group
+  const sourceToApiGroup = new Map<number, AlignmentGroup>();
+  for (const g of globalApiAlignment) {
+    for (const srcIdx of g.left) {
+      sourceToApiGroup.set(srcIdx, g);
+    }
+  }
+
+  const affectedSet = new Set(affectedGroupIndices);
+  const targetNonSep: string[] = [];
+  const newAlignment: AlignmentGroup[] = [];
+  const usedApiRightIndices = new Set<number>();
+
+  for (let gIdx = 0; gIdx < previousAlignment.length; gIdx++) {
+    const group = previousAlignment[gIdx];
+
+    if (affectedSet.has(gIdx)) {
+      // Affected group: use new API translations
+      const newRightIndices: number[] = [];
+
+      // Find all API groups covering any of this group's source indices
+      const relevantApiGroups: AlignmentGroup[] = [];
+      const seen = new Set<AlignmentGroup>();
+      for (const srcIdx of group.left) {
+        const apiGroup = sourceToApiGroup.get(srcIdx);
+        if (apiGroup && !seen.has(apiGroup)) {
+          seen.add(apiGroup);
+          relevantApiGroups.push(apiGroup);
+        }
+      }
+
+      // Collect source indices and translations from relevant API groups
+      const newLeftIndices = new Set<number>();
+      for (const apiGroup of relevantApiGroups) {
+        for (const srcIdx of apiGroup.left) newLeftIndices.add(srcIdx);
+
+        for (const rightIdx of apiGroup.right) {
+          if (
+            !usedApiRightIndices.has(rightIdx) &&
+            rightIdx < apiTranslations.length
+          ) {
+            usedApiRightIndices.add(rightIdx);
+            newRightIndices.push(targetNonSep.length);
+            targetNonSep.push(apiTranslations[rightIdx]);
+          }
+        }
+      }
+
+      newAlignment.push({
+        left: [...newLeftIndices].sort((a, b) => a - b),
+        right: newRightIndices,
+      });
+    } else {
+      // Non-affected group: keep existing translations
+      const newRightIndices: number[] = [];
+      for (const rightIdx of group.right) {
+        if (rightIdx < previousTargetNonSep.length) {
+          newRightIndices.push(targetNonSep.length);
+          targetNonSep.push(previousTargetNonSep[rightIdx]);
+        }
+      }
+      newAlignment.push({
+        left: [...group.left],
+        right: newRightIndices,
+      });
+    }
+  }
+
+  return { targetNonSep, alignment: newAlignment };
+}

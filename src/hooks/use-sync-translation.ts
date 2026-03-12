@@ -14,7 +14,13 @@ import {
   computeSentenceRanges,
   isSeparator,
 } from "@/lib/split-sentences";
-import { buildIdentityAlignment } from "@/lib/alignment";
+import {
+  buildIdentityAlignment,
+  findAffectedGroups,
+  expandWithNeighbors,
+  getSourceIndicesFromGroups,
+  mergePartialTranslation,
+} from "@/lib/alignment";
 
 interface SyncResult {
   text: string;
@@ -38,6 +44,7 @@ interface UseSyncTranslationReturn {
     leftLang: LanguageCode,
     rightLang: LanguageCode,
     journal?: string,
+    previousAlignment?: AlignmentGroup[],
   ) => Promise<SyncResult | null>;
   syncRightToLeft: (
     leftText: string,
@@ -45,6 +52,7 @@ interface UseSyncTranslationReturn {
     leftLang: LanguageCode,
     rightLang: LanguageCode,
     journal?: string,
+    previousAlignment?: AlignmentGroup[],
   ) => Promise<SyncResult | null>;
   initSnapshots: (leftText: string, rightText: string) => void;
 }
@@ -71,6 +79,66 @@ export function useSyncTranslation(
     [],
   );
 
+  /**
+   * Build the final target text from non-separator target sentences,
+   * using source sentence structure to preserve paragraph separators.
+   */
+  const buildTargetText = (
+    targetNonSep: string[],
+    currentSourceSentences: string[],
+    alignment: AlignmentGroup[],
+  ): { text: string; sentences: string[]; ranges: { from: number; to: number }[] } => {
+    const newTargetSentences: string[] = [];
+    let sourceNonSepIdx = 0;
+
+    for (const token of currentSourceSentences) {
+      if (isSeparator(token)) {
+        newTargetSentences.push(token);
+      } else {
+        if (alignment.length > 0) {
+          const groups = alignment.filter((g) =>
+            g.left.includes(sourceNonSepIdx),
+          );
+          for (const group of groups) {
+            if (group.left[0] === sourceNonSepIdx) {
+              for (const rightIdx of group.right) {
+                if (rightIdx < targetNonSep.length) {
+                  newTargetSentences.push(targetNonSep[rightIdx]);
+                }
+              }
+            }
+          }
+        } else {
+          if (sourceNonSepIdx < targetNonSep.length) {
+            newTargetSentences.push(targetNonSep[sourceNonSepIdx]);
+          }
+        }
+        sourceNonSepIdx++;
+      }
+    }
+
+    // Ensure proper spacing between sentences within paragraphs
+    for (let i = 1; i < newTargetSentences.length; i++) {
+      const s = newTargetSentences[i];
+      const prev = newTargetSentences[i - 1];
+      if (
+        s &&
+        !isSeparator(s) &&
+        !s.startsWith(" ") &&
+        prev &&
+        !isSeparator(prev)
+      ) {
+        newTargetSentences[i] = " " + s;
+      }
+    }
+
+    return {
+      text: joinSentences(newTargetSentences),
+      sentences: newTargetSentences,
+      ranges: computeSentenceRanges(newTargetSentences),
+    };
+  };
+
   const doSync = useCallback(
     async (
       sourceText: string,
@@ -81,6 +149,7 @@ export function useSyncTranslation(
       targetSnapshot: React.RefObject<string[]>,
       direction: "left" | "right",
       journal?: string,
+      previousAlignment?: AlignmentGroup[],
     ): Promise<SyncResult | null> => {
       // Cancel any in-flight request
       if (abortControllerRef.current) {
@@ -88,7 +157,6 @@ export function useSyncTranslation(
       }
 
       if (!sourceText.trim()) {
-        // Source cleared → clear target
         sourceSnapshot.current = [];
         targetSnapshot.current = [];
         return { text: "", sentenceRanges: [], alignment: [] };
@@ -96,31 +164,61 @@ export function useSyncTranslation(
 
       const currentSourceSentences = splitSentences(sourceText);
 
-      // Detect which source sentences changed since last sync
       const changedIndices = detectChangedSentences(
         sourceSnapshot.current,
         currentSourceSentences,
       );
 
-      // If nothing changed, just update snapshots and return
       if (changedIndices.length === 0) {
         sourceSnapshot.current = currentSourceSentences;
         return null;
       }
 
-      // Extract non-separator sentences from source
       const sourceTextSentences = currentSourceSentences.filter(
         (s) => !isSeparator(s),
       );
 
-      // For N:M alignment, always send all non-empty sentences for full translation
-      // so Gemini can properly decide how to merge/split across the full context
-      const allSentencesToTranslate = sourceTextSentences;
-      const leadingWhitespace = allSentencesToTranslate.map((s) => {
-        const match = s.match(/^(\s+)/);
-        return match ? match[1] : "";
-      });
-      const trimmedSentences = allSentencesToTranslate.map((s) => s.trim());
+      // --- Determine if partial translation is possible ---
+      const prevSourceNonSep = sourceSnapshot.current.filter(
+        (s) => !isSeparator(s),
+      );
+      const canDoPartial =
+        previousAlignment &&
+        previousAlignment.length > 0 &&
+        targetSnapshot.current.length > 0 &&
+        // Only when sentence count is unchanged (no additions/deletions)
+        prevSourceNonSep.length === sourceTextSentences.length &&
+        // All changed indices must be covered by alignment
+        changedIndices.every((idx) =>
+          previousAlignment.some((g) => g.left.includes(idx)),
+        );
+
+      let sentencesToSend: string[];
+      let localToGlobalMap: number[] | null = null;
+      let affectedGroupIndices: number[] | null = null;
+
+      if (canDoPartial) {
+        // Partial translation: only send affected groups + neighbors
+        affectedGroupIndices = findAffectedGroups(
+          previousAlignment,
+          changedIndices,
+        );
+        const expandedGroupIndices = expandWithNeighbors(
+          affectedGroupIndices,
+          previousAlignment.length,
+        );
+        const sourceIndicesToSend = getSourceIndicesFromGroups(
+          previousAlignment,
+          expandedGroupIndices,
+        );
+        localToGlobalMap = sourceIndicesToSend;
+        sentencesToSend = sourceIndicesToSend.map((i) =>
+          sourceTextSentences[i].trim(),
+        );
+      } else {
+        // Full translation: send all sentences
+        sentencesToSend = sourceTextSentences.map((s) => s.trim());
+      }
 
       const controller = new AbortController();
       abortControllerRef.current = controller;
@@ -132,7 +230,7 @@ export function useSyncTranslation(
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            sentences: trimmedSentences,
+            sentences: sentencesToSend,
             sourceLang,
             targetLang,
             journal,
@@ -152,94 +250,81 @@ export function useSyncTranslation(
 
         if (controller.signal.aborted) return null;
 
-        // Report usage
         if (data.usage && onUsageRef.current) {
           onUsageRef.current(data.usage);
         }
 
-        // Build result text from translated sentences with paragraph separators
-        // The API returns N:M translations — just join them with spaces
         const translatedTexts = data.translations;
-
-        // Rebuild the target text preserving paragraph structure from source
-        // Count separators in source to reconstruct paragraph breaks
-        const newTargetSentences: string[] = [];
-        let translationIdx = 0;
-        let sourceNonSepIdx = 0;
-
-        for (const token of currentSourceSentences) {
-          if (isSeparator(token)) {
-            newTargetSentences.push(token);
-          } else {
-            // Find translations that correspond to this source index
-            if (data.alignment && data.alignment.length > 0) {
-              // With alignment: find groups that include this source non-sep index
-              const groups = data.alignment.filter((g) =>
-                g.left.includes(sourceNonSepIdx),
-              );
-              for (const group of groups) {
-                // Only emit translation for the first left index in the group
-                if (group.left[0] === sourceNonSepIdx) {
-                  for (const rightIdx of group.right) {
-                    if (rightIdx < translatedTexts.length) {
-                      const ws =
-                        rightIdx < leadingWhitespace.length
-                          ? leadingWhitespace[rightIdx]
-                          : "";
-                      newTargetSentences.push(ws + translatedTexts[rightIdx]);
-                    }
-                  }
-                }
-              }
-            } else {
-              // No alignment — 1:1 fallback
-              if (translationIdx < translatedTexts.length) {
-                newTargetSentences.push(
-                  leadingWhitespace[sourceNonSepIdx] +
-                    translatedTexts[translationIdx],
-                );
-                translationIdx++;
-              }
-            }
-            sourceNonSepIdx++;
-          }
-        }
-
-        // Ensure proper spacing between sentences within paragraphs
-        for (let i = 1; i < newTargetSentences.length; i++) {
-          const s = newTargetSentences[i];
-          const prev = newTargetSentences[i - 1];
-          if (
-            s &&
-            !isSeparator(s) &&
-            !s.startsWith(" ") &&
-            prev &&
-            !isSeparator(prev)
-          ) {
-            newTargetSentences[i] = " " + s;
-          }
-        }
-
-        const resultText = joinSentences(newTargetSentences);
-        const resultRanges = computeSentenceRanges(newTargetSentences);
-
-        // Build alignment or use identity
-        const alignment =
+        const apiAlignment =
           data.alignment && data.alignment.length > 0
             ? data.alignment
             : buildIdentityAlignment(
-                Math.min(
-                  sourceTextSentences.length,
-                  translatedTexts.length,
-                ),
+                Math.min(sentencesToSend.length, translatedTexts.length),
               );
+
+        let finalTargetNonSep: string[];
+        let finalAlignment: AlignmentGroup[];
+
+        if (
+          canDoPartial &&
+          localToGlobalMap &&
+          affectedGroupIndices &&
+          previousAlignment
+        ) {
+          // --- Partial merge: only update affected groups ---
+          const previousTargetNonSep = targetSnapshot.current.filter(
+            (s) => !isSeparator(s),
+          );
+
+          const merged = mergePartialTranslation({
+            previousAlignment,
+            previousTargetNonSep,
+            affectedGroupIndices,
+            apiTranslations: translatedTexts,
+            apiAlignment,
+            localToGlobalSourceMap: localToGlobalMap,
+          });
+
+          finalTargetNonSep = merged.targetNonSep;
+          finalAlignment = merged.alignment;
+        } else {
+          // --- Full translation: build target from all translations ---
+          finalTargetNonSep = translatedTexts;
+
+          // Remap alignment to account for empty sentence filtering in API
+          finalAlignment = apiAlignment;
+        }
+
+        // Restore leading whitespace from source sentences
+        const leadingWhitespace = sourceTextSentences.map((s) => {
+          const match = s.match(/^(\s+)/);
+          return match ? match[1] : "";
+        });
+
+        // For full translation, apply whitespace to all; for partial, only to new translations
+        if (!canDoPartial) {
+          finalTargetNonSep = finalTargetNonSep.map((t, i) => {
+            const ws = i < leadingWhitespace.length ? leadingWhitespace[i] : "";
+            return ws + t;
+          });
+        }
+
+        const built = buildTargetText(
+          finalTargetNonSep,
+          currentSourceSentences,
+          finalAlignment,
+        );
 
         // Update snapshots
         sourceSnapshot.current = currentSourceSentences;
-        targetSnapshot.current = newTargetSentences;
+        targetSnapshot.current = built.sentences;
 
         setSyncingDirection(null);
-        return { text: resultText, sentenceRanges: resultRanges, alignment };
+        return {
+          text: built.text,
+          sentenceRanges: built.ranges,
+          alignment: finalAlignment,
+        };
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
           return null;
@@ -259,6 +344,7 @@ export function useSyncTranslation(
       leftLang: LanguageCode,
       rightLang: LanguageCode,
       journal?: string,
+      previousAlignment?: AlignmentGroup[],
     ) => {
       return doSync(
         leftText,
@@ -269,6 +355,7 @@ export function useSyncTranslation(
         rightSnapshotRef,
         "left",
         journal,
+        previousAlignment,
       );
     },
     [doSync],
@@ -281,6 +368,7 @@ export function useSyncTranslation(
       leftLang: LanguageCode,
       rightLang: LanguageCode,
       journal?: string,
+      previousAlignment?: AlignmentGroup[],
     ) => {
       return doSync(
         rightText,
@@ -291,6 +379,7 @@ export function useSyncTranslation(
         leftSnapshotRef,
         "right",
         journal,
+        previousAlignment,
       );
     },
     [doSync],

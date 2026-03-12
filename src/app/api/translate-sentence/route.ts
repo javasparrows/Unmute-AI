@@ -35,6 +35,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (sourceLang === targetLang) {
+      return NextResponse.json(
+        { error: "原文と翻訳の言語が同じです。言語設定を確認してください。" },
+        { status: 400 },
+      );
+    }
+
     const { plan } = await getUserPlanById(session.user.id);
 
     // Filter out empty sentences, keep track of indices
