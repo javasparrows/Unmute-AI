@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useCallback, useMemo, useState, useEffect } from "react";
+import { useRef, useCallback, useMemo, useState, useEffect, useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
@@ -16,6 +16,7 @@ import { CostDisplay } from "./cost-display";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
 
+import { renameDocument } from "@/app/actions/document";
 import { SettingsPanel } from "../settings/settings-panel";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { SaveButton } from "./save-button";
@@ -75,6 +76,44 @@ export function EditorPageClient({
   const [journal, setJournal] = useState(initialVersion?.journal ?? "general");
   const [currentVersionNumber, setCurrentVersionNumber] = useState(
     initialVersion?.versionNumber ?? 1,
+  );
+
+  const [displayTitle, setDisplayTitle] = useState(documentTitle);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editTitle, setEditTitle] = useState(documentTitle);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const [, startTitleTransition] = useTransition();
+
+  const handleStartTitleEdit = useCallback(() => {
+    setEditTitle(displayTitle);
+    setIsEditingTitle(true);
+    requestAnimationFrame(() => titleInputRef.current?.select());
+  }, [displayTitle]);
+
+  const handleSaveTitle = useCallback(() => {
+    const trimmed = editTitle.trim();
+    if (trimmed && trimmed !== displayTitle) {
+      setDisplayTitle(trimmed);
+      startTitleTransition(() => renameDocument(documentId, trimmed));
+    }
+    setIsEditingTitle(false);
+  }, [editTitle, displayTitle, documentId]);
+
+  const handleCancelTitleEdit = useCallback(() => {
+    setEditTitle(displayTitle);
+    setIsEditingTitle(false);
+  }, [displayTitle]);
+
+  const handleTitleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSaveTitle();
+      } else if (e.key === "Escape") {
+        handleCancelTitleEdit();
+      }
+    },
+    [handleSaveTitle, handleCancelTitleEdit],
   );
 
   // Auto-swap: when one language is changed to match the other, swap them
@@ -343,9 +382,24 @@ export function EditorPageClient({
             </TooltipTrigger>
             <TooltipContent>一覧に戻る</TooltipContent>
           </Tooltip>
-          <h1 className="text-lg font-semibold tracking-tight">
-            {documentTitle}
-          </h1>
+          {isEditingTitle ? (
+            <input
+              ref={titleInputRef}
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              onBlur={handleSaveTitle}
+              onKeyDown={handleTitleKeyDown}
+              className="text-lg font-semibold tracking-tight bg-transparent border-b border-secondary-foreground/40 outline-none px-1 min-w-[120px] text-secondary-foreground"
+            />
+          ) : (
+            <button
+              onClick={handleStartTitleEdit}
+              className="group/title flex items-center gap-1 text-lg font-semibold tracking-tight hover:opacity-70 transition-opacity cursor-text"
+            >
+              {displayTitle}
+              <Pencil className="h-3.5 w-3.5 opacity-0 group-hover/title:opacity-50 transition-opacity" />
+            </button>
+          )}
           <TranslationStatus isTranslating={isSyncing} error={error} />
           <Separator
             orientation="vertical"

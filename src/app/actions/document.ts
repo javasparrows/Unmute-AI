@@ -69,4 +69,5 @@ export async function renameDocument(documentId: string, title: string) {
     data: { title },
   });
   revalidatePath("/dashboard");
+  revalidatePath(`/documents/${documentId}`);
 }
