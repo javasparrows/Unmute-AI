@@ -130,7 +130,7 @@ export function TipTapEditor({
 
   return (
     <div ref={containerRef} className="flex-1 min-h-0 overflow-auto">
-      <EditorContent editor={editor} className="h-full" />
+      <EditorContent editor={editor} className="min-h-full" />
     </div>
   );
 }

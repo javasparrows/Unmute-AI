@@ -4,19 +4,21 @@ import { useCallback, useRef } from "react";
 
 /**
  * Ratio-based bidirectional scroll sync between two scrollable containers.
- * Uses requestAnimationFrame and a source lock to prevent infinite loops.
+ * Uses requestAnimationFrame and a timeout-based lock to prevent feedback loops.
  */
 export function useScrollSync() {
   const leftRef = useRef<HTMLDivElement | null>(null);
   const rightRef = useRef<HTMLDivElement | null>(null);
   const sourceRef = useRef<"left" | "right" | null>(null);
   const rafRef = useRef<number | null>(null);
+  const lockTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const syncScroll = useCallback(
     (source: "left" | "right") => {
       if (sourceRef.current && sourceRef.current !== source) return;
       sourceRef.current = source;
 
+      if (lockTimerRef.current) clearTimeout(lockTimerRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
       rafRef.current = requestAnimationFrame(() => {
@@ -39,7 +41,10 @@ export function useScrollSync() {
         const ratio = from.scrollTop / maxFrom;
         to.scrollTop = ratio * maxTo;
 
-        sourceRef.current = null;
+        // Keep the lock briefly to ignore the programmatic scroll event on the target
+        lockTimerRef.current = setTimeout(() => {
+          sourceRef.current = null;
+        }, 50);
       });
     },
     [],
