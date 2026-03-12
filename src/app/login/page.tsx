@@ -5,9 +5,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-sm space-y-8 px-6">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-serif font-bold tracking-tight">
+          <a href="/" className="text-3xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">
             Unmute AI
-          </h1>
+          </a>
           <p className="text-muted-foreground">
             Focus on the research. We handle the language.
           </p>

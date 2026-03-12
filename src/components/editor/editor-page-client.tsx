@@ -368,6 +368,9 @@ export function EditorPageClient({
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
         <div className="flex items-center gap-3">
+          <Link href="/dashboard" className="text-sm font-serif font-bold tracking-tight hover:opacity-80 transition-opacity hidden sm:inline">
+            Unmute AI
+          </Link>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/dashboard">
