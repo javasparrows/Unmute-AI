@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { getPlanInfo } from "@/lib/plans";
 import { getUsageSummary } from "@/app/actions/usage";
 import { BillingClient } from "@/components/billing/billing-client";
-import { SiteHeader } from "@/components/layout/site-header";
 
 export default async function BillingPage() {
   const session = await auth();
@@ -24,21 +23,13 @@ export default async function BillingPage() {
   const usage = await getUsageSummary(session.user.id, plan);
 
   return (
-    <div className="min-h-screen bg-background">
-      <SiteHeader />
-
-      <main className="mx-auto max-w-2xl px-6 py-8">
-        <BillingClient
-          plan={plan}
-          planName={planInfo.name}
-          price={planInfo.price}
-          subscriptionStatus={user?.subscriptionStatus ?? null}
-          currentPeriodEnd={
-            user?.currentPeriodEnd?.toISOString() ?? null
-          }
-          usage={usage}
-        />
-      </main>
-    </div>
+    <BillingClient
+      plan={plan}
+      planName={planInfo.name}
+      price={planInfo.price}
+      subscriptionStatus={user?.subscriptionStatus ?? null}
+      currentPeriodEnd={user?.currentPeriodEnd?.toISOString() ?? null}
+      usage={usage}
+    />
   );
 }
