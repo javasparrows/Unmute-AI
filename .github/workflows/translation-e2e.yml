@@ -3,7 +3,7 @@ name: Translation E2E
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 18 * * *"  # JST 3:00 (UTC 18:00)
 
 permissions:
   contents: read
