@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { toast } from "sonner";
 import type {
   LanguageCode,
   TranslationUsage,
@@ -329,7 +330,16 @@ export function useSyncTranslation(
         if (err instanceof Error && err.name === "AbortError") {
           return null;
         }
-        setError(err instanceof Error ? err.message : "Translation failed");
+        const message = err instanceof Error ? err.message : "Translation failed";
+        setError(message);
+        if (message.includes("上限")) {
+          toast.error(message, {
+            action: {
+              label: "プランを確認",
+              onClick: () => window.open("/pricing", "_blank"),
+            },
+          });
+        }
         setSyncingDirection(null);
         return null;
       }

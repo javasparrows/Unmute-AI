@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createDocument } from "@/app/actions/document";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export function CreateDocumentButton() {
   const [isPending, startTransition] = useTransition();
@@ -11,8 +12,18 @@ export function CreateDocumentButton() {
 
   const handleCreate = () => {
     startTransition(async () => {
-      const doc = await createDocument();
-      router.push(`/documents/${doc.id}`);
+      try {
+        const doc = await createDocument();
+        router.push(`/documents/${doc.id}`);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "ドキュメントの作成に失敗しました";
+        toast.error(message, {
+          action: {
+            label: "プランを確認",
+            onClick: () => router.push("/pricing"),
+          },
+        });
+      }
     });
   };
 

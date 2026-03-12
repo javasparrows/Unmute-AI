@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Merriweather, Fira_Code } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const fontSans = Outfit({
@@ -37,6 +38,7 @@ export default function RootLayout({
       >
         <TooltipProvider>
           {children}
+          <Toaster richColors position="top-center" />
         </TooltipProvider>
       </body>
     </html>

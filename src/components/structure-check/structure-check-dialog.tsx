@@ -60,12 +60,19 @@ export function StructureCheckDialog({
         body: JSON.stringify({ text, lang }),
       });
 
-      if (!res.ok) throw new Error("Structure check failed");
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(
+          (errorData as { error?: string }).error || "構成チェックに失敗しました",
+        );
+      }
 
       const data = (await res.json()) as StructureCheckResult;
       setResult(data);
-    } catch {
-      setCheckError("構成チェックに失敗しました。もう一度お試しください。");
+    } catch (err) {
+      setCheckError(
+        err instanceof Error ? err.message : "構成チェックに失敗しました。もう一度お試しください。",
+      );
     } finally {
       setIsChecking(false);
     }
