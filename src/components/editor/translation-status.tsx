@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 
 interface TranslationStatusProps {
   isTranslating: boolean;
@@ -17,19 +16,12 @@ export function TranslationStatus({ isTranslating, error }: TranslationStatusPro
     );
   }
 
+  if (!isTranslating) return null;
+
   return (
-    <div
-      className={cn(
-        "flex items-center gap-2 text-sm px-3 py-1.5 rounded-md transition-all duration-300",
-        isTranslating
-          ? "text-primary bg-primary/10"
-          : "opacity-70 bg-transparent",
-      )}
-    >
-      {isTranslating && (
-        <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
-      )}
-      {isTranslating ? "翻訳中..." : "入力待ち"}
+    <div className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md text-primary bg-primary/10 transition-all duration-300">
+      <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
+      翻訳中...
     </div>
   );
 }
