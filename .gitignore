@@ -38,6 +38,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# test logs
+/tests/logs
+
 # project-specific
 CLAUDE.md
 /prompts

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useMemo, useState } from "react";
+import { useRef, useCallback, useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2 } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
@@ -9,7 +9,7 @@ import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useCostTracking } from "@/hooks/use-cost-tracking";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
-import { getGroupIndices, buildIdentityAlignment } from "@/lib/alignment";
+import { getGroupIndices } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
 import { CostDisplay } from "./cost-display";
@@ -77,6 +77,23 @@ export function EditorPageClient({
     initialVersion?.versionNumber ?? 1,
   );
 
+  // Auto-swap: when one language is changed to match the other, swap them
+  const handleLeftLangChange = useCallback(
+    (lang: LanguageCode) => {
+      if (lang === rightLang) setRightLang(leftLang);
+      setLeftLang(lang);
+    },
+    [leftLang, rightLang],
+  );
+
+  const handleRightLangChange = useCallback(
+    (lang: LanguageCode) => {
+      if (lang === leftLang) setLeftLang(rightLang);
+      setRightLang(lang);
+    },
+    [leftLang, rightLang],
+  );
+
   const leftTextRef = useRef(leftText);
   leftTextRef.current = leftText;
   const rightTextRef = useRef(rightText);
@@ -96,6 +113,14 @@ export function EditorPageClient({
     syncRightToLeft,
     initSnapshots,
   } = useSyncTranslation({ onUsage: addUsage });
+
+  const initialSourceTextRef = useRef(initialVersion?.sourceText ?? "");
+  const initialTranslatedTextRef = useRef(initialVersion?.translatedText ?? "");
+
+  // Seed sentence snapshots from loaded version so first sync can do partial retranslation.
+  useEffect(() => {
+    initSnapshots(initialSourceTextRef.current, initialTranslatedTextRef.current);
+  }, [initSnapshots]);
 
   const translatedRangesRef = useRef<{ from: number; to: number }[]>(
     initialVersion?.rightRanges ?? [],
@@ -151,6 +176,7 @@ export function EditorPageClient({
       leftLang,
       rightLang,
       journal,
+      alignmentRef.current.length > 0 ? alignmentRef.current : undefined,
     );
     if (result) {
       setRightText(result.text);
@@ -160,18 +186,23 @@ export function EditorPageClient({
   }, [leftLang, rightLang, journal, syncLeftToRight]);
 
   const handleSyncRightToLeft = useCallback(async () => {
+    // For right-to-left, swap alignment direction before passing
+    const swappedAlignment =
+      alignmentRef.current.length > 0
+        ? alignmentRef.current.map((g) => ({ left: g.right, right: g.left }))
+        : undefined;
     const result = await syncRightToLeft(
       leftTextRef.current,
       rightTextRef.current,
       leftLang,
       rightLang,
       journal,
+      swappedAlignment,
     );
     if (result) {
       setLeftText(result.text);
       sourceRangesRef.current = result.sentenceRanges;
-      // For right-to-left, the alignment is reversed (left=target, right=source)
-      // Swap left/right in alignment groups
+      // Swap back for storage (left=source, right=target in stored alignment)
       alignmentRef.current = result.alignment.map((g) => ({
         left: g.right,
         right: g.left,
@@ -384,7 +415,7 @@ export function EditorPageClient({
 
       {/* Language bar */}
       <div className="flex items-center justify-center gap-3 px-6 py-2 bg-card shadow-sm">
-        <LanguageSelector value={leftLang} onChange={setLeftLang} />
+        <LanguageSelector value={leftLang} onChange={handleLeftLangChange} />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -398,7 +429,7 @@ export function EditorPageClient({
           </TooltipTrigger>
           <TooltipContent>言語を入れ替え</TooltipContent>
         </Tooltip>
-        <LanguageSelector value={rightLang} onChange={setRightLang} />
+        <LanguageSelector value={rightLang} onChange={handleRightLangChange} />
         <Separator orientation="vertical" className="h-6" />
         <JournalSelector
           value={journal}

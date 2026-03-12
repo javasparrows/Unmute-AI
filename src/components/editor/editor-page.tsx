@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useMemo } from "react";
+import { useRef, useCallback, useMemo, useEffect } from "react";
 import { ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
@@ -34,6 +34,23 @@ export function EditorPage() {
   const [rightLang, setRightLang] = useLocalStorage<LanguageCode>("right-lang", "en");
   const [journal, setJournal] = useLocalStorage("journal", "general");
 
+  // Auto-swap: when one language is changed to match the other, swap them
+  const handleLeftLangChange = useCallback(
+    (lang: LanguageCode) => {
+      if (lang === rightLang) setRightLang(leftLang);
+      setLeftLang(lang);
+    },
+    [leftLang, rightLang, setLeftLang, setRightLang],
+  );
+
+  const handleRightLangChange = useCallback(
+    (lang: LanguageCode) => {
+      if (lang === leftLang) setLeftLang(rightLang);
+      setRightLang(lang);
+    },
+    [leftLang, rightLang, setLeftLang, setRightLang],
+  );
+
   // Track latest text values for sync callbacks
   const leftTextRef = useRef(leftText);
   leftTextRef.current = leftText;
@@ -52,6 +69,14 @@ export function EditorPage() {
     syncRightToLeft,
     initSnapshots,
   } = useSyncTranslation({ onUsage: addUsage });
+
+  const initialSourceTextRef = useRef(leftText);
+  const initialTranslatedTextRef = useRef(rightText);
+
+  // Seed snapshots so the first sync can use previous alignment for partial updates.
+  useEffect(() => {
+    initSnapshots(initialSourceTextRef.current, initialTranslatedTextRef.current);
+  }, [initSnapshots]);
 
   // Track translated sentence ranges from last sync
   const translatedRangesRef = useRef<{ from: number; to: number }[]>([]);
@@ -107,6 +132,7 @@ export function EditorPage() {
       leftLang,
       rightLang,
       journal,
+      alignmentRef.current.length > 0 ? alignmentRef.current : undefined,
     );
     if (result) {
       setRightText(result.text);
@@ -116,12 +142,17 @@ export function EditorPage() {
   }, [leftLang, rightLang, journal, syncLeftToRight]);
 
   const handleSyncRightToLeft = useCallback(async () => {
+    const swappedAlignment =
+      alignmentRef.current.length > 0
+        ? alignmentRef.current.map((g) => ({ left: g.right, right: g.left }))
+        : undefined;
     const result = await syncRightToLeft(
       leftTextRef.current,
       rightTextRef.current,
       leftLang,
       rightLang,
       journal,
+      swappedAlignment,
     );
     if (result) {
       setLeftText(result.text);
@@ -287,7 +318,7 @@ export function EditorPage() {
 
       {/* Language bar */}
       <div className="flex items-center justify-center gap-3 px-6 py-2 bg-card shadow-sm">
-        <LanguageSelector value={leftLang} onChange={setLeftLang} />
+        <LanguageSelector value={leftLang} onChange={handleLeftLangChange} />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -301,7 +332,7 @@ export function EditorPage() {
           </TooltipTrigger>
           <TooltipContent>言語を入れ替え</TooltipContent>
         </Tooltip>
-        <LanguageSelector value={rightLang} onChange={setRightLang} />
+        <LanguageSelector value={rightLang} onChange={handleRightLangChange} />
         <Separator orientation="vertical" className="h-6" />
         <JournalSelector value={journal} onChange={setJournal} />
         <Separator orientation="vertical" className="h-6" />
