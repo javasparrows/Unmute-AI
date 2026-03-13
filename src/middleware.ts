@@ -10,7 +10,7 @@ const publicPaths = ['/', '/login', '/pricing', '/privacy', '/terms'];
 
 function isPublicPath(pathname: string): boolean {
   // Strip locale prefix if present
-  const pathWithoutLocale = pathname.replace(/^\/(ja|en)/, '') || '/';
+  const pathWithoutLocale = pathname.replace(/^\/(ja|en|zh-CN|zh-TW|ko|de|fr|es|pt-BR)/, '') || '/';
 
   return (
     publicPaths.includes(pathWithoutLocale) ||

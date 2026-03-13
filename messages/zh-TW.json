@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "專注於研究。",
+      "title2": "語言交給我們。",
+      "description": "理解期刊風格、論文架構和您寫作意圖的AI學術翻譯。用母語撰寫，以任何語言發表。",
+      "cta": "免費開始使用"
+    },
+    "problem": {
+      "title1": "別讓語言障礙",
+      "title2": "拖慢您的才華。",
+      "description": "非英語母語的研究者在學術發表中面臨結構性障礙。高達40%的研究時間被花費在語言問題上，而非推動科學進展。"
+    },
+    "howItWorks": {
+      "title": "使用方式",
+      "subtitle": "從初稿到投稿，只需三個步驟。",
+      "step1Title": "自由撰寫",
+      "step1Description": "用您最擅長的語言撰寫論文，不需要在腦中翻譯。",
+      "step2Title": "即時建構",
+      "step2Description": "AI即時翻譯，並自動適配目標期刊的風格，逐句精準呈現。",
+      "step3Title": "潤飾投稿",
+      "step3Description": "在任一語言中編輯。琢磨您的稿件，自信投稿。"
+    },
+    "features": {
+      "sectionTitle": "由研究者打造，為研究者服務。",
+      "academicPrecisionTitle": "學術級精確度",
+      "academicPrecisionDescription": "以學術慣例訓練，理解IMRAD架構、LaTeX標記和期刊特定格式。",
+      "zeroCognitiveLoadTitle": "零認知負擔",
+      "zeroCognitiveLoadDescription": "用母語思考，以任何語言發表。無需在寫作和翻譯之間來回切換。",
+      "securityPrivacyTitle": "安全與隱私",
+      "securityPrivacyDescription": "您的研究始終屬於您。透明的API使用、不保留資料、完整的費用可視化。",
+      "realtimeTranslationTitle": "即時雙向翻譯",
+      "realtimeTranslationDescription": "並排編輯原文與譯文。句子層級的精確度，變更即時同步。",
+      "journalStylingTitle": "期刊專屬樣式",
+      "journalStylingDescription": "提供8種學術期刊樣式可選。譯文自動符合目標出版物的規範。",
+      "latexAwareTitle": "LaTeX感知翻譯",
+      "latexAwareDescription": "完整保留\\cite{}、\\ref{}、方程式及所有LaTeX指令。您的標記不會被更動。",
+      "structureCheckTitle": "AI論文結構檢查",
+      "structureCheckDescription": "自動驗證IMRAD結構，在投稿前發現遺漏的章節。",
+      "versionControlTitle": "版本管理",
+      "versionControlDescription": "儲存和還原翻譯版本，修改過程中的進度永不遺失。",
+      "costTrackingTitle": "透明的費用追蹤",
+      "costTrackingDescription": "即時查看每次翻譯的費用，不會有意外帳單。"
+    },
+    "cta": {
+      "title1": "以實力被評價，",
+      "title2": "而非語言流利度。",
+      "description": "優秀的研究在世界各地誕生。我們相信，全球最好的想法應該擁有平等的發聲機會，不論它們誕生於哪種語言。",
+      "button": "立即體驗 Unmute AI"
+    },
+    "footer": {
+      "pricing": "方案價格",
+      "terms": "服務條款",
+      "privacy": "隱私權政策",
+      "tokushoho": "法律聲明"
+    }
+  },
+  "header": {
+    "dashboard": "儀表板",
+    "features": "功能",
+    "pricing": "方案價格",
+    "login": "登入",
+    "getStarted": "開始使用"
+  },
+  "login": {
+    "tagline": "專注於研究。語言交給我們。",
+    "continueWithGoogle": "使用 Google 帳號繼續"
+  },
+  "pricing": {
+    "title": "方案價格",
+    "description": "選擇適合您研究工作流程的方案。",
+    "guarantee": "14天退款保證，隨時可取消。"
+  },
+  "dashboard": {
+    "myDocuments": "我的文件",
+    "createNew": "+ 新建文件",
+    "creating": "建立中...",
+    "createError": "文件建立失敗",
+    "checkPlan": "查看方案",
+    "noDocuments": "尚無文件",
+    "noDocumentsHint": "點擊\"+ 新建文件\"開始翻譯",
+    "updated": "更新於：",
+    "save": "儲存",
+    "cancel": "取消",
+    "rename": "重新命名",
+    "delete": "刪除",
+    "confirmDelete": "確定要刪除此文件嗎？"
+  },
+  "settings": {
+    "title": "設定",
+    "description": "管理您的帳戶和應用程式設定",
+    "nav": {
+      "profile": "個人檔案",
+      "preferences": "翻譯設定",
+      "billing": "方案與帳單",
+      "analytics": "使用分析"
+    }
+  },
+  "profile": {
+    "title": "個人檔案",
+    "description": "帳戶資訊",
+    "nameNotSet": "未設定",
+    "plan": "方案",
+    "registeredDate": "註冊日期"
+  },
+  "analytics": {
+    "periodTotal": "期間合計（估算）",
+    "topModel": "費用最高的模型",
+    "noData": "尚無資料",
+    "costTrend": "估算費用趨勢",
+    "costTrendDescription": "依據 Gemini 公開定價的估算值",
+    "granularity": {
+      "hour": "按小時",
+      "day": "按天",
+      "week": "按週",
+      "month": "按月"
+    },
+    "loading": "載入中...",
+    "noDataForPeriod": "此期間尚無資料",
+    "modelBreakdown": "模型明細",
+    "tableHeaders": {
+      "model": "模型",
+      "estimatedCost": "估算費用",
+      "share": "佔比",
+      "requests": "請求次數",
+      "inputTokens": "輸入 Token",
+      "outputTokens": "輸出 Token"
+    }
+  },
+  "userMenu": {
+    "defaultName": "使用者",
+    "dashboard": "儀表板",
+    "settings": "設定",
+    "billing": "方案與帳單",
+    "analytics": "使用分析",
+    "logout": "登出"
+  },
+  "common": {
+    "loading": "載入中...",
+    "appName": "Unmute AI"
+  }
+}
