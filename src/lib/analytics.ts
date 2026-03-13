@@ -49,3 +49,50 @@ export function getBucketKey(date: Date, granularity: Granularity): string {
       return `${jst.getUTCFullYear()}/${jst.getUTCMonth() + 1}`;
   }
 }
+
+export function generateAllBucketKeys(
+  since: Date,
+  granularity: Granularity,
+): string[] {
+  const now = new Date();
+  const keys: string[] = [];
+
+  switch (granularity) {
+    case "hour": {
+      for (let h = 0; h < 24; h++) {
+        keys.push(`${h}:00`);
+      }
+      break;
+    }
+    case "day": {
+      const cursor = new Date(since);
+      while (cursor <= now) {
+        keys.push(getBucketKey(cursor, "day"));
+        cursor.setTime(cursor.getTime() + 24 * 60 * 60 * 1000);
+      }
+      break;
+    }
+    case "week": {
+      const cursor = new Date(since);
+      // Align to Monday
+      const day = cursor.getUTCDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      cursor.setTime(cursor.getTime() + diff * 24 * 60 * 60 * 1000);
+      while (cursor <= now) {
+        keys.push(getBucketKey(cursor, "week"));
+        cursor.setTime(cursor.getTime() + 7 * 24 * 60 * 60 * 1000);
+      }
+      break;
+    }
+    case "month": {
+      const cursor = new Date(since.getFullYear(), since.getMonth(), 1);
+      while (cursor <= now) {
+        keys.push(getBucketKey(cursor, "month"));
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+      break;
+    }
+  }
+
+  return keys;
+}

@@ -5,6 +5,7 @@ import {
   calculateCost,
   getTimeWindow,
   getBucketKey,
+  generateAllBucketKeys,
   type Granularity,
 } from "@/lib/analytics";
 
@@ -121,12 +122,16 @@ export async function GET(request: NextRequest) {
         }
       : null;
 
-  // Chart data
-  const chart = Array.from(bucketMap.entries()).map(([key, values]) => ({
-    bucket_label: key,
-    total_cost_usd: Object.values(values).reduce((sum, v) => sum + v, 0),
-    values,
-  }));
+  // Chart data — include all time buckets (even empty ones)
+  const allKeys = generateAllBucketKeys(since, granularity);
+  const chart = allKeys.map((key) => {
+    const values = bucketMap.get(key) ?? {};
+    return {
+      bucket_label: key,
+      total_cost_usd: Object.values(values).reduce((sum, v) => sum + v, 0),
+      values,
+    };
+  });
 
   return NextResponse.json({
     summary: {
