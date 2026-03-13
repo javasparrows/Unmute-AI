@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Concentratevi sulla ricerca.",
+      "title2": "Alla lingua pensiamo noi.",
+      "description": "Traduzione accademica basata sull'IA che comprende gli stili delle riviste, la struttura degli articoli e le Vostre intenzioni. Scrivete nella Vostra lingua, pubblicate in qualsiasi altra.",
+      "cta": "Inizia gratuitamente"
+    },
+    "problem": {
+      "title1": "Non lasciate che la barriera linguistica",
+      "title2": "freni il Vostro intelletto.",
+      "description": "I ricercatori non madrelingua inglese affrontano barriere sistematiche nella pubblicazione accademica. Fino al 40% del tempo di ricerca viene speso a lottare con la lingua anziché a far progredire la scienza."
+    },
+    "howItWorks": {
+      "title": "Come funziona",
+      "subtitle": "Dalla bozza alla sottomissione in tre passaggi.",
+      "step1Title": "Scrivete liberamente",
+      "step1Description": "Scrivete il Vostro articolo nella lingua in cui pensate. Nessuna traduzione mentale necessaria.",
+      "step2Title": "Strutturate all'istante",
+      "step2Description": "L'IA traduce e adatta in tempo reale allo stile della rivista di destinazione, frase per frase.",
+      "step3Title": "Rifinite e inviate",
+      "step3Description": "Modificate in entrambe le lingue. Perfezionate il manoscritto e inviatelo con sicurezza."
+    },
+    "features": {
+      "sectionTitle": "Creato da ricercatori, per ricercatori.",
+      "academicPrecisionTitle": "Precisione accademica",
+      "academicPrecisionDescription": "Addestrato sulle convenzioni accademiche. Comprende la struttura IMRAD, il markup LaTeX e lo stile specifico delle riviste.",
+      "zeroCognitiveLoadTitle": "Carico cognitivo zero",
+      "zeroCognitiveLoadDescription": "Pensate nella Vostra lingua, pubblicate in qualsiasi altra. Niente più passaggi continui tra scrittura e traduzione.",
+      "securityPrivacyTitle": "Sicurezza e privacy",
+      "securityPrivacyDescription": "La Vostra ricerca resta Vostra. Utilizzo trasparente delle API, nessuna conservazione dei dati, piena visibilità dei costi.",
+      "realtimeTranslationTitle": "Traduzione bidirezionale in tempo reale",
+      "realtimeTranslationDescription": "Modificate originale e traduzione affiancati. Le modifiche si sincronizzano istantaneamente con precisione a livello di frase.",
+      "journalStylingTitle": "Stile specifico per rivista",
+      "journalStylingDescription": "Scegliete tra 8 stili di riviste accademiche. La traduzione rispetta le convenzioni della pubblicazione di destinazione.",
+      "latexAwareTitle": "Traduzione consapevole di LaTeX",
+      "latexAwareDescription": "Preserva \\cite{}, \\ref{}, equazioni e tutti i comandi LaTeX intatti. Il Vostro markup resta invariato.",
+      "structureCheckTitle": "Controllo struttura con IA",
+      "structureCheckDescription": "Validazione automatica della struttura IMRAD. Individuate le sezioni mancanti prima dell'invio.",
+      "versionControlTitle": "Controllo versioni",
+      "versionControlDescription": "Salvate e ripristinate le versioni della traduzione. Non perdete mai i progressi durante le revisioni.",
+      "costTrackingTitle": "Monitoraggio trasparente dei costi",
+      "costTrackingDescription": "Vedete esattamente quanto costa ogni traduzione in tempo reale. Nessuna sorpresa in fattura."
+    },
+    "cta": {
+      "title1": "Valutati per il merito,",
+      "title2": "non per la padronanza linguistica.",
+      "description": "La grande ricerca nasce ovunque. Crediamo che le migliori idee del mondo meritino pari voce, indipendentemente dalla lingua in cui sono nate.",
+      "button": "Prova Unmute AI oggi"
+    },
+    "footer": {
+      "pricing": "Prezzi",
+      "terms": "Termini",
+      "privacy": "Privacy",
+      "tokushoho": "Note legali"
+    }
+  },
+  "header": {
+    "dashboard": "Dashboard",
+    "features": "Funzionalità",
+    "pricing": "Prezzi",
+    "login": "Accedi",
+    "getStarted": "Inizia"
+  },
+  "login": {
+    "tagline": "Concentratevi sulla ricerca. Alla lingua pensiamo noi.",
+    "continueWithGoogle": "Continua con Google"
+  },
+  "pricing": {
+    "title": "Prezzi",
+    "description": "Scegliete il piano più adatto al Vostro flusso di lavoro di ricerca.",
+    "guarantee": "Garanzia di rimborso entro 14 giorni. Cancellazione in qualsiasi momento."
+  },
+  "dashboard": {
+    "myDocuments": "I miei documenti",
+    "createNew": "+ Nuovo documento",
+    "creating": "Creazione...",
+    "createError": "Impossibile creare il documento",
+    "checkPlan": "Verifica piano",
+    "noDocuments": "Nessun documento presente",
+    "noDocumentsHint": "Cliccate su \"+ Nuovo documento\" per iniziare a tradurre",
+    "updated": "Aggiornato:",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "rename": "Rinomina",
+    "delete": "Elimina",
+    "confirmDelete": "Eliminare questo documento?"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "description": "Gestite le impostazioni del Vostro account e dell'applicazione",
+    "nav": {
+      "profile": "Profilo",
+      "preferences": "Impostazioni di traduzione",
+      "billing": "Piano e fatturazione",
+      "analytics": "Analisi dell'utilizzo"
+    }
+  },
+  "profile": {
+    "title": "Profilo",
+    "description": "Informazioni sull'account",
+    "nameNotSet": "Non impostato",
+    "plan": "Piano",
+    "registeredDate": "Data di registrazione"
+  },
+  "analytics": {
+    "periodTotal": "Totale del periodo (stimato)",
+    "topModel": "Modello più costoso",
+    "noData": "Nessun dato",
+    "costTrend": "Andamento dei costi stimati",
+    "costTrendDescription": "Stima basata sui prezzi pubblici di Gemini",
+    "granularity": {
+      "hour": "Orario",
+      "day": "Giornaliero",
+      "week": "Settimanale",
+      "month": "Mensile"
+    },
+    "loading": "Caricamento...",
+    "noDataForPeriod": "Nessun dato per questo periodo",
+    "modelBreakdown": "Dettaglio per modello",
+    "tableHeaders": {
+      "model": "Modello",
+      "estimatedCost": "Costo stimato",
+      "share": "Quota",
+      "requests": "Richieste",
+      "inputTokens": "Token in ingresso",
+      "outputTokens": "Token in uscita"
+    }
+  },
+  "userMenu": {
+    "defaultName": "Utente",
+    "dashboard": "Dashboard",
+    "settings": "Impostazioni",
+    "billing": "Piano e fatturazione",
+    "analytics": "Analisi dell'utilizzo",
+    "logout": "Esci"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "appName": "Unmute AI"
+  }
+}

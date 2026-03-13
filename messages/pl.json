@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Skup się na badaniach.",
+      "title2": "Język zostawcie nam.",
+      "description": "Akademickie tłumaczenie oparte na AI, które rozumie style czasopism, strukturę artykułów i Państwa zamysł. Piszcie w swoim języku, publikujcie w dowolnym.",
+      "cta": "Zacznij za darmo"
+    },
+    "problem": {
+      "title1": "Nie pozwól, by bariera językowa",
+      "title2": "hamowała Twój intelekt.",
+      "description": "Naukowcy, dla których angielski nie jest językiem ojczystym, napotykają systemowe bariery w publikacjach akademickich. Nawet 40% czasu badawczego poświęca się na zmagania z językiem zamiast na rozwój nauki."
+    },
+    "howItWorks": {
+      "title": "Jak to działa",
+      "subtitle": "Od szkicu do zgłoszenia w trzech krokach.",
+      "step1Title": "Pisz swobodnie",
+      "step1Description": "Napisz artykuł w języku, w którym myślisz. Bez konieczności mentalnego tłumaczenia.",
+      "step2Title": "Ustrukturyzuj natychmiast",
+      "step2Description": "AI tłumaczy i dostosowuje do stylu docelowego czasopisma w czasie rzeczywistym, zdanie po zdaniu.",
+      "step3Title": "Dopracuj i wyślij",
+      "step3Description": "Edytuj w obu językach. Dopracuj manuskrypt i wyślij go z pewnością."
+    },
+    "features": {
+      "sectionTitle": "Stworzone przez naukowców, dla naukowców.",
+      "academicPrecisionTitle": "Precyzja akademicka",
+      "academicPrecisionDescription": "Wytrenowane na konwencjach akademickich. Rozumie strukturę IMRAD, znaczniki LaTeX i style właściwe dla czasopism.",
+      "zeroCognitiveLoadTitle": "Zero obciążenia poznawczego",
+      "zeroCognitiveLoadDescription": "Myśl w swoim języku, publikuj w dowolnym. Koniec z przełączaniem się między pisaniem a tłumaczeniem.",
+      "securityPrivacyTitle": "Bezpieczeństwo i prywatność",
+      "securityPrivacyDescription": "Twoje badania pozostają Twoje. Przejrzyste korzystanie z API, brak przechowywania danych, pełna widoczność kosztów.",
+      "realtimeTranslationTitle": "Tłumaczenie dwukierunkowe w czasie rzeczywistym",
+      "realtimeTranslationDescription": "Edytuj oryginał i tłumaczenie obok siebie. Zmiany synchronizują się natychmiast z dokładnością do zdania.",
+      "journalStylingTitle": "Style specyficzne dla czasopism",
+      "journalStylingDescription": "Wybierz spośród 8 stylów czasopism akademickich. Tłumaczenie odpowiada konwencjom docelowej publikacji.",
+      "latexAwareTitle": "Tłumaczenie uwzględniające LaTeX",
+      "latexAwareDescription": "Zachowuje \\cite{}, \\ref{}, równania i wszystkie polecenia LaTeX w nietkniętej postaci. Twój markup pozostaje bez zmian.",
+      "structureCheckTitle": "Sprawdzanie struktury artykułu przez AI",
+      "structureCheckDescription": "Automatyczna walidacja struktury IMRAD. Wykryj brakujące sekcje przed zgłoszeniem.",
+      "versionControlTitle": "Kontrola wersji",
+      "versionControlDescription": "Zapisuj i przywracaj wersje tłumaczenia. Nigdy nie trać postępów podczas rewizji.",
+      "costTrackingTitle": "Przejrzyste śledzenie kosztów",
+      "costTrackingDescription": "Zobacz dokładnie, ile kosztuje każde tłumaczenie w czasie rzeczywistym. Bez niespodziewanych rachunków."
+    },
+    "cta": {
+      "title1": "Oceniani za wartość merytoryczną,",
+      "title2": "nie za biegłość językową.",
+      "description": "Wspaniałe badania powstają wszędzie. Wierzymy, że najlepsze pomysły świata zasługują na równy głos, niezależnie od języka, w którym się zrodziły.",
+      "button": "Wypróbuj Unmute AI"
+    },
+    "footer": {
+      "pricing": "Cennik",
+      "terms": "Regulamin",
+      "privacy": "Prywatność",
+      "tokushoho": "Informacje prawne"
+    }
+  },
+  "header": {
+    "dashboard": "Panel",
+    "features": "Funkcje",
+    "pricing": "Cennik",
+    "login": "Zaloguj się",
+    "getStarted": "Rozpocznij"
+  },
+  "login": {
+    "tagline": "Skup się na badaniach. Język zostawcie nam.",
+    "continueWithGoogle": "Kontynuuj z Google"
+  },
+  "pricing": {
+    "title": "Cennik",
+    "description": "Wybierz plan dopasowany do Twojego procesu badawczego.",
+    "guarantee": "14-dniowa gwarancja zwrotu pieniędzy. Anuluj w dowolnym momencie."
+  },
+  "dashboard": {
+    "myDocuments": "Moje dokumenty",
+    "createNew": "+ Nowy dokument",
+    "creating": "Tworzenie...",
+    "createError": "Nie udało się utworzyć dokumentu",
+    "checkPlan": "Sprawdź plan",
+    "noDocuments": "Brak dokumentów",
+    "noDocumentsHint": "Kliknij \"+ Nowy dokument\", aby rozpocząć tłumaczenie",
+    "updated": "Zaktualizowano:",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "rename": "Zmień nazwę",
+    "delete": "Usuń",
+    "confirmDelete": "Usunąć ten dokument?"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "description": "Zarządzaj ustawieniami konta i aplikacji",
+    "nav": {
+      "profile": "Profil",
+      "preferences": "Ustawienia tłumaczeń",
+      "billing": "Plan i płatności",
+      "analytics": "Analiza użycia"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Informacje o koncie",
+    "nameNotSet": "Nie ustawiono",
+    "plan": "Plan",
+    "registeredDate": "Data rejestracji"
+  },
+  "analytics": {
+    "periodTotal": "Suma za okres (szacunkowa)",
+    "topModel": "Najdroższy model",
+    "noData": "Brak danych",
+    "costTrend": "Szacunkowy trend kosztów",
+    "costTrendDescription": "Szacunek na podstawie publicznych cen Gemini",
+    "granularity": {
+      "hour": "Godzinowo",
+      "day": "Dziennie",
+      "week": "Tygodniowo",
+      "month": "Miesięcznie"
+    },
+    "loading": "Ładowanie...",
+    "noDataForPeriod": "Brak danych za ten okres",
+    "modelBreakdown": "Podział według modeli",
+    "tableHeaders": {
+      "model": "Model",
+      "estimatedCost": "Szacunkowy koszt",
+      "share": "Udział",
+      "requests": "Żądania",
+      "inputTokens": "Tokeny wejściowe",
+      "outputTokens": "Tokeny wyjściowe"
+    }
+  },
+  "userMenu": {
+    "defaultName": "Użytkownik",
+    "dashboard": "Panel",
+    "settings": "Ustawienia",
+    "billing": "Plan i płatności",
+    "analytics": "Analiza użycia",
+    "logout": "Wyloguj"
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "appName": "Unmute AI"
+  }
+}
