@@ -39,7 +39,7 @@ export function HistoryPanel({ onRestore, onSave }: HistoryPanelProps) {
         <Button variant="ghost" size="sm" className="text-muted-foreground">
           履歴
           {entries.length > 0 && (
-            <span className="ml-1 text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
+            <span className="ms-1 text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
               {entries.length}
             </span>
           )}
@@ -68,7 +68,7 @@ export function HistoryPanel({ onRestore, onSave }: HistoryPanelProps) {
           )}
         </div>
         <ScrollArea className="mt-4 h-[calc(100vh-200px)]">
-          <div className="space-y-3 pr-4">
+          <div className="space-y-3 pe-4">
             {entries.length === 0 ? (
               <p className="text-sm text-muted-foreground py-8 text-center">
                 履歴はまだありません

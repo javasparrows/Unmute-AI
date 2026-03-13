@@ -129,7 +129,7 @@ export function StructureCheckDialog({
 
         {result && (
           <ScrollArea className="max-h-[60vh]">
-            <div className="space-y-4 pr-4">
+            <div className="space-y-4 pe-4">
               {/* Overall score */}
               <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
                 <div>

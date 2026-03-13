@@ -33,7 +33,7 @@ export default function TermsPage() {
           {/* ── 第1条 定義 ── */}
           <Section title="第1条（定義）">
             <p>本規約において、以下の用語は次の意味を有します。</p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>
                 <strong>「本サービス」</strong> —
                 運営者が提供するAI学術翻訳支援サービス「Unmute AI」（Webアプリケーション、API、および関連するすべての機能を含みます）
@@ -63,7 +63,7 @@ export default function TermsPage() {
 
           {/* ── 第2条 適用 ── */}
           <Section title="第2条（適用）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 本利用規約（以下「本規約」）は、本サービスの利用に関する一切の関係に適用されます。
               </li>
@@ -78,7 +78,7 @@ export default function TermsPage() {
 
           {/* ── 第3条 サービス内容 ── */}
           <Section title="第3条（サービス内容）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 本サービスは、AIテクノロジーを活用した学術論文の翻訳支援サービスです。ユーザーが入力した原文テキストを指定の言語に翻訳し、学術ジャーナルのスタイルに適合した翻訳結果を提供します。
               </li>
@@ -93,7 +93,7 @@ export default function TermsPage() {
 
           {/* ── 第4条 アカウント ── */}
           <Section title="第4条（アカウント）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 ユーザーは、Googleアカウントを使用して本サービスに登録するものとします。
               </li>
@@ -116,10 +116,10 @@ export default function TermsPage() {
               <table className="w-full text-sm border-collapse">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 pr-4 font-semibold">
+                    <th className="text-start py-2 pe-4 font-semibold">
                       プラン
                     </th>
-                    <th className="text-left py-2 pr-4 font-semibold">
+                    <th className="text-start py-2 pe-4 font-semibold">
                       月額料金（税込）
                     </th>
                     <th className="text-left py-2 font-semibold">内容</th>
@@ -127,24 +127,24 @@ export default function TermsPage() {
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="py-2 pr-4">Free</td>
-                    <td className="py-2 pr-4">無料</td>
+                    <td className="py-2 pe-4">Free</td>
+                    <td className="py-2 pe-4">無料</td>
                     <td className="py-2">基本翻訳機能</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="py-2 pr-4">Pro</td>
-                    <td className="py-2 pr-4">980円</td>
+                    <td className="py-2 pe-4">Pro</td>
+                    <td className="py-2 pe-4">980円</td>
                     <td className="py-2">翻訳回数上限拡大、優先翻訳</td>
                   </tr>
                   <tr className="border-b">
-                    <td className="py-2 pr-4">Max</td>
-                    <td className="py-2 pr-4">2,980円</td>
+                    <td className="py-2 pe-4">Max</td>
+                    <td className="py-2 pe-4">2,980円</td>
                     <td className="py-2">無制限翻訳、全機能利用可能</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <ol className="list-decimal pl-6 space-y-2 mt-4">
+            <ol className="list-decimal ps-6 space-y-2 mt-4">
               <li>
                 有料プランの支払いは、Stripeを通じたクレジットカード決済により行われます。クレジットカード情報はStripeが直接管理し、運営者のサーバーには保存されません。
               </li>
@@ -162,7 +162,7 @@ export default function TermsPage() {
 
           {/* ── 第6条 返金・キャンセル ── */}
           <Section title="第6条（返金・キャンセル）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 ユーザーは、設定画面からいつでもサブスクリプションをキャンセルできます。キャンセル後も、当該請求期間の終了時まで有料プランの機能を引き続き利用できます。
               </li>
@@ -177,7 +177,7 @@ export default function TermsPage() {
 
           {/* ── 第7条 データの取り扱い ── */}
           <Section title="第7条（データの取り扱い）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 ユーザーが入力したコンテンツおよび翻訳結果は、サービス提供に必要な範囲でのみ保存・処理されます。
               </li>
@@ -203,7 +203,7 @@ export default function TermsPage() {
 
           {/* ── 第8条 知的財産権 ── */}
           <Section title="第8条（知的財産権）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 ユーザーが入力したコンテンツに関する一切の権利は、ユーザーに帰属します。運営者は、サービス提供に必要な範囲でのみコンテンツを使用する非独占的なライセンスを取得します。
               </li>
@@ -221,7 +221,7 @@ export default function TermsPage() {
 
           {/* ── 第9条 AIテクノロジーに関する特記事項 ── */}
           <Section title="第9条（AIテクノロジーに関する特記事項）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 本サービスが提供する翻訳はAIテクノロジーにより自動生成されるものであり、翻訳の正確性、完全性、学術的妥当性、または特定目的への適合性を保証するものではありません。
               </li>
@@ -243,7 +243,7 @@ export default function TermsPage() {
           {/* ── 第10条 禁止事項 ── */}
           <Section title="第10条（禁止事項）">
             <p>ユーザーは、以下の行為を行ってはなりません。</p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>法令または公序良俗に反する行為</li>
               <li>本サービスの運営を妨害する行為</li>
               <li>他のユーザーまたは第三者の権利を侵害する行為</li>
@@ -263,7 +263,7 @@ export default function TermsPage() {
 
           {/* ── 第11条 サービスの可用性・変更・中断 ── */}
           <Section title="第11条（サービスの可用性・変更・中断）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 運営者は、本サービスの安定的な提供に努めますが、100%の稼働率を保証するものではありません。
               </li>
@@ -272,7 +272,7 @@ export default function TermsPage() {
               </li>
               <li>
                 以下の事由による一時的なサービスの中断について、運営者は責任を負いません。
-                <ul className="list-disc pl-6 space-y-1 mt-1">
+                <ul className="list-disc ps-6 space-y-1 mt-1">
                   <li>システムの保守・アップデート</li>
                   <li>天災、停電、通信障害等の不可抗力</li>
                   <li>
@@ -285,7 +285,7 @@ export default function TermsPage() {
 
           {/* ── 第12条 解約・アカウント削除 ── */}
           <Section title="第12条（解約・アカウント削除）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 ユーザーは、設定画面からいつでもアカウントを削除し、本サービスの利用を終了できます。
               </li>
@@ -300,7 +300,7 @@ export default function TermsPage() {
 
           {/* ── 第13条 免責事項・責任制限 ── */}
           <Section title="第13条（免責事項・責任制限）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 本サービスは「現状有姿（as is）」および「提供可能な状態（as
                 available）」で提供されます。運営者は、明示・黙示を問わず、商品性、特定目的への適合性、権利非侵害を含むいかなる保証も行いません。
@@ -322,7 +322,7 @@ export default function TermsPage() {
             <p>
               ユーザーは、以下の事由に起因または関連して、運営者が被った損害、損失、費用（合理的な弁護士費用を含む）を補償するものとします。
             </p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>ユーザーによる本規約の違反</li>
               <li>
                 ユーザーが入力したコンテンツが第三者の権利を侵害した場合
@@ -335,7 +335,7 @@ export default function TermsPage() {
 
           {/* ── 第15条 規約の変更 ── */}
           <Section title="第15条（規約の変更）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>
                 運営者は、法令の改正、サービス内容の変更、その他の事由により、本規約を変更することがあります。
               </li>
@@ -353,7 +353,7 @@ export default function TermsPage() {
 
           {/* ── 第16条 準拠法・管轄裁判所 ── */}
           <Section title="第16条（準拠法・管轄裁判所）">
-            <ol className="list-decimal pl-6 space-y-2 mt-2">
+            <ol className="list-decimal ps-6 space-y-2 mt-2">
               <li>本規約は日本法に準拠し、日本法に基づいて解釈されるものとします。</li>
               <li>
                 本サービスに関する紛争については、仙台地方裁判所を第一審の専属的合意管轄裁判所とします。

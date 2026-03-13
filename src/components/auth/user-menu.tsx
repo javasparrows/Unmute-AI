@@ -62,25 +62,25 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/dashboard">
-              <LayoutDashboard className="mr-2 h-4 w-4" />
+              <LayoutDashboard className="me-2 h-4 w-4" />
               {t("dashboard")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings">
-              <Settings className="mr-2 h-4 w-4" />
+              <Settings className="me-2 h-4 w-4" />
               {t("settings")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings/billing">
-              <CreditCard className="mr-2 h-4 w-4" />
+              <CreditCard className="me-2 h-4 w-4" />
               {t("billing")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings/analytics">
-              <BarChart3 className="mr-2 h-4 w-4" />
+              <BarChart3 className="me-2 h-4 w-4" />
               {t("analytics")}
             </Link>
           </DropdownMenuItem>
@@ -89,7 +89,7 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuItem asChild>
           <form action="/api/auth/signout" method="POST" className="w-full">
             <button type="submit" className="flex w-full items-center">
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="me-2 h-4 w-4" />
               {t("logout")}
             </button>
           </form>
