@@ -3,7 +3,6 @@
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,16 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const LOCALE_LABELS: Record<string, string> = {
-  ja: "日本語",
-  en: "English",
-  "zh-CN": "简体中文",
-  "zh-TW": "繁體中文",
-  ko: "한국어",
-  de: "Deutsch",
-  fr: "Français",
-  es: "Español",
-  "pt-BR": "Português (BR)",
+const LOCALE_CONFIG: Record<string, { flag: string; label: string }> = {
+  ja: { flag: "🇯🇵", label: "日本語" },
+  en: { flag: "🇺🇸", label: "English" },
+  "zh-CN": { flag: "🇨🇳", label: "简体中文" },
+  "zh-TW": { flag: "🇹🇼", label: "繁體中文" },
+  ko: { flag: "🇰🇷", label: "한국어" },
+  de: { flag: "🇩🇪", label: "Deutsch" },
+  fr: { flag: "🇫🇷", label: "Français" },
+  es: { flag: "🇪🇸", label: "Español" },
+  "pt-BR": { flag: "🇧🇷", label: "Português (BR)" },
 };
 
 export function LocaleSwitcher() {
@@ -37,7 +36,7 @@ export function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1.5 px-2">
-          <Globe className="h-4 w-4" />
+          <span>{LOCALE_CONFIG[locale]?.flag}</span>
           <span className="text-xs uppercase">{locale}</span>
         </Button>
       </DropdownMenuTrigger>
@@ -48,7 +47,8 @@ export function LocaleSwitcher() {
             onClick={() => switchLocale(l)}
             className={l === locale ? "font-medium bg-accent" : ""}
           >
-            {LOCALE_LABELS[l]}
+            <span>{LOCALE_CONFIG[l]?.flag}</span>
+            {LOCALE_CONFIG[l]?.label}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
