@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/user-menu";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 
@@ -40,6 +41,7 @@ export async function SiteHeader() {
       </div>
 
       <div className="flex items-center gap-3">
+        <LocaleSwitcher />
         {session?.user ? (
           <UserMenu user={session.user} />
         ) : (
