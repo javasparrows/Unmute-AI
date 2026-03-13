@@ -441,7 +441,7 @@ export function EditorPageClient({
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href={`/settings/preferences?returnTo=/documents/${documentId}`}>
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-secondary-foreground/70 hover:text-secondary-foreground">
+                <Button variant="ghost" size="sm">
                   <Settings className="h-4 w-4" />
                 </Button>
               </Link>
