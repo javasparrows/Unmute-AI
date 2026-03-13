@@ -15,6 +15,17 @@ enum Plan {
   MAX
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum PlanChangeSource {
+  STRIPE_WEBHOOK
+  ADMIN_OVERRIDE
+  BACKFILL
+}
+
 // ===== Auth.js required tables =====
 
 model User {
@@ -28,6 +39,7 @@ model User {
   documents            Document[]
   usageRecords         UsageRecord[]
   apiUsageLogs         ApiUsageLog[]
+  role                 UserRole       @default(USER)
   plan                 Plan           @default(FREE)
   planOverride         Plan?          // 管理者手動付与（NULL=無効、設定時はStripeより優先）
   planOverrideNote     String?        // 付与理由 e.g. "開発者", "友人招待"
@@ -37,6 +49,8 @@ model User {
   subscriptionStatus   String?        // "active", "canceled", "past_due"
   currentPeriodEnd     DateTime?
   createdAt            DateTime       @default(now())
+  pageViews            PageView[]
+  planChanges          PlanChangeLog[]
 }
 
 model Account {
@@ -138,4 +152,39 @@ model ApiUsageLog {
 
   @@index([userId, createdAt])
   @@index([userId, type])
+}
+
+model PageView {
+  id          String   @id @default(cuid())
+  visitorId   String
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  path        String
+  locale      String?
+  countryCode String?  @db.VarChar(2)
+  createdAt   DateTime @default(now())
+
+  @@index([path, createdAt, visitorId])
+  @@index([visitorId, createdAt])
+  @@index([userId, createdAt])
+  @@index([countryCode, createdAt])
+}
+
+model PlanChangeLog {
+  id                   String           @id @default(cuid())
+  userId               String
+  user                 User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromPlan             Plan
+  toPlan               Plan
+  source               PlanChangeSource
+  externalEventId      String?          @unique
+  stripeSubscriptionId String?
+  stripePriceId        String?
+  note                 String?          @db.Text
+  createdAt            DateTime         @default(now())
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+  @@index([toPlan, createdAt])
+  @@index([source, createdAt])
 }
