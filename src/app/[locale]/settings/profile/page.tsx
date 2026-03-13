@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { getPlanInfo } from "@/lib/plans";
+import { getTranslations } from "next-intl/server";
 import {
   Card,
   CardContent,
@@ -29,13 +30,14 @@ export default async function ProfilePage() {
   if (!user) redirect("/login");
 
   const planInfo = getPlanInfo(user.plan);
+  const t = await getTranslations("profile");
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>プロフィール</CardTitle>
-          <CardDescription>アカウント情報</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
@@ -52,13 +54,13 @@ export default async function ProfilePage() {
               </div>
             )}
             <div>
-              <p className="text-lg font-medium">{user.name ?? "未設定"}</p>
+              <p className="text-lg font-medium">{user.name ?? t("nameNotSet")}</p>
               <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 pt-4 border-t">
             <div>
-              <p className="text-sm text-muted-foreground">プラン</p>
+              <p className="text-sm text-muted-foreground">{t("plan")}</p>
               <div className="mt-1">
                 <Badge variant={user.plan === "FREE" ? "outline" : "default"}>
                   {planInfo.name}
@@ -66,7 +68,7 @@ export default async function ProfilePage() {
               </div>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">登録日</p>
+              <p className="text-sm text-muted-foreground">{t("registeredDate")}</p>
               <p className="text-sm mt-1">
                 {user.createdAt.toLocaleDateString("ja-JP")}
               </p>

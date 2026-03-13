@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { LayoutDashboard, Settings, CreditCard, BarChart3, LogOut } from "lucide-react";
 import {
   DropdownMenu,
@@ -22,6 +23,7 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ user }: UserMenuProps) {
+  const t = useTranslations("userMenu");
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
 
   return (
@@ -48,7 +50,7 @@ export function UserMenu({ user }: UserMenuProps) {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>
           <div className="flex flex-col">
-            <span className="text-sm font-medium">{user.name ?? "ユーザー"}</span>
+            <span className="text-sm font-medium">{user.name ?? t("defaultName")}</span>
             {user.email && (
               <span className="text-xs text-muted-foreground font-normal">
                 {user.email}
@@ -61,25 +63,25 @@ export function UserMenu({ user }: UserMenuProps) {
           <DropdownMenuItem asChild>
             <Link href="/dashboard">
               <LayoutDashboard className="mr-2 h-4 w-4" />
-              ダッシュボード
+              {t("dashboard")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings">
               <Settings className="mr-2 h-4 w-4" />
-              設定
+              {t("settings")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings/billing">
               <CreditCard className="mr-2 h-4 w-4" />
-              プラン・課金
+              {t("billing")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/settings/analytics">
               <BarChart3 className="mr-2 h-4 w-4" />
-              利用分析
+              {t("analytics")}
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -88,7 +90,7 @@ export function UserMenu({ user }: UserMenuProps) {
           <form action="/api/auth/signout" method="POST" className="w-full">
             <button type="submit" className="flex w-full items-center">
               <LogOut className="mr-2 h-4 w-4" />
-              ログアウト
+              {t("logout")}
             </button>
           </form>
         </DropdownMenuItem>

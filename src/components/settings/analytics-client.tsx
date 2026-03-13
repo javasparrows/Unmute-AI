@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import {
   ChartContainer,
@@ -50,12 +51,7 @@ interface AnalyticsData {
   models: ModelData[];
 }
 
-const GRANULARITY_OPTIONS: { value: Granularity; label: string }[] = [
-  { value: "hour", label: "時間別" },
-  { value: "day", label: "日別" },
-  { value: "week", label: "週別" },
-  { value: "month", label: "月別" },
-];
+const GRANULARITY_KEYS: Granularity[] = ["hour", "day", "week", "month"];
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -66,9 +62,16 @@ const CHART_COLORS = [
 ];
 
 export function AnalyticsClient() {
+  const t = useTranslations("analytics");
   const [granularity, setGranularity] = useState<Granularity>("day");
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const granularityOptions: { value: Granularity; label: string }[] =
+    GRANULARITY_KEYS.map((key) => ({
+      value: key,
+      label: t(`granularity.${key}`),
+    }));
 
   const fetchData = useCallback(async (g: Granularity) => {
     setLoading(true);
@@ -109,7 +112,7 @@ export function AnalyticsClient() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>期間合計（推定）</CardDescription>
+            <CardDescription>{t("periodTotal")}</CardDescription>
             <CardTitle className="text-2xl">
               {loading
                 ? "..."
@@ -119,13 +122,13 @@ export function AnalyticsClient() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>最もコストが高いモデル</CardDescription>
+            <CardDescription>{t("topModel")}</CardDescription>
             <CardTitle className="text-2xl">
               {loading
                 ? "..."
                 : data?.summary.top_model
                   ? data.summary.top_model.name
-                  : "データなし"}
+                  : t("noData")}
             </CardTitle>
           </CardHeader>
           {data?.summary.top_model && (
@@ -144,13 +147,13 @@ export function AnalyticsClient() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>推定コスト推移</CardTitle>
+              <CardTitle>{t("costTrend")}</CardTitle>
               <CardDescription>
-                Gemini 公開単価ベースの推定値です
+                {t("costTrendDescription")}
               </CardDescription>
             </div>
             <div className="flex gap-1">
-              {GRANULARITY_OPTIONS.map(({ value, label }) => (
+              {granularityOptions.map(({ value, label }) => (
                 <Button
                   key={value}
                   variant={granularity === value ? "default" : "outline"}
@@ -167,11 +170,11 @@ export function AnalyticsClient() {
         <CardContent>
           {loading ? (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              読み込み中...
+              {t("loading")}
             </div>
           ) : chartData.length === 0 ? (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              この期間のデータはありません
+              {t("noDataForPeriod")}
             </div>
           ) : (
             <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -212,29 +215,29 @@ export function AnalyticsClient() {
       {/* Model breakdown table */}
       <Card>
         <CardHeader>
-          <CardTitle>モデル別内訳</CardTitle>
+          <CardTitle>{t("modelBreakdown")}</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-sm text-muted-foreground">読み込み中...</p>
+            <p className="text-sm text-muted-foreground">{t("loading")}</p>
           ) : (data?.models.length ?? 0) === 0 ? (
-            <p className="text-sm text-muted-foreground">データなし</p>
+            <p className="text-sm text-muted-foreground">{t("noData")}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="text-left py-2 font-medium">モデル</th>
-                    <th className="text-right py-2 font-medium">推定コスト</th>
-                    <th className="text-right py-2 font-medium">構成比</th>
+                    <th className="text-left py-2 font-medium">{t("tableHeaders.model")}</th>
+                    <th className="text-right py-2 font-medium">{t("tableHeaders.estimatedCost")}</th>
+                    <th className="text-right py-2 font-medium">{t("tableHeaders.share")}</th>
                     <th className="text-right py-2 font-medium hidden sm:table-cell">
-                      リクエスト数
+                      {t("tableHeaders.requests")}
                     </th>
                     <th className="text-right py-2 font-medium hidden md:table-cell">
-                      入力トークン
+                      {t("tableHeaders.inputTokens")}
                     </th>
                     <th className="text-right py-2 font-medium hidden md:table-cell">
-                      出力トークン
+                      {t("tableHeaders.outputTokens")}
                     </th>
                   </tr>
                 </thead>

@@ -1,6 +1,8 @@
 import { signIn } from "@/lib/auth";
+import { getTranslations } from "next-intl/server";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const t = await getTranslations("login");
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-sm space-y-8 px-6">
@@ -9,7 +11,7 @@ export default function LoginPage() {
             Unmute AI
           </a>
           <p className="text-muted-foreground">
-            Focus on the research. We handle the language.
+            {t("tagline")}
           </p>
         </div>
 
@@ -41,7 +43,7 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            Continue with Google
+            {t("continueWithGoogle")}
           </button>
         </form>
       </div>

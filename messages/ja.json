@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "研究に集中しよう。",
+      "title2": "言語は私たちにお任せください。",
+      "description": "ジャーナルのスタイル、論文構成、そしてあなたの意図を理解するAI翻訳。母語で書いて、どの言語でも出版できます。",
+      "cta": "無料で始める"
+    },
+    "problem": {
+      "title1": "言語の壁に",
+      "title2": "知性を止めさせない。",
+      "description": "英語を母語としない研究者は、学術出版において構造的な障壁に直面しています。研究時間の最大40%が、科学の進歩ではなく言語との格闘に費やされています。"
+    },
+    "howItWorks": {
+      "title": "使い方",
+      "subtitle": "ドラフトから投稿まで3ステップ。",
+      "step1Title": "自由に書く",
+      "step1Description": "考える言語で論文を書きましょう。頭の中で翻訳する必要はありません。",
+      "step2Title": "即座に構成",
+      "step2Description": "AIがリアルタイムで翻訳し、ターゲットジャーナルのスタイルに適応させます。",
+      "step3Title": "推敲して投稿",
+      "step3Description": "どちらの言語でも編集可能。原稿を磨いて、自信を持って投稿しましょう。"
+    },
+    "features": {
+      "sectionTitle": "研究者のために、研究者が作りました。",
+      "academicPrecisionTitle": "学術的精度",
+      "academicPrecisionDescription": "学術的慣習に基づいて訓練。IMRAD構造、LaTeXマークアップ、ジャーナル固有のスタイルを理解します。",
+      "zeroCognitiveLoadTitle": "認知負荷ゼロ",
+      "zeroCognitiveLoadDescription": "母語で考え、どの言語でも出版。執筆と翻訳の切り替えは不要です。",
+      "securityPrivacyTitle": "セキュリティとプライバシー",
+      "securityPrivacyDescription": "あなたの研究はあなたのもの。透明なAPI利用、データ保持なし、完全なコスト可視化。",
+      "realtimeTranslationTitle": "リアルタイム双方向翻訳",
+      "realtimeTranslationDescription": "原文と翻訳を並べて編集。文レベルの精度で変更が即座に同期されます。",
+      "journalStylingTitle": "ジャーナル別スタイル適用",
+      "journalStylingDescription": "8種類の学術ジャーナルスタイルから選択。翻訳が投稿先の慣習に合致します。",
+      "latexAwareTitle": "LaTeX対応翻訳",
+      "latexAwareDescription": "\\cite{}、\\ref{}、数式、すべてのLaTeXコマンドをそのまま保持。マークアップは変更されません。",
+      "structureCheckTitle": "AI論文構造チェック",
+      "structureCheckDescription": "IMRAD構造の自動検証。投稿前に不足セクションを発見できます。",
+      "versionControlTitle": "バージョン管理",
+      "versionControlDescription": "翻訳のバージョンを保存・復元。改訂作業の進捗を失うことはありません。",
+      "costTrackingTitle": "透明なコスト追跡",
+      "costTrackingDescription": "各翻訳のコストをリアルタイムで確認。予想外の請求はありません。"
+    },
+    "cta": {
+      "title1": "評価されるべきは実力であり、",
+      "title2": "流暢さではない。",
+      "description": "優れた研究は世界中で生まれています。世界最高のアイデアは、それが生まれた言語に関係なく、等しく発言の機会を得るべきだと私たちは信じています。",
+      "button": "Unmute AI を試す"
+    },
+    "footer": {
+      "pricing": "料金",
+      "terms": "利用規約",
+      "privacy": "プライバシー",
+      "tokushoho": "特商法表記"
+    }
+  },
+  "header": {
+    "dashboard": "ダッシュボード",
+    "features": "機能",
+    "pricing": "料金",
+    "login": "ログイン",
+    "getStarted": "始める"
+  },
+  "login": {
+    "tagline": "研究に集中しよう。言語は私たちにお任せください。",
+    "continueWithGoogle": "Googleで続ける"
+  },
+  "pricing": {
+    "title": "料金プラン",
+    "description": "あなたの研究ワークフローに合ったプランをお選びください。",
+    "guarantee": "14日間の返金保証。いつでもキャンセル可能。"
+  },
+  "dashboard": {
+    "myDocuments": "マイドキュメント",
+    "createNew": "+ 新規作成",
+    "creating": "作成中...",
+    "createError": "ドキュメントの作成に失敗しました",
+    "checkPlan": "プランを確認",
+    "noDocuments": "まだドキュメントがありません",
+    "noDocumentsHint": "「新規作成」をクリックして翻訳を始めましょう",
+    "updated": "更新:",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "rename": "名前を変更",
+    "delete": "削除",
+    "confirmDelete": "このドキュメントを削除しますか？"
+  },
+  "settings": {
+    "title": "設定",
+    "description": "アカウントとアプリケーションの設定を管理します",
+    "nav": {
+      "profile": "プロフィール",
+      "preferences": "翻訳設定",
+      "billing": "プラン・課金",
+      "analytics": "利用分析"
+    }
+  },
+  "profile": {
+    "title": "プロフィール",
+    "description": "アカウント情報",
+    "nameNotSet": "未設定",
+    "plan": "プラン",
+    "registeredDate": "登録日"
+  },
+  "analytics": {
+    "periodTotal": "期間合計（推定）",
+    "topModel": "最もコストが高いモデル",
+    "noData": "データなし",
+    "costTrend": "推定コスト推移",
+    "costTrendDescription": "Gemini 公開単価ベースの推定値です",
+    "granularity": {
+      "hour": "時間別",
+      "day": "日別",
+      "week": "週別",
+      "month": "月別"
+    },
+    "loading": "読み込み中...",
+    "noDataForPeriod": "この期間のデータはありません",
+    "modelBreakdown": "モデル別内訳",
+    "tableHeaders": {
+      "model": "モデル",
+      "estimatedCost": "推定コスト",
+      "share": "構成比",
+      "requests": "リクエスト数",
+      "inputTokens": "入力トークン",
+      "outputTokens": "出力トークン"
+    }
+  },
+  "userMenu": {
+    "defaultName": "ユーザー",
+    "dashboard": "ダッシュボード",
+    "settings": "設定",
+    "billing": "プラン・課金",
+    "analytics": "利用分析",
+    "logout": "ログアウト"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "appName": "Unmute AI"
+  }
+}
