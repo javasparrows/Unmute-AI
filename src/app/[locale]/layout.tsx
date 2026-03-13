@@ -4,6 +4,7 @@ import { routing } from '@/i18n/routing';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { fontSans, fontSerif, fontMono } from "@/app/layout";
+import { PageViewTracker } from "@/components/analytics/page-view-tracker";
 
 const RTL_LOCALES = new Set(['ar', 'fa']);
 
@@ -33,6 +34,7 @@ export default async function LocaleLayout({
             {children}
             <Toaster richColors position="top-center" />
           </TooltipProvider>
+          <PageViewTracker />
         </NextIntlClientProvider>
       </body>
     </html>
