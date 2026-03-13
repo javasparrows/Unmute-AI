@@ -21,6 +21,14 @@ const LOCALE_CONFIG: Record<string, { flag: string; label: string }> = {
   fr: { flag: "🇫🇷", label: "Français" },
   es: { flag: "🇪🇸", label: "Español" },
   "pt-BR": { flag: "🇧🇷", label: "Português (BR)" },
+  ru: { flag: "🇷🇺", label: "Русский" },
+  it: { flag: "🇮🇹", label: "Italiano" },
+  hi: { flag: "🇮🇳", label: "हिन्दी" },
+  tr: { flag: "🇹🇷", label: "Türkçe" },
+  ar: { flag: "🇸🇦", label: "العربية" },
+  id: { flag: "🇮🇩", label: "Bahasa Indonesia" },
+  pl: { flag: "🇵🇱", label: "Polski" },
+  fa: { flag: "🇮🇷", label: "فارسی" },
 };
 
 export function LocaleSwitcher() {

@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Fokus pada penelitian.",
+      "title2": "Bahasa kami yang urus.",
+      "description": "Terjemahan akademis berbasis AI yang memahami gaya jurnal, struktur makalah, dan maksud Anda. Tulis dalam bahasa Anda, terbitkan dalam bahasa apa pun.",
+      "cta": "Mulai Gratis"
+    },
+    "problem": {
+      "title1": "Jangan biarkan kendala bahasa",
+      "title2": "menghambat kecerdasan Anda.",
+      "description": "Peneliti yang bukan penutur asli bahasa Inggris menghadapi hambatan sistemik dalam publikasi akademis. Hingga 40% waktu penelitian dihabiskan untuk bergulat dengan bahasa, bukan memajukan sains."
+    },
+    "howItWorks": {
+      "title": "Cara Kerja",
+      "subtitle": "Dari draf hingga pengiriman dalam tiga langkah.",
+      "step1Title": "Tulis dengan Bebas",
+      "step1Description": "Tulis makalah Anda dalam bahasa yang Anda pikirkan. Tidak perlu menerjemahkan secara mental.",
+      "step2Title": "Strukturkan Seketika",
+      "step2Description": "AI menerjemahkan dan menyesuaikan dengan gaya jurnal target secara real-time, kalimat demi kalimat.",
+      "step3Title": "Sempurnakan & Kirim",
+      "step3Description": "Edit dalam kedua bahasa. Poles manuskrip Anda dan kirim dengan percaya diri."
+    },
+    "features": {
+      "sectionTitle": "Dibangun oleh peneliti, untuk peneliti.",
+      "academicPrecisionTitle": "Presisi Akademis",
+      "academicPrecisionDescription": "Dilatih pada konvensi akademis. Memahami struktur IMRAD, markup LaTeX, dan gaya spesifik jurnal.",
+      "zeroCognitiveLoadTitle": "Beban Kognitif Nol",
+      "zeroCognitiveLoadDescription": "Berpikir dalam bahasa Anda, terbitkan dalam bahasa apa pun. Tidak perlu lagi beralih antara menulis dan menerjemahkan.",
+      "securityPrivacyTitle": "Keamanan & Privasi",
+      "securityPrivacyDescription": "Penelitian Anda tetap milik Anda. Penggunaan API yang transparan, tanpa penyimpanan data, visibilitas biaya penuh.",
+      "realtimeTranslationTitle": "Terjemahan Dua Arah Real-time",
+      "realtimeTranslationDescription": "Edit sumber dan terjemahan berdampingan. Perubahan tersinkronisasi seketika dengan presisi tingkat kalimat.",
+      "journalStylingTitle": "Gaya Spesifik Jurnal",
+      "journalStylingDescription": "Pilih dari 8 gaya jurnal akademis. Terjemahan Anda sesuai dengan konvensi publikasi target.",
+      "latexAwareTitle": "Terjemahan Sadar LaTeX",
+      "latexAwareDescription": "Mempertahankan \\cite{}, \\ref{}, persamaan, dan semua perintah LaTeX secara utuh. Markup Anda tetap tak tersentuh.",
+      "structureCheckTitle": "Pemeriksaan Struktur Makalah AI",
+      "structureCheckDescription": "Validasi struktur IMRAD otomatis. Temukan bagian yang hilang sebelum pengiriman.",
+      "versionControlTitle": "Kontrol Versi",
+      "versionControlDescription": "Simpan dan pulihkan versi terjemahan Anda. Tidak pernah kehilangan kemajuan saat revisi.",
+      "costTrackingTitle": "Pelacakan Biaya Transparan",
+      "costTrackingDescription": "Lihat dengan tepat berapa biaya setiap terjemahan secara real-time. Tanpa tagihan kejutan."
+    },
+    "cta": {
+      "title1": "Dinilai berdasarkan kualitas,",
+      "title2": "bukan kefasihan bahasa.",
+      "description": "Penelitian hebat lahir di mana saja. Kami percaya ide-ide terbaik dunia layak mendapat suara yang setara, terlepas dari bahasa tempat mereka dilahirkan.",
+      "button": "Coba Unmute AI Hari Ini"
+    },
+    "footer": {
+      "pricing": "Harga",
+      "terms": "Ketentuan",
+      "privacy": "Privasi",
+      "tokushoho": "Pemberitahuan Hukum"
+    }
+  },
+  "header": {
+    "dashboard": "Dasbor",
+    "features": "Fitur",
+    "pricing": "Harga",
+    "login": "Masuk",
+    "getStarted": "Mulai"
+  },
+  "login": {
+    "tagline": "Fokus pada penelitian. Bahasa kami yang urus.",
+    "continueWithGoogle": "Lanjutkan dengan Google"
+  },
+  "pricing": {
+    "title": "Harga",
+    "description": "Pilih paket yang sesuai dengan alur kerja penelitian Anda.",
+    "guarantee": "Jaminan uang kembali 14 hari. Batalkan kapan saja."
+  },
+  "dashboard": {
+    "myDocuments": "Dokumen Saya",
+    "createNew": "+ Dokumen Baru",
+    "creating": "Membuat...",
+    "createError": "Gagal membuat dokumen",
+    "checkPlan": "Periksa paket",
+    "noDocuments": "Belum ada dokumen",
+    "noDocumentsHint": "Klik \"+ Dokumen Baru\" untuk mulai menerjemahkan",
+    "updated": "Diperbarui:",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "rename": "Ganti Nama",
+    "delete": "Hapus",
+    "confirmDelete": "Hapus dokumen ini?"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "description": "Kelola pengaturan akun dan aplikasi Anda",
+    "nav": {
+      "profile": "Profil",
+      "preferences": "Pengaturan Terjemahan",
+      "billing": "Paket & Tagihan",
+      "analytics": "Analisis Penggunaan"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Informasi akun",
+    "nameNotSet": "Belum diatur",
+    "plan": "Paket",
+    "registeredDate": "Tanggal Pendaftaran"
+  },
+  "analytics": {
+    "periodTotal": "Total Periode (Perkiraan)",
+    "topModel": "Model Termahal",
+    "noData": "Tidak ada data",
+    "costTrend": "Tren Biaya Perkiraan",
+    "costTrendDescription": "Perkiraan berdasarkan harga publik Gemini",
+    "granularity": {
+      "hour": "Per Jam",
+      "day": "Harian",
+      "week": "Mingguan",
+      "month": "Bulanan"
+    },
+    "loading": "Memuat...",
+    "noDataForPeriod": "Tidak ada data untuk periode ini",
+    "modelBreakdown": "Rincian Model",
+    "tableHeaders": {
+      "model": "Model",
+      "estimatedCost": "Perkiraan Biaya",
+      "share": "Bagian",
+      "requests": "Permintaan",
+      "inputTokens": "Token Input",
+      "outputTokens": "Token Output"
+    }
+  },
+  "userMenu": {
+    "defaultName": "Pengguna",
+    "dashboard": "Dasbor",
+    "settings": "Pengaturan",
+    "billing": "Paket & Tagihan",
+    "analytics": "Analisis Penggunaan",
+    "logout": "Keluar"
+  },
+  "common": {
+    "loading": "Memuat...",
+    "appName": "Unmute AI"
+  }
+}

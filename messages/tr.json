@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Araştırmaya odaklanın.",
+      "title2": "Dili biz hallederiz.",
+      "description": "Dergi stillerini, makale yapısını ve niyetinizi anlayan yapay zeka destekli akademik çeviri. Kendi dilinizde yazın, istediğiniz dilde yayınlayın.",
+      "cta": "Ücretsiz Başlayın"
+    },
+    "problem": {
+      "title1": "Dil bariyerinin",
+      "title2": "zekanızı yavaşlatmasına izin vermeyin.",
+      "description": "Ana dili İngilizce olmayan araştırmacılar, akademik yayıncılıkta sistematik engellerle karşılaşmaktadır. Araştırma süresinin %40'a kadarı bilimi ilerletmek yerine dille boğuşarak harcanmaktadır."
+    },
+    "howItWorks": {
+      "title": "Nasıl Çalışır",
+      "subtitle": "Taslaktan gönderime üç adımda.",
+      "step1Title": "Özgürce Yazın",
+      "step1Description": "Makalenizi düşündüğünüz dilde yazın. Zihinsel çeviriye gerek yok.",
+      "step2Title": "Anında Yapılandırın",
+      "step2Description": "Yapay zeka, hedef derginin stiline gerçek zamanlı olarak çevirir ve uyarlar; cümle cümle.",
+      "step3Title": "İyileştirin ve Gönderin",
+      "step3Description": "Her iki dilde de düzenleyin. Elyazmanızı cilalanmış hale getirin ve güvenle gönderin."
+    },
+    "features": {
+      "sectionTitle": "Araştırmacılar tarafından, araştırmacılar için geliştirildi.",
+      "academicPrecisionTitle": "Akademik Hassasiyet",
+      "academicPrecisionDescription": "Akademik kurallara göre eğitilmiştir. IMRAD yapısını, LaTeX işaretlemesini ve dergiye özgü biçimlendirmeyi anlar.",
+      "zeroCognitiveLoadTitle": "Sıfır Bilişsel Yük",
+      "zeroCognitiveLoadDescription": "Kendi dilinizde düşünün, istediğiniz dilde yayınlayın. Yazma ve çeviri arasında geçiş yapmanıza artık gerek yok.",
+      "securityPrivacyTitle": "Güvenlik ve Gizlilik",
+      "securityPrivacyDescription": "Araştırmanız sizin kalır. Şeffaf API kullanımı, veri saklama yok, tam maliyet görünürlüğü.",
+      "realtimeTranslationTitle": "Gerçek Zamanlı Çift Yönlü Çeviri",
+      "realtimeTranslationDescription": "Kaynak ve çeviriyi yan yana düzenleyin. Değişiklikler cümle düzeyinde hassasiyetle anında senkronize olur.",
+      "journalStylingTitle": "Dergiye Özgü Biçimlendirme",
+      "journalStylingDescription": "8 akademik dergi stilinden birini seçin. Çeviriniz hedef yayının kurallarına uygun olur.",
+      "latexAwareTitle": "LaTeX Uyumlu Çeviri",
+      "latexAwareDescription": "\\cite{}, \\ref{}, denklemler ve tüm LaTeX komutlarını bozulmadan korur. İşaretlemeniz el değmemiş kalır.",
+      "structureCheckTitle": "Yapay Zeka Makale Yapı Kontrolü",
+      "structureCheckDescription": "Otomatik IMRAD yapı doğrulaması. Göndermeden önce eksik bölümleri tespit edin.",
+      "versionControlTitle": "Sürüm Kontrolü",
+      "versionControlDescription": "Çevirinizin sürümlerini kaydedin ve geri yükleyin. Revizyon sırasında ilerlemenizi asla kaybetmeyin.",
+      "costTrackingTitle": "Şeffaf Maliyet Takibi",
+      "costTrackingDescription": "Her çevirinin maliyetini gerçek zamanlı olarak görün. Sürpriz faturalar yok."
+    },
+    "cta": {
+      "title1": "Liyakatle değerlendirin,",
+      "title2": "dil akıcılığıyla değil.",
+      "description": "Büyük araştırmalar her yerde doğar. Dünyanın en iyi fikirlerinin, hangi dilde doğmuş olursa olsun, eşit bir sese sahip olmayı hak ettiğine inanıyoruz.",
+      "button": "Unmute AI'ı Bugün Deneyin"
+    },
+    "footer": {
+      "pricing": "Fiyatlandırma",
+      "terms": "Koşullar",
+      "privacy": "Gizlilik",
+      "tokushoho": "Yasal Bildirim"
+    }
+  },
+  "header": {
+    "dashboard": "Kontrol Paneli",
+    "features": "Özellikler",
+    "pricing": "Fiyatlandırma",
+    "login": "Giriş Yap",
+    "getStarted": "Başlayın"
+  },
+  "login": {
+    "tagline": "Araştırmaya odaklanın. Dili biz hallederiz.",
+    "continueWithGoogle": "Google ile devam edin"
+  },
+  "pricing": {
+    "title": "Fiyatlandırma",
+    "description": "Araştırma iş akışınıza uygun planı seçin.",
+    "guarantee": "14 gün para iade garantisi. İstediğiniz zaman iptal edin."
+  },
+  "dashboard": {
+    "myDocuments": "Belgelerim",
+    "createNew": "+ Yeni Belge",
+    "creating": "Oluşturuluyor...",
+    "createError": "Belge oluşturulamadı",
+    "checkPlan": "Planı kontrol et",
+    "noDocuments": "Henüz belge yok",
+    "noDocumentsHint": "Çevirmeye başlamak için \"+ Yeni Belge\"ye tıklayın",
+    "updated": "Güncellendi:",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "rename": "Yeniden Adlandır",
+    "delete": "Sil",
+    "confirmDelete": "Bu belge silinsin mi?"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "description": "Hesap ve uygulama ayarlarınızı yönetin",
+    "nav": {
+      "profile": "Profil",
+      "preferences": "Çeviri Ayarları",
+      "billing": "Plan ve Faturalandırma",
+      "analytics": "Kullanım Analizi"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Hesap bilgileri",
+    "nameNotSet": "Ayarlanmadı",
+    "plan": "Plan",
+    "registeredDate": "Kayıt Tarihi"
+  },
+  "analytics": {
+    "periodTotal": "Dönem Toplamı (Tahmini)",
+    "topModel": "En Pahalı Model",
+    "noData": "Veri yok",
+    "costTrend": "Tahmini Maliyet Eğilimi",
+    "costTrendDescription": "Gemini genel fiyatlandırmasına dayalı tahmin",
+    "granularity": {
+      "hour": "Saatlik",
+      "day": "Günlük",
+      "week": "Haftalık",
+      "month": "Aylık"
+    },
+    "loading": "Yükleniyor...",
+    "noDataForPeriod": "Bu dönem için veri yok",
+    "modelBreakdown": "Model Dağılımı",
+    "tableHeaders": {
+      "model": "Model",
+      "estimatedCost": "Tahmini Maliyet",
+      "share": "Pay",
+      "requests": "İstekler",
+      "inputTokens": "Giriş Tokenleri",
+      "outputTokens": "Çıkış Tokenleri"
+    }
+  },
+  "userMenu": {
+    "defaultName": "Kullanıcı",
+    "dashboard": "Kontrol Paneli",
+    "settings": "Ayarlar",
+    "billing": "Plan ve Faturalandırma",
+    "analytics": "Kullanım Analizi",
+    "logout": "Çıkış Yap"
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "appName": "Unmute AI"
+  }
+}

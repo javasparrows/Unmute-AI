@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "ركّز على البحث.",
+      "title2": "نحن نتولّى اللغة.",
+      "description": "ترجمة أكاديمية مدعومة بالذكاء الاصطناعي تفهم أساليب المجلات وبنية الأوراق البحثية ومقاصدكم. اكتبوا بلغتكم، وانشروا بأي لغة.",
+      "cta": "ابدأ مجاناً"
+    },
+    "problem": {
+      "title1": "لا تدع الحاجز اللغوي",
+      "title2": "يُبطئ فكرك.",
+      "description": "يواجه الباحثون غير الناطقين بالإنجليزية عوائق منهجية في النشر الأكاديمي. يُنفق ما يصل إلى 40% من وقت البحث في معالجة اللغة بدلاً من تطوير العلم."
+    },
+    "howItWorks": {
+      "title": "كيف يعمل",
+      "subtitle": "من المسودة إلى التقديم في ثلاث خطوات.",
+      "step1Title": "اكتب بحرية",
+      "step1Description": "اكتب ورقتك البحثية باللغة التي تفكر بها. لا حاجة للترجمة الذهنية.",
+      "step2Title": "هيكلة فورية",
+      "step2Description": "يترجم الذكاء الاصطناعي ويكيّف النص وفق أسلوب المجلة المستهدفة في الوقت الفعلي، جملة بجملة.",
+      "step3Title": "صقّل وأرسل",
+      "step3Description": "حرّر بأي من اللغتين. أتقن مخطوطتك وأرسلها بثقة."
+    },
+    "features": {
+      "sectionTitle": "صُمّم بواسطة باحثين، من أجل باحثين.",
+      "academicPrecisionTitle": "دقة أكاديمية",
+      "academicPrecisionDescription": "مُدرَّب على الأعراف الأكاديمية. يفهم بنية IMRAD وترميز LaTeX وأساليب المجلات المحددة.",
+      "zeroCognitiveLoadTitle": "عبء معرفي صفري",
+      "zeroCognitiveLoadDescription": "فكّر بلغتك، وانشر بأي لغة. لا مزيد من التبديل بين الكتابة والترجمة.",
+      "securityPrivacyTitle": "الأمان والخصوصية",
+      "securityPrivacyDescription": "يبقى بحثك ملكاً لك. استخدام شفاف لواجهة برمجة التطبيقات، بدون احتفاظ بالبيانات، رؤية كاملة للتكاليف.",
+      "realtimeTranslationTitle": "ترجمة ثنائية الاتجاه في الوقت الفعلي",
+      "realtimeTranslationDescription": "حرّر النص الأصلي والترجمة جنباً إلى جنب. تتزامن التغييرات فوراً بدقة على مستوى الجملة.",
+      "journalStylingTitle": "تنسيق خاص بالمجلة",
+      "journalStylingDescription": "اختر من بين 8 أساليب مجلات أكاديمية. تتوافق ترجمتك مع أعراف المنشور المستهدف.",
+      "latexAwareTitle": "ترجمة واعية بـ LaTeX",
+      "latexAwareDescription": "يحافظ على \\cite{} و\\ref{} والمعادلات وجميع أوامر LaTeX كما هي. يبقى ترميزك دون تغيير.",
+      "structureCheckTitle": "فحص بنية الورقة بالذكاء الاصطناعي",
+      "structureCheckDescription": "تحقق تلقائي من بنية IMRAD. اكتشف الأقسام الناقصة قبل التقديم.",
+      "versionControlTitle": "التحكم في الإصدارات",
+      "versionControlDescription": "احفظ واستعد إصدارات ترجمتك. لن تفقد تقدمك أبداً أثناء المراجعة.",
+      "costTrackingTitle": "تتبّع شفاف للتكاليف",
+      "costTrackingDescription": "شاهد تكلفة كل ترجمة في الوقت الفعلي بالضبط. لا فواتير مفاجئة."
+    },
+    "cta": {
+      "title1": "قيّموا بالجدارة،",
+      "title2": "لا بالطلاقة اللغوية.",
+      "description": "البحث المتميز يولد في كل مكان. نؤمن بأن أفضل أفكار العالم تستحق صوتاً متساوياً، بغض النظر عن اللغة التي وُلدت فيها.",
+      "button": "جرّب Unmute AI اليوم"
+    },
+    "footer": {
+      "pricing": "الأسعار",
+      "terms": "الشروط",
+      "privacy": "الخصوصية",
+      "tokushoho": "إشعار قانوني"
+    }
+  },
+  "header": {
+    "dashboard": "لوحة التحكم",
+    "features": "المزايا",
+    "pricing": "الأسعار",
+    "login": "تسجيل الدخول",
+    "getStarted": "ابدأ الآن"
+  },
+  "login": {
+    "tagline": "ركّز على البحث. نحن نتولّى اللغة.",
+    "continueWithGoogle": "المتابعة مع Google"
+  },
+  "pricing": {
+    "title": "الأسعار",
+    "description": "اختر الخطة التي تناسب سير عملك البحثي.",
+    "guarantee": "ضمان استرداد الأموال خلال 14 يوماً. إلغاء في أي وقت."
+  },
+  "dashboard": {
+    "myDocuments": "مستنداتي",
+    "createNew": "+ مستند جديد",
+    "creating": "جارٍ الإنشاء...",
+    "createError": "فشل إنشاء المستند",
+    "checkPlan": "تحقّق من الخطة",
+    "noDocuments": "لا توجد مستندات بعد",
+    "noDocumentsHint": "انقر على \"+ مستند جديد\" لبدء الترجمة",
+    "updated": "تم التحديث:",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "rename": "إعادة تسمية",
+    "delete": "حذف",
+    "confirmDelete": "هل تريد حذف هذا المستند؟"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "description": "إدارة إعدادات الحساب والتطبيق",
+    "nav": {
+      "profile": "الملف الشخصي",
+      "preferences": "إعدادات الترجمة",
+      "billing": "الخطة والفوترة",
+      "analytics": "تحليلات الاستخدام"
+    }
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "description": "معلومات الحساب",
+    "nameNotSet": "غير محدد",
+    "plan": "الخطة",
+    "registeredDate": "تاريخ التسجيل"
+  },
+  "analytics": {
+    "periodTotal": "إجمالي الفترة (تقديري)",
+    "topModel": "النموذج الأعلى تكلفة",
+    "noData": "لا توجد بيانات",
+    "costTrend": "اتجاه التكلفة التقديرية",
+    "costTrendDescription": "تقدير مبني على أسعار Gemini العامة",
+    "granularity": {
+      "hour": "بالساعة",
+      "day": "يومي",
+      "week": "أسبوعي",
+      "month": "شهري"
+    },
+    "loading": "جارٍ التحميل...",
+    "noDataForPeriod": "لا توجد بيانات لهذه الفترة",
+    "modelBreakdown": "تفصيل حسب النموذج",
+    "tableHeaders": {
+      "model": "النموذج",
+      "estimatedCost": "التكلفة التقديرية",
+      "share": "الحصة",
+      "requests": "الطلبات",
+      "inputTokens": "رموز الإدخال",
+      "outputTokens": "رموز الإخراج"
+    }
+  },
+  "userMenu": {
+    "defaultName": "مستخدم",
+    "dashboard": "لوحة التحكم",
+    "settings": "الإعدادات",
+    "billing": "الخطة والفوترة",
+    "analytics": "تحليلات الاستخدام",
+    "logout": "تسجيل الخروج"
+  },
+  "common": {
+    "loading": "جارٍ التحميل...",
+    "appName": "Unmute AI"
+  }
+}
