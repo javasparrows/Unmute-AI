@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   Languages,
@@ -23,91 +24,81 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-const steps = [
-  {
-    icon: PenLine,
-    number: "01",
-    title: "Draft Freely",
-    description:
-      "Write your paper in any language you think in. No mental translation required.",
-  },
-  {
-    icon: LayoutTemplate,
-    number: "02",
-    title: "Structure Instantly",
-    description:
-      "AI translates and adapts to your target journal's style in real time, sentence by sentence.",
-  },
-  {
-    icon: Sparkles,
-    number: "03",
-    title: "Refine & Submit",
-    description:
-      "Edit in either language. Polish your manuscript and submit with confidence.",
-  },
-];
+export default async function LandingPage() {
+  const t = await getTranslations("landing");
 
-const coreValues = [
-  {
-    icon: Brain,
-    title: "Academic Precision",
-    description:
-      "Trained on academic conventions. Understands IMRAD structure, LaTeX markup, and journal-specific styling.",
-  },
-  {
-    icon: Zap,
-    title: "Zero Cognitive Load",
-    description:
-      "Think in your language, publish in any. No more context-switching between writing and translating.",
-  },
-  {
-    icon: Shield,
-    title: "Security & Privacy",
-    description:
-      "Your research stays yours. Transparent API usage, no data retention, full cost visibility.",
-  },
-];
+  const steps = [
+    {
+      icon: PenLine,
+      number: "01",
+      title: t("howItWorks.step1Title"),
+      description: t("howItWorks.step1Description"),
+    },
+    {
+      icon: LayoutTemplate,
+      number: "02",
+      title: t("howItWorks.step2Title"),
+      description: t("howItWorks.step2Description"),
+    },
+    {
+      icon: Sparkles,
+      number: "03",
+      title: t("howItWorks.step3Title"),
+      description: t("howItWorks.step3Description"),
+    },
+  ];
 
-const features = [
-  {
-    icon: Languages,
-    title: "Real-time Bidirectional Translation",
-    description:
-      "Edit source and translation side by side. Changes sync instantly with sentence-level precision.",
-  },
-  {
-    icon: BookOpen,
-    title: "Journal-Specific Styling",
-    description:
-      "Choose from 8 academic journal styles. Your translation matches the target publication's conventions.",
-  },
-  {
-    icon: Layers,
-    title: "LaTeX-Aware Translation",
-    description:
-      "Preserves \\cite{}, \\ref{}, equations, and all LaTeX commands intact. Your markup stays untouched.",
-  },
-  {
-    icon: FileCheck,
-    title: "AI Paper Structure Check",
-    description:
-      "Automatic IMRAD structure validation. Catch missing sections before submission.",
-  },
-  {
-    icon: GitBranch,
-    title: "Version Control",
-    description:
-      "Save and restore versions of your translation. Never lose progress on a revision.",
-  },
-  {
-    icon: DollarSign,
-    title: "Transparent Cost Tracking",
-    description:
-      "See exactly what each translation costs in real time. No surprise bills.",
-  },
-];
+  const coreValues = [
+    {
+      icon: Brain,
+      title: t("features.academicPrecisionTitle"),
+      description: t("features.academicPrecisionDescription"),
+    },
+    {
+      icon: Zap,
+      title: t("features.zeroCognitiveLoadTitle"),
+      description: t("features.zeroCognitiveLoadDescription"),
+    },
+    {
+      icon: Shield,
+      title: t("features.securityPrivacyTitle"),
+      description: t("features.securityPrivacyDescription"),
+    },
+  ];
 
-export default function LandingPage() {
+  const features = [
+    {
+      icon: Languages,
+      title: t("features.realtimeTranslationTitle"),
+      description: t("features.realtimeTranslationDescription"),
+    },
+    {
+      icon: BookOpen,
+      title: t("features.journalStylingTitle"),
+      description: t("features.journalStylingDescription"),
+    },
+    {
+      icon: Layers,
+      title: t("features.latexAwareTitle"),
+      description: t("features.latexAwareDescription"),
+    },
+    {
+      icon: FileCheck,
+      title: t("features.structureCheckTitle"),
+      description: t("features.structureCheckDescription"),
+    },
+    {
+      icon: GitBranch,
+      title: t("features.versionControlTitle"),
+      description: t("features.versionControlDescription"),
+    },
+    {
+      icon: DollarSign,
+      title: t("features.costTrackingTitle"),
+      description: t("features.costTrackingDescription"),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -116,19 +107,17 @@ export default function LandingPage() {
       <section className="bg-secondary py-28 sm:py-36">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-secondary-foreground">
-            Focus on the research.
+            {t("hero.title1")}
             <br />
-            <span className="text-primary">We handle the language.</span>
+            <span className="text-primary">{t("hero.title2")}</span>
           </h1>
           <p className="mt-6 text-lg text-secondary-foreground/70 max-w-2xl mx-auto leading-relaxed">
-            AI-powered academic translation that understands journal styles,
-            paper structure, and your intent. Write in your language, publish in
-            any.
+            {t("hero.description")}
           </p>
           <div className="mt-10">
             <Link href="/login">
               <Button size="lg" className="gap-2 text-base px-8 py-6">
-                Start Writing for Free
+                {t("hero.cta")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -140,14 +129,12 @@ export default function LandingPage() {
       <section className="py-24">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-            Don&apos;t let the language barrier
+            {t("problem.title1")}
             <br />
-            slow your intellect.
+            {t("problem.title2")}
           </h2>
           <p className="mt-6 text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-            Non-native English speakers face systemic barriers in academic
-            publishing. Up to 40% of research time is spent wrestling with
-            language instead of advancing science.
+            {t("problem.description")}
           </p>
         </div>
       </section>
@@ -157,10 +144,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl text-secondary-foreground">
-              How It Works
+              {t("howItWorks.title")}
             </h2>
             <p className="mt-4 text-secondary-foreground/70 text-lg">
-              From draft to submission in three steps.
+              {t("howItWorks.subtitle")}
             </p>
           </div>
 
@@ -190,7 +177,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-              Built for researchers, by researchers.
+              {t("features.sectionTitle")}
             </h2>
           </div>
 
@@ -232,19 +219,17 @@ export default function LandingPage() {
       <section className="bg-secondary py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight text-secondary-foreground">
-            Evaluated by merit,
+            {t("cta.title1")}
             <br />
-            not by fluency.
+            {t("cta.title2")}
           </h2>
           <p className="mt-6 text-secondary-foreground/70 text-lg max-w-xl mx-auto">
-            Great research happens everywhere. We believe the world&apos;s best
-            ideas deserve an equal voice, regardless of the language they were
-            born in.
+            {t("cta.description")}
           </p>
           <div className="mt-10">
             <Link href="/login">
               <Button size="lg" className="gap-2 text-base px-8 py-6">
-                Try Unmute AI Today
+                {t("cta.button")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -261,25 +246,25 @@ export default function LandingPage() {
               href="/pricing"
               className="hover:text-foreground transition-colors"
             >
-              Pricing
+              {t("footer.pricing")}
             </Link>
             <Link
               href="/terms"
               className="hover:text-foreground transition-colors"
             >
-              Terms
+              {t("footer.terms")}
             </Link>
             <Link
               href="/privacy"
               className="hover:text-foreground transition-colors"
             >
-              Privacy
+              {t("footer.privacy")}
             </Link>
             <Link
               href="/legal/tokushoho"
               className="hover:text-foreground transition-colors"
             >
-              特商法表記
+              {t("footer.tokushoho")}
             </Link>
           </div>
           <div>&copy; {new Date().getFullYear()} Unmute AI</div>

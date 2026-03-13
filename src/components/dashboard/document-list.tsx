@@ -1,7 +1,8 @@
 "use client";
 
 import { useTransition, useState, useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { FileText, Trash2, Pencil, Check, X } from "lucide-react";
 import { deleteDocument, renameDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ function DocumentCard({
   doc: DocumentItem;
   onDelete: (id: string) => void;
 }) {
+  const t = useTranslations("dashboard");
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(doc.title);
@@ -48,7 +50,7 @@ function DocumentCard({
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!confirm("このドキュメントを削除しますか？")) return;
+    if (!confirm(t("confirmDelete"))) return;
     onDelete(doc.id);
     startTransition(() => deleteDocument(doc.id));
   };
@@ -115,7 +117,7 @@ function DocumentCard({
                 <Check className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>保存</TooltipContent>
+            <TooltipContent>{t("save")}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -131,7 +133,7 @@ function DocumentCard({
                 <X className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>キャンセル</TooltipContent>
+            <TooltipContent>{t("cancel")}</TooltipContent>
           </Tooltip>
         </div>
       </div>
@@ -155,7 +157,7 @@ function DocumentCard({
             )}
           </p>
           <p className="text-xs text-muted-foreground">
-            更新: {formatDate(doc.updatedAt)}
+            {t("updated")} {formatDate(doc.updatedAt)}
           </p>
         </div>
       </div>
@@ -173,7 +175,7 @@ function DocumentCard({
               <Pencil className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>名前を変更</TooltipContent>
+          <TooltipContent>{t("rename")}</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -187,7 +189,7 @@ function DocumentCard({
               <Trash2 className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>削除</TooltipContent>
+          <TooltipContent>{t("delete")}</TooltipContent>
         </Tooltip>
       </div>
     </Link>
@@ -195,6 +197,7 @@ function DocumentCard({
 }
 
 export function DocumentList({ documents }: DocumentListProps) {
+  const t = useTranslations("dashboard");
   const [visibleDocs, setVisibleDocs] = useState(documents);
 
   const handleDelete = (id: string) => {
@@ -206,10 +209,10 @@ export function DocumentList({ documents }: DocumentListProps) {
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
         <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
         <p className="text-muted-foreground">
-          まだドキュメントがありません
+          {t("noDocuments")}
         </p>
         <p className="text-sm text-muted-foreground/70 mt-1">
-          「新規作成」をクリックして翻訳を始めましょう
+          {t("noDocumentsHint")}
         </p>
       </div>
     );

@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Focus on the research.",
+      "title2": "We handle the language.",
+      "description": "AI-powered academic translation that understands journal styles, paper structure, and your intent. Write in your language, publish in any.",
+      "cta": "Start Writing for Free"
+    },
+    "problem": {
+      "title1": "Don't let the language barrier",
+      "title2": "slow your intellect.",
+      "description": "Non-native English speakers face systemic barriers in academic publishing. Up to 40% of research time is spent wrestling with language instead of advancing science."
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "From draft to submission in three steps.",
+      "step1Title": "Draft Freely",
+      "step1Description": "Write your paper in any language you think in. No mental translation required.",
+      "step2Title": "Structure Instantly",
+      "step2Description": "AI translates and adapts to your target journal's style in real time, sentence by sentence.",
+      "step3Title": "Refine & Submit",
+      "step3Description": "Edit in either language. Polish your manuscript and submit with confidence."
+    },
+    "features": {
+      "sectionTitle": "Built for researchers, by researchers.",
+      "academicPrecisionTitle": "Academic Precision",
+      "academicPrecisionDescription": "Trained on academic conventions. Understands IMRAD structure, LaTeX markup, and journal-specific styling.",
+      "zeroCognitiveLoadTitle": "Zero Cognitive Load",
+      "zeroCognitiveLoadDescription": "Think in your language, publish in any. No more context-switching between writing and translating.",
+      "securityPrivacyTitle": "Security & Privacy",
+      "securityPrivacyDescription": "Your research stays yours. Transparent API usage, no data retention, full cost visibility.",
+      "realtimeTranslationTitle": "Real-time Bidirectional Translation",
+      "realtimeTranslationDescription": "Edit source and translation side by side. Changes sync instantly with sentence-level precision.",
+      "journalStylingTitle": "Journal-Specific Styling",
+      "journalStylingDescription": "Choose from 8 academic journal styles. Your translation matches the target publication's conventions.",
+      "latexAwareTitle": "LaTeX-Aware Translation",
+      "latexAwareDescription": "Preserves \\cite{}, \\ref{}, equations, and all LaTeX commands intact. Your markup stays untouched.",
+      "structureCheckTitle": "AI Paper Structure Check",
+      "structureCheckDescription": "Automatic IMRAD structure validation. Catch missing sections before submission.",
+      "versionControlTitle": "Version Control",
+      "versionControlDescription": "Save and restore versions of your translation. Never lose progress on a revision.",
+      "costTrackingTitle": "Transparent Cost Tracking",
+      "costTrackingDescription": "See exactly what each translation costs in real time. No surprise bills."
+    },
+    "cta": {
+      "title1": "Evaluated by merit,",
+      "title2": "not by fluency.",
+      "description": "Great research happens everywhere. We believe the world's best ideas deserve an equal voice, regardless of the language they were born in.",
+      "button": "Try Unmute AI Today"
+    },
+    "footer": {
+      "pricing": "Pricing",
+      "terms": "Terms",
+      "privacy": "Privacy",
+      "tokushoho": "Commercial Disclosure"
+    }
+  },
+  "header": {
+    "dashboard": "Dashboard",
+    "features": "Features",
+    "pricing": "Pricing",
+    "login": "Log in",
+    "getStarted": "Get Started"
+  },
+  "login": {
+    "tagline": "Focus on the research. We handle the language.",
+    "continueWithGoogle": "Continue with Google"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "Choose the plan that fits your research workflow.",
+    "guarantee": "14-day money-back guarantee. Cancel anytime."
+  },
+  "dashboard": {
+    "myDocuments": "My Documents",
+    "createNew": "+ New Document",
+    "creating": "Creating...",
+    "createError": "Failed to create document",
+    "checkPlan": "Check plan",
+    "noDocuments": "No documents yet",
+    "noDocumentsHint": "Click \"+ New Document\" to start translating",
+    "updated": "Updated:",
+    "save": "Save",
+    "cancel": "Cancel",
+    "rename": "Rename",
+    "delete": "Delete",
+    "confirmDelete": "Delete this document?"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account and application settings",
+    "nav": {
+      "profile": "Profile",
+      "preferences": "Translation Settings",
+      "billing": "Plan & Billing",
+      "analytics": "Usage Analytics"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Account information",
+    "nameNotSet": "Not set",
+    "plan": "Plan",
+    "registeredDate": "Registered"
+  },
+  "analytics": {
+    "periodTotal": "Period Total (Estimated)",
+    "topModel": "Most Expensive Model",
+    "noData": "No data",
+    "costTrend": "Estimated Cost Trend",
+    "costTrendDescription": "Estimated based on Gemini public pricing",
+    "granularity": {
+      "hour": "Hourly",
+      "day": "Daily",
+      "week": "Weekly",
+      "month": "Monthly"
+    },
+    "loading": "Loading...",
+    "noDataForPeriod": "No data for this period",
+    "modelBreakdown": "Model Breakdown",
+    "tableHeaders": {
+      "model": "Model",
+      "estimatedCost": "Estimated Cost",
+      "share": "Share",
+      "requests": "Requests",
+      "inputTokens": "Input Tokens",
+      "outputTokens": "Output Tokens"
+    }
+  },
+  "userMenu": {
+    "defaultName": "User",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "billing": "Plan & Billing",
+    "analytics": "Usage Analytics",
+    "logout": "Log out"
+  },
+  "common": {
+    "loading": "Loading...",
+    "appName": "Unmute AI"
+  }
+}

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Outfit, Merriweather, Fira_Code } from "next/font/google";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const fontSans = Outfit({
@@ -22,25 +20,15 @@ const fontMono = Fira_Code({
 
 export const metadata: Metadata = {
   title: "Unmute AI",
-  description: "Focus on the research. We handle the language. AI-powered academic translation for researchers worldwide.",
+  description: "Focus on the research. We handle the language.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return (
-    <html lang="ja">
-      <body
-        className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}
-        suppressHydrationWarning
-      >
-        <TooltipProvider>
-          {children}
-          <Toaster richColors position="top-center" />
-        </TooltipProvider>
-      </body>
-    </html>
-  );
+}) {
+  return children;
 }
+
+export { fontSans, fontSerif, fontMono };

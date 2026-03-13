@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { auth } from "@/lib/auth";
 import { getDocuments } from "@/app/actions/document";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -7,9 +7,11 @@ import { CreateDocumentButton } from "@/components/dashboard/create-document-but
 import { Badge } from "@/components/ui/badge";
 import { getUserPlanById } from "@/lib/user-plan";
 import { getPlanInfo, isUnlimited } from "@/lib/plans";
+import { getTranslations } from "next-intl/server";
 
 export default async function DashboardPage() {
   const session = await auth();
+  const t = await getTranslations("dashboard");
   const documents = await getDocuments();
 
   const plan = session?.user?.id
@@ -25,7 +27,7 @@ export default async function DashboardPage() {
       <main className="mx-auto max-w-4xl px-6 py-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl font-semibold">マイドキュメント</h2>
+            <h2 className="text-xl font-semibold">{t("myDocuments")}</h2>
             <Link href="/pricing">
               <Badge
                 variant={plan === "FREE" ? "outline" : "default"}

@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createDocument } from "@/app/actions/document";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -9,6 +10,7 @@ import { toast } from "sonner";
 export function CreateDocumentButton() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const t = useTranslations("dashboard");
 
   const handleCreate = () => {
     startTransition(async () => {
@@ -16,10 +18,10 @@ export function CreateDocumentButton() {
         const doc = await createDocument();
         router.push(`/documents/${doc.id}`);
       } catch (err) {
-        const message = err instanceof Error ? err.message : "ドキュメントの作成に失敗しました";
+        const message = err instanceof Error ? err.message : t("createError");
         toast.error(message, {
           action: {
-            label: "プランを確認",
+            label: t("checkPlan"),
             onClick: () => router.push("/pricing"),
           },
         });
@@ -37,10 +39,10 @@ export function CreateDocumentButton() {
       {isPending ? (
         <span className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          作成中...
+          {t("creating")}
         </span>
       ) : (
-        "+ 新規作成"
+        t("createNew")
       )}
     </button>
   );

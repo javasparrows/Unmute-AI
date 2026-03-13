@@ -1,10 +1,13 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { auth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/user-menu";
+import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { Button } from "@/components/ui/button";
+import { getTranslations } from "next-intl/server";
 
 export async function SiteHeader() {
   const session = await auth();
+  const t = await getTranslations("header");
 
   return (
     <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
@@ -18,38 +21,39 @@ export async function SiteHeader() {
               href="/dashboard"
               className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
             >
-              Dashboard
+              {t("dashboard")}
             </Link>
           ) : (
             <Link
               href="/#features"
               className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
             >
-              Features
+              {t("features")}
             </Link>
           )}
           <Link
             href="/pricing"
             className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
           >
-            Pricing
+            {t("pricing")}
           </Link>
         </nav>
       </div>
 
       <div className="flex items-center gap-3">
+        <LocaleSwitcher />
         {session?.user ? (
           <UserMenu user={session.user} />
         ) : (
           <>
             <Link href="/login">
               <Button variant="ghost" size="sm">
-                Log in
+                {t("login")}
               </Button>
             </Link>
             <Link href="/login">
               <Button size="sm">
-                Get Started
+                {t("getStarted")}
               </Button>
             </Link>
           </>

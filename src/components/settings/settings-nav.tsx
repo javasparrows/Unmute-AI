@@ -1,23 +1,25 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { User, Settings, CreditCard, BarChart3 } from "lucide-react";
 
 const navItems = [
-  { href: "/settings/profile", label: "プロフィール", icon: User },
-  { href: "/settings/preferences", label: "翻訳設定", icon: Settings },
-  { href: "/settings/billing", label: "プラン・課金", icon: CreditCard },
-  { href: "/settings/analytics", label: "利用分析", icon: BarChart3 },
-];
+  { href: "/settings/profile", key: "profile", icon: User },
+  { href: "/settings/preferences", key: "preferences", icon: Settings },
+  { href: "/settings/billing", key: "billing", icon: CreditCard },
+  { href: "/settings/analytics", key: "analytics", icon: BarChart3 },
+] as const;
 
 export function SettingsNav() {
   const pathname = usePathname();
+  const t = useTranslations("settings.nav");
 
   return (
     <nav className="flex flex-row md:flex-col gap-1">
-      {navItems.map(({ href, label, icon: Icon }) => (
+      {navItems.map(({ href, key, icon: Icon }) => (
         <Link
           key={href}
           href={href}
@@ -29,7 +31,7 @@ export function SettingsNav() {
           )}
         >
           <Icon className="h-4 w-4" />
-          <span className="hidden md:inline">{label}</span>
+          <span className="hidden md:inline">{t(key)}</span>
         </Link>
       ))}
     </nav>
