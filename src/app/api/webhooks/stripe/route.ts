@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { getPlanByPriceId } from "@/lib/plans";
+import { recordPlanChange } from "@/lib/plan-change-log";
 import type Stripe from "stripe";
 
 export async function POST(request: Request) {
@@ -35,20 +36,20 @@ export async function POST(request: Request) {
         const subscription = await getStripe().subscriptions.retrieve(
           session.subscription as string,
         );
-        await handleSubscriptionUpdate(subscription);
+        await handleSubscriptionUpdate(subscription, event.id);
       }
       break;
     }
 
     case "customer.subscription.updated": {
       const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionUpdate(subscription);
+      await handleSubscriptionUpdate(subscription, event.id);
       break;
     }
 
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionDeleted(subscription);
+      await handleSubscriptionDeleted(subscription, event.id);
       break;
     }
 
@@ -67,11 +68,20 @@ export async function POST(request: Request) {
   return NextResponse.json({ received: true });
 }
 
-async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdate(
+  subscription: Stripe.Subscription,
+  eventId: string,
+) {
   const customerId = subscription.customer as string;
   const priceId = subscription.items.data[0]?.price.id;
   const planInfo = priceId ? getPlanByPriceId(priceId) : undefined;
   const plan = planInfo?.id ?? "FREE";
+
+  // Fetch current effective plan before updating
+  const currentUser = await prisma.user.findFirst({
+    where: { stripeCustomerId: customerId },
+    select: { id: true, plan: true, planOverride: true },
+  });
 
   await prisma.user.updateMany({
     where: { stripeCustomerId: customerId },
@@ -85,10 +95,33 @@ async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
       ),
     },
   });
+
+  // Log the plan change
+  if (currentUser) {
+    const fromPlan = currentUser.planOverride ?? currentUser.plan;
+    await recordPlanChange({
+      userId: currentUser.id,
+      fromPlan,
+      toPlan: plan,
+      source: "STRIPE_WEBHOOK",
+      externalEventId: eventId,
+      stripeSubscriptionId: subscription.id,
+      stripePriceId: priceId,
+    });
+  }
 }
 
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+async function handleSubscriptionDeleted(
+  subscription: Stripe.Subscription,
+  eventId: string,
+) {
   const customerId = subscription.customer as string;
+
+  // Fetch current effective plan before updating
+  const currentUser = await prisma.user.findFirst({
+    where: { stripeCustomerId: customerId },
+    select: { id: true, plan: true, planOverride: true },
+  });
 
   await prisma.user.updateMany({
     where: { stripeCustomerId: customerId },
@@ -100,4 +133,17 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       currentPeriodEnd: null,
     },
   });
+
+  // Log the plan change to FREE
+  if (currentUser) {
+    const fromPlan = currentUser.planOverride ?? currentUser.plan;
+    await recordPlanChange({
+      userId: currentUser.id,
+      fromPlan,
+      toPlan: "FREE",
+      source: "STRIPE_WEBHOOK",
+      externalEventId: eventId,
+      stripeSubscriptionId: subscription.id,
+    });
+  }
 }

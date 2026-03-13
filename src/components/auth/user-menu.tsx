@@ -2,7 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { LayoutDashboard, Settings, CreditCard, BarChart3, LogOut } from "lucide-react";
+import { LayoutDashboard, Settings, CreditCard, BarChart3, LogOut, Shield } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +20,10 @@ interface UserMenuProps {
     email?: string | null;
     image?: string | null;
   };
+  role?: string;
 }
 
-export function UserMenu({ user }: UserMenuProps) {
+export function UserMenu({ user, role }: UserMenuProps) {
   const t = useTranslations("userMenu");
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
 
@@ -60,6 +61,14 @@ export function UserMenu({ user }: UserMenuProps) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {role === "ADMIN" && (
+            <DropdownMenuItem asChild>
+              <Link href="/admin">
+                <Shield className="me-2 h-4 w-4" />
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem asChild>
             <Link href="/dashboard">
               <LayoutDashboard className="me-2 h-4 w-4" />

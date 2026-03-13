@@ -45,3 +45,4 @@ next-env.d.ts
 CLAUDE.md
 /prompts
 /src/generated/prisma
+.env*.local

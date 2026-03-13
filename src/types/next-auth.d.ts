@@ -1,4 +1,4 @@
-import type { Plan } from "@/generated/prisma/client";
+import type { Plan, UserRole } from "@/generated/prisma/client";
 import type { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
@@ -6,6 +6,7 @@ declare module "next-auth" {
     user: DefaultSession["user"] & {
       id: string;
       plan: Plan;
+      role: UserRole;
     };
   }
 }
