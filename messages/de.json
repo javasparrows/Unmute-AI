@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "Konzentrieren Sie sich auf die Forschung.",
+      "title2": "Die Sprache übernehmen wir.",
+      "description": "KI-gestützte akademische Übersetzung, die Zeitschriftenstile, Aufsatzstruktur und Ihre Absicht versteht. Schreiben Sie in Ihrer Sprache, veröffentlichen Sie in jeder.",
+      "cta": "Kostenlos starten"
+    },
+    "problem": {
+      "title1": "Lassen Sie die Sprachbarriere",
+      "title2": "nicht Ihren Intellekt bremsen.",
+      "description": "Nicht-muttersprachliche Forschende stehen vor systematischen Hürden bei akademischen Veröffentlichungen. Bis zu 40 % der Forschungszeit wird für sprachliche Probleme aufgewendet, statt die Wissenschaft voranzubringen."
+    },
+    "howItWorks": {
+      "title": "So funktioniert es",
+      "subtitle": "Vom Entwurf zur Einreichung in drei Schritten.",
+      "step1Title": "Frei formulieren",
+      "step1Description": "Schreiben Sie Ihren Aufsatz in der Sprache, in der Sie denken. Keine mentale Übersetzung nötig.",
+      "step2Title": "Sofort strukturieren",
+      "step2Description": "KI übersetzt und passt in Echtzeit an den Stil Ihrer Zielzeitschrift an — Satz für Satz.",
+      "step3Title": "Überarbeiten und einreichen",
+      "step3Description": "Bearbeiten Sie in beiden Sprachen. Perfektionieren Sie Ihr Manuskript und reichen Sie es selbstbewusst ein."
+    },
+    "features": {
+      "sectionTitle": "Von Forschenden für Forschende entwickelt.",
+      "academicPrecisionTitle": "Akademische Präzision",
+      "academicPrecisionDescription": "Trainiert auf akademische Konventionen. Versteht IMRAD-Struktur, LaTeX-Markup und zeitschriftenspezifische Formatierung.",
+      "zeroCognitiveLoadTitle": "Null kognitive Belastung",
+      "zeroCognitiveLoadDescription": "Denken Sie in Ihrer Sprache, veröffentlichen Sie in jeder. Kein Wechsel mehr zwischen Schreiben und Übersetzen.",
+      "securityPrivacyTitle": "Sicherheit und Datenschutz",
+      "securityPrivacyDescription": "Ihre Forschung bleibt Ihre. Transparente API-Nutzung, keine Datenspeicherung, volle Kostentransparenz.",
+      "realtimeTranslationTitle": "Bidirektionale Echtzeit-Übersetzung",
+      "realtimeTranslationDescription": "Bearbeiten Sie Original und Übersetzung nebeneinander. Änderungen synchronisieren sich sofort mit Satz-Präzision.",
+      "journalStylingTitle": "Zeitschriftenspezifische Formatierung",
+      "journalStylingDescription": "Wählen Sie aus 8 akademischen Zeitschriftenstilen. Ihre Übersetzung entspricht den Konventionen der Zielpublikation.",
+      "latexAwareTitle": "LaTeX-bewusste Übersetzung",
+      "latexAwareDescription": "Bewahrt \\cite{}, \\ref{}, Gleichungen und alle LaTeX-Befehle unverändert. Ihr Markup bleibt intakt.",
+      "structureCheckTitle": "KI-Strukturprüfung für Aufsätze",
+      "structureCheckDescription": "Automatische Validierung der IMRAD-Struktur. Erkennen Sie fehlende Abschnitte vor der Einreichung.",
+      "versionControlTitle": "Versionsverwaltung",
+      "versionControlDescription": "Speichern und stellen Sie Versionen Ihrer Übersetzung wieder her. Kein Fortschrittsverlust bei Überarbeitungen.",
+      "costTrackingTitle": "Transparente Kostenverfolgung",
+      "costTrackingDescription": "Sehen Sie in Echtzeit, was jede Übersetzung kostet. Keine überraschenden Rechnungen."
+    },
+    "cta": {
+      "title1": "Bewertet nach Leistung,",
+      "title2": "nicht nach Sprachgewandtheit.",
+      "description": "Großartige Forschung entsteht überall. Wir glauben, dass die besten Ideen der Welt eine gleichberechtigte Stimme verdienen — unabhängig von der Sprache, in der sie geboren wurden.",
+      "button": "Unmute AI jetzt testen"
+    },
+    "footer": {
+      "pricing": "Preise",
+      "terms": "AGB",
+      "privacy": "Datenschutz",
+      "tokushoho": "Rechtliche Hinweise"
+    }
+  },
+  "header": {
+    "dashboard": "Dashboard",
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "getStarted": "Loslegen"
+  },
+  "login": {
+    "tagline": "Konzentrieren Sie sich auf die Forschung. Die Sprache übernehmen wir.",
+    "continueWithGoogle": "Weiter mit Google"
+  },
+  "pricing": {
+    "title": "Preise",
+    "description": "Wählen Sie den Plan, der zu Ihrem Forschungsworkflow passt.",
+    "guarantee": "14 Tage Geld-zurück-Garantie. Jederzeit kündbar."
+  },
+  "dashboard": {
+    "myDocuments": "Meine Dokumente",
+    "createNew": "+ Neues Dokument",
+    "creating": "Wird erstellt...",
+    "createError": "Dokument konnte nicht erstellt werden",
+    "checkPlan": "Plan prüfen",
+    "noDocuments": "Noch keine Dokumente",
+    "noDocumentsHint": "Klicken Sie auf \"+ Neues Dokument\", um mit dem Übersetzen zu beginnen",
+    "updated": "Aktualisiert:",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "rename": "Umbenennen",
+    "delete": "Löschen",
+    "confirmDelete": "Dieses Dokument löschen?"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "description": "Verwalten Sie Ihre Konto- und Anwendungseinstellungen",
+    "nav": {
+      "profile": "Profil",
+      "preferences": "Übersetzungseinstellungen",
+      "billing": "Plan und Abrechnung",
+      "analytics": "Nutzungsanalyse"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "description": "Kontoinformationen",
+    "nameNotSet": "Nicht festgelegt",
+    "plan": "Plan",
+    "registeredDate": "Registriert am"
+  },
+  "analytics": {
+    "periodTotal": "Zeitraum gesamt (geschätzt)",
+    "topModel": "Teuerstes Modell",
+    "noData": "Keine Daten",
+    "costTrend": "Geschätzte Kostenentwicklung",
+    "costTrendDescription": "Schätzung basierend auf öffentlichen Gemini-Preisen",
+    "granularity": {
+      "hour": "Stündlich",
+      "day": "Täglich",
+      "week": "Wöchentlich",
+      "month": "Monatlich"
+    },
+    "loading": "Wird geladen...",
+    "noDataForPeriod": "Keine Daten für diesen Zeitraum",
+    "modelBreakdown": "Aufschlüsselung nach Modell",
+    "tableHeaders": {
+      "model": "Modell",
+      "estimatedCost": "Geschätzte Kosten",
+      "share": "Anteil",
+      "requests": "Anfragen",
+      "inputTokens": "Eingabe-Token",
+      "outputTokens": "Ausgabe-Token"
+    }
+  },
+  "userMenu": {
+    "defaultName": "Benutzer",
+    "dashboard": "Dashboard",
+    "settings": "Einstellungen",
+    "billing": "Plan und Abrechnung",
+    "analytics": "Nutzungsanalyse",
+    "logout": "Abmelden"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "appName": "Unmute AI"
+  }
+}

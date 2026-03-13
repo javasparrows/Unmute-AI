@@ -1,0 +1,142 @@
+{
+  "landing": {
+    "hero": {
+      "title1": "专注于研究。",
+      "title2": "语言交给我们。",
+      "description": "理解期刊风格、论文结构和您写作意图的AI学术翻译。用母语写作，以任何语言发表。",
+      "cta": "免费开始使用"
+    },
+    "problem": {
+      "title1": "别让语言障碍",
+      "title2": "拖慢您的才华。",
+      "description": "非英语母语的研究者在学术发表中面临系统性障碍。高达40%的研究时间被花费在语言问题上，而非推动科学进步。"
+    },
+    "howItWorks": {
+      "title": "使用方法",
+      "subtitle": "从初稿到投稿，只需三步。",
+      "step1Title": "自由撰写",
+      "step1Description": "用您最擅长的语言撰写论文，无需在脑中翻译。",
+      "step2Title": "即时构建",
+      "step2Description": "AI实时翻译，并自动适配目标期刊的风格，逐句精准呈现。",
+      "step3Title": "润色投稿",
+      "step3Description": "在任一语言中编辑。打磨您的稿件，自信投稿。"
+    },
+    "features": {
+      "sectionTitle": "由研究者打造，为研究者服务。",
+      "academicPrecisionTitle": "学术级精度",
+      "academicPrecisionDescription": "基于学术规范训练，理解IMRAD结构、LaTeX标记和期刊特定格式。",
+      "zeroCognitiveLoadTitle": "零认知负担",
+      "zeroCognitiveLoadDescription": "用母语思考，以任何语言发表。无需在写作和翻译之间来回切换。",
+      "securityPrivacyTitle": "安全与隐私",
+      "securityPrivacyDescription": "您的研究始终属于您。透明的API使用、不保留数据、完全的费用可视化。",
+      "realtimeTranslationTitle": "实时双向翻译",
+      "realtimeTranslationDescription": "并排编辑原文与译文。句子级精度，变更即时同步。",
+      "journalStylingTitle": "期刊专属样式",
+      "journalStylingDescription": "支持8种学术期刊样式可选。译文自动匹配目标出版物的规范。",
+      "latexAwareTitle": "LaTeX感知翻译",
+      "latexAwareDescription": "完整保留\\cite{}、\\ref{}、公式及所有LaTeX命令。您的标记不会被改动。",
+      "structureCheckTitle": "AI论文结构检查",
+      "structureCheckDescription": "自动验证IMRAD结构，在投稿前发现缺失的章节。",
+      "versionControlTitle": "版本管理",
+      "versionControlDescription": "保存和恢复翻译版本，修改过程中的进度永不丢失。",
+      "costTrackingTitle": "透明的费用追踪",
+      "costTrackingDescription": "实时查看每次翻译的费用，不会有意外账单。"
+    },
+    "cta": {
+      "title1": "以实力被评判，",
+      "title2": "而非语言流利度。",
+      "description": "优秀的研究在世界各地诞生。我们相信，全球最好的想法应该拥有平等的发声机会，不论它们诞生于哪种语言。",
+      "button": "立即体验 Unmute AI"
+    },
+    "footer": {
+      "pricing": "定价",
+      "terms": "服务条款",
+      "privacy": "隐私政策",
+      "tokushoho": "法律声明"
+    }
+  },
+  "header": {
+    "dashboard": "工作台",
+    "features": "功能",
+    "pricing": "定价",
+    "login": "登录",
+    "getStarted": "开始使用"
+  },
+  "login": {
+    "tagline": "专注于研究。语言交给我们。",
+    "continueWithGoogle": "使用 Google 账号继续"
+  },
+  "pricing": {
+    "title": "定价",
+    "description": "选择适合您研究工作流的方案。",
+    "guarantee": "14天退款保证，随时可取消。"
+  },
+  "dashboard": {
+    "myDocuments": "我的文档",
+    "createNew": "+ 新建文档",
+    "creating": "创建中...",
+    "createError": "文档创建失败",
+    "checkPlan": "查看方案",
+    "noDocuments": "暂无文档",
+    "noDocumentsHint": "点击\"+ 新建文档\"开始翻译",
+    "updated": "更新于：",
+    "save": "保存",
+    "cancel": "取消",
+    "rename": "重命名",
+    "delete": "删除",
+    "confirmDelete": "确定要删除此文档吗？"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的账户和应用设置",
+    "nav": {
+      "profile": "个人资料",
+      "preferences": "翻译设置",
+      "billing": "方案与账单",
+      "analytics": "使用分析"
+    }
+  },
+  "profile": {
+    "title": "个人资料",
+    "description": "账户信息",
+    "nameNotSet": "未设置",
+    "plan": "方案",
+    "registeredDate": "注册日期"
+  },
+  "analytics": {
+    "periodTotal": "期间合计（估算）",
+    "topModel": "费用最高的模型",
+    "noData": "暂无数据",
+    "costTrend": "估算费用趋势",
+    "costTrendDescription": "基于 Gemini 公开定价的估算值",
+    "granularity": {
+      "hour": "按小时",
+      "day": "按天",
+      "week": "按周",
+      "month": "按月"
+    },
+    "loading": "加载中...",
+    "noDataForPeriod": "该期间暂无数据",
+    "modelBreakdown": "模型明细",
+    "tableHeaders": {
+      "model": "模型",
+      "estimatedCost": "估算费用",
+      "share": "占比",
+      "requests": "请求数",
+      "inputTokens": "输入 Token",
+      "outputTokens": "输出 Token"
+    }
+  },
+  "userMenu": {
+    "defaultName": "用户",
+    "dashboard": "工作台",
+    "settings": "设置",
+    "billing": "方案与账单",
+    "analytics": "使用分析",
+    "logout": "退出登录"
+  },
+  "common": {
+    "loading": "加载中...",
+    "appName": "Unmute AI"
+  }
+}

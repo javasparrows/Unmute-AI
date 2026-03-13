@@ -15,6 +15,13 @@ import {
 const LOCALE_LABELS: Record<string, string> = {
   ja: "日本語",
   en: "English",
+  "zh-CN": "简体中文",
+  "zh-TW": "繁體中文",
+  ko: "한국어",
+  de: "Deutsch",
+  fr: "Français",
+  es: "Español",
+  "pt-BR": "Português (BR)",
 };
 
 export function LocaleSwitcher() {
