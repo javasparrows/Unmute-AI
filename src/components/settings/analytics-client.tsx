@@ -227,16 +227,16 @@ export function AnalyticsClient() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-muted-foreground">
-                    <th className="text-left py-2 font-medium">{t("tableHeaders.model")}</th>
-                    <th className="text-right py-2 font-medium">{t("tableHeaders.estimatedCost")}</th>
-                    <th className="text-right py-2 font-medium">{t("tableHeaders.share")}</th>
-                    <th className="text-right py-2 font-medium hidden sm:table-cell">
+                    <th className="text-start py-2 font-medium">{t("tableHeaders.model")}</th>
+                    <th className="text-end py-2 font-medium">{t("tableHeaders.estimatedCost")}</th>
+                    <th className="text-end py-2 font-medium">{t("tableHeaders.share")}</th>
+                    <th className="text-end py-2 font-medium hidden sm:table-cell">
                       {t("tableHeaders.requests")}
                     </th>
-                    <th className="text-right py-2 font-medium hidden md:table-cell">
+                    <th className="text-end py-2 font-medium hidden md:table-cell">
                       {t("tableHeaders.inputTokens")}
                     </th>
-                    <th className="text-right py-2 font-medium hidden md:table-cell">
+                    <th className="text-end py-2 font-medium hidden md:table-cell">
                       {t("tableHeaders.outputTokens")}
                     </th>
                   </tr>
@@ -251,19 +251,19 @@ export function AnalyticsClient() {
                       )}
                     >
                       <td className="py-2">{m.model}</td>
-                      <td className="text-right py-2">
+                      <td className="text-end py-2">
                         ${m.cost_usd.toFixed(4)}
                       </td>
-                      <td className="text-right py-2">
+                      <td className="text-end py-2">
                         {m.share_percent.toFixed(1)}%
                       </td>
-                      <td className="text-right py-2 hidden sm:table-cell">
+                      <td className="text-end py-2 hidden sm:table-cell">
                         {m.request_count.toLocaleString()}
                       </td>
-                      <td className="text-right py-2 hidden md:table-cell">
+                      <td className="text-end py-2 hidden md:table-cell">
                         {m.input_tokens.toLocaleString()}
                       </td>
-                      <td className="text-right py-2 hidden md:table-cell">
+                      <td className="text-end py-2 hidden md:table-cell">
                         {m.output_tokens.toLocaleString()}
                       </td>
                     </tr>

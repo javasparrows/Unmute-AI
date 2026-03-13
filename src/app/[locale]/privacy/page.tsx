@@ -60,7 +60,7 @@ export default function PrivacyPage() {
 
           <Section title="3. 利用目的">
             <p>収集した個人情報は、以下の目的で利用します。</p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>本サービスの提供・維持・改善</li>
               <li>ユーザー認証およびアカウント管理</li>
               <li>有料プランの課金処理</li>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
             <p>
               本サービスは、以下のサービスプロバイダーと情報を共有する場合があります。いずれも、サービス提供に必要な範囲に限定されます。
             </p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>
                 <strong>Google</strong> — OAuth認証
               </li>
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
             <p>
               ユーザーは、個人情報保護法に基づき、以下の権利を有します。
             </p>
-            <ul className="list-disc pl-6 space-y-1 mt-2">
+            <ul className="list-disc ps-6 space-y-1 mt-2">
               <li>個人情報の開示請求</li>
               <li>個人情報の訂正・追加・削除請求</li>
               <li>個人情報の利用停止・消去請求</li>

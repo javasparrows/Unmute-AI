@@ -81,7 +81,7 @@ export default function TokushohoPage() {
               <tbody>
                 {rows.map((row) => (
                   <tr key={row.label} className="border-b">
-                    <th className="text-left py-3 pr-6 font-semibold align-top whitespace-nowrap w-40">
+                    <th className="text-start py-3 pe-6 font-semibold align-top whitespace-nowrap w-40">
                       {row.label}
                     </th>
                     <td className="py-3 text-foreground/85 leading-relaxed">

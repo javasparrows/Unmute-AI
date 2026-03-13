@@ -133,7 +133,7 @@ export function VersionPanel({
                   <span className="text-sm font-medium">
                     v{v.versionNumber}
                   </span>
-                  <span className="ml-2 text-xs text-muted-foreground">
+                  <span className="ms-2 text-xs text-muted-foreground">
                     {formatDate(v.createdAt)}
                   </span>
                 </div>

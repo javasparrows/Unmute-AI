@@ -102,7 +102,7 @@ function DocumentCard({
             onClick={(e) => e.stopPropagation()}
           />
         </div>
-        <div className="flex items-center gap-1 shrink-0 ml-2">
+        <div className="flex items-center gap-1 shrink-0 ms-2">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -151,7 +151,7 @@ function DocumentCard({
           <p className="font-medium truncate">
             {displayTitle}
             {latestVersion > 0 && (
-              <span className="ml-2 text-xs text-muted-foreground">
+              <span className="ms-2 text-xs text-muted-foreground">
                 (v{latestVersion})
               </span>
             )}
