@@ -73,3 +73,96 @@ export async function createPortalSession(): Promise<{ url: string | null; error
     return { url: null, error: "Failed to create portal session" };
   }
 }
+
+export async function cancelSubscription(): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id)
+      return { success: false, error: "Not authenticated" };
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { stripeSubscriptionId: true },
+    });
+
+    if (!user?.stripeSubscriptionId)
+      return { success: false, error: "No active subscription" };
+
+    await getStripe().subscriptions.update(user.stripeSubscriptionId, {
+      cancel_at_period_end: true,
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("Subscription cancellation failed:", err);
+    return { success: false, error: "Failed to cancel subscription" };
+  }
+}
+
+export async function reactivateSubscription(): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id)
+      return { success: false, error: "Not authenticated" };
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { stripeSubscriptionId: true },
+    });
+
+    if (!user?.stripeSubscriptionId)
+      return { success: false, error: "No active subscription" };
+
+    await getStripe().subscriptions.update(user.stripeSubscriptionId, {
+      cancel_at_period_end: false,
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("Subscription reactivation failed:", err);
+    return { success: false, error: "Failed to reactivate subscription" };
+  }
+}
+
+export async function changeSubscription(priceId: string): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const session = await auth();
+    if (!session?.user?.id)
+      return { success: false, error: "Not authenticated" };
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { stripeSubscriptionId: true },
+    });
+
+    if (!user?.stripeSubscriptionId)
+      return { success: false, error: "No active subscription" };
+
+    const subscription = await getStripe().subscriptions.retrieve(
+      user.stripeSubscriptionId,
+    );
+
+    const itemId = subscription.items.data[0]?.id;
+    if (!itemId)
+      return { success: false, error: "No subscription item found" };
+
+    await getStripe().subscriptions.update(user.stripeSubscriptionId, {
+      items: [{ id: itemId, price: priceId }],
+      proration_behavior: "create_prorations",
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("Subscription change failed:", err);
+    return { success: false, error: "Failed to change subscription" };
+  }
+}
