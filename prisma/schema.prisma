@@ -52,6 +52,7 @@ model User {
   createdAt            DateTime       @default(now())
   pageViews            PageView[]
   planChanges          PlanChangeLog[]
+  loginDevices         LoginDevice[]
 }
 
 model Account {
@@ -184,6 +185,20 @@ model PageViewDaily {
   @@unique([date, path, locale, countryCode])
   @@index([date])
   @@index([path, date])
+}
+
+model LoginDevice {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceHash  String   // hash of user-agent + IP for fingerprinting
+  userAgent   String?  @db.Text
+  ip          String?
+  lastSeenAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, deviceHash])
+  @@index([userId])
 }
 
 model PlanChangeLog {

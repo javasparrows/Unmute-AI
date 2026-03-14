@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { getUserPlanById } from "@/lib/user-plan";
 import { getPlanInfo, isUnlimited } from "@/lib/plans";
 import { getTranslations } from "next-intl/server";
+import { LoginCheck } from "@/components/auth/login-check";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -60,6 +61,7 @@ export default async function DashboardPage() {
       </main>
 
       {showWelcome && <WelcomeDialog open={true} />}
+      <LoginCheck />
     </div>
   );
 }
