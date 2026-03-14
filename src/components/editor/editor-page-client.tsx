@@ -53,6 +53,7 @@ interface EditorPageClientProps {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    role?: string;
   };
   planLimits?: PlanLimitsProps;
 }
@@ -491,7 +492,7 @@ export function EditorPageClient({
           {user && (
             <>
               <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
-              <UserMenu user={user} />
+              <UserMenu user={user} role={user.role} />
             </>
           )}
         </div>
