@@ -23,8 +23,8 @@ function isPublicPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip API routes (except auth)
-  if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
+  // Skip all API routes (including auth callbacks — NextAuth handles them internally)
+  if (pathname.startsWith('/api/')) {
     return NextResponse.next();
   }
 
@@ -47,5 +47,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/(?!auth)).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/).*)"],
 };
