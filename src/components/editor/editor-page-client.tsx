@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useMemo, useState, useEffect, useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil, Settings } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
@@ -19,6 +19,7 @@ import { renameDocument } from "@/app/actions/document";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
+import { EvidencePanel } from "@/components/evidence/evidence-panel";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -75,6 +76,24 @@ export function EditorPageClient({
   const [currentVersionNumber, setCurrentVersionNumber] = useState(
     initialVersion?.versionNumber ?? 1,
   );
+
+  const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(false);
+
+  const toggleEvidencePanel = useCallback(() => {
+    setIsEvidencePanelOpen((prev) => !prev);
+  }, []);
+
+  // Cmd+E to toggle evidence panel
+  useEffect(() => {
+    function handleEvidenceShortcut(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "e") {
+        e.preventDefault();
+        toggleEvidencePanel();
+      }
+    }
+    document.addEventListener("keydown", handleEvidenceShortcut);
+    return () => document.removeEventListener("keydown", handleEvidenceShortcut);
+  }, [toggleEvidencePanel]);
 
   const [displayTitle, setDisplayTitle] = useState(documentTitle);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -402,6 +421,20 @@ export function EditorPageClient({
           <TranslationStatus isTranslating={isSyncing} error={error} />
         </div>
         <div className="flex items-center gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={isEvidencePanelOpen ? "default" : "ghost"}
+                size="sm"
+                onClick={toggleEvidencePanel}
+                className="gap-1.5"
+              >
+                <BookOpenCheck className="h-4 w-4" />
+                <span className="hidden sm:inline">Evidence</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>エビデンスパネル (Cmd+E)</TooltipContent>
+          </Tooltip>
           <StructureCheckDialog
             leftText={leftText}
             rightText={rightText}
@@ -565,6 +598,13 @@ export function EditorPageClient({
           sentenceRanges={translatedSentenceRanges}
           placeholder="翻訳がここに表示されます..."
           containerRef={setRightEditorRef}
+        />
+
+        {/* Evidence side panel */}
+        <EvidencePanel
+          isOpen={isEvidencePanelOpen}
+          onClose={() => setIsEvidencePanelOpen(false)}
+          documentId={documentId}
         />
       </div>
     </div>
