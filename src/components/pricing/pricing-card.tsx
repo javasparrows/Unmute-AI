@@ -1,6 +1,7 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { useState } from "react";
+import { Check, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -28,6 +29,7 @@ export function PricingCard({
   isLoggedIn,
   popular,
 }: PricingCardProps) {
+  const [loading, setLoading] = useState(false);
   const isCurrent = currentPlan === plan.id;
   const isDowngrade =
     currentPlan &&
@@ -35,12 +37,14 @@ export function PricingCard({
       (currentPlan === "PRO" && plan.id === "FREE"));
 
   async function handleSubscribe() {
-    if (!plan.stripePriceId) return;
+    if (!plan.stripePriceId || loading) return;
+    setLoading(true);
     const result = await createCheckoutSession(plan.stripePriceId);
     if (result.url) {
       window.location.href = result.url;
     } else {
       alert(result.error ?? "Something went wrong. Please try again.");
+      setLoading(false);
     }
   }
 
@@ -94,9 +98,14 @@ export function PricingCard({
               type="submit"
               className="w-full"
               variant={popular ? "default" : "outline"}
-              disabled={!isLoggedIn}
+              disabled={!isLoggedIn || loading}
             >
-              {!isLoggedIn
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  処理中...
+                </>
+              ) : !isLoggedIn
                 ? "ログインして申し込む"
                 : isDowngrade
                   ? "ダウングレード"
