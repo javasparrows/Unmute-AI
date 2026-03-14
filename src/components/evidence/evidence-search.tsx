@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useTransition, useMemo } from "react";
+import { useState, useRef, useTransition, useMemo, useEffect, useCallback } from "react";
 import { useLocale } from "next-intl";
-import { Search, Loader2, Lightbulb, ArrowRight, ArrowUpDown, ChevronDown } from "lucide-react";
+import { Search, Loader2, Lightbulb, ArrowRight, ArrowUpDown, ChevronDown, Clock, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PaperCard } from "./paper-card";
 import { PaperCardSkeleton } from "./paper-card-skeleton";
@@ -52,12 +52,79 @@ function getSearchExamples(locale: string): SearchExample[] {
 // Ranking & sorting
 type SortOption = "relevance" | "citations" | "year-desc" | "year-asc";
 
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "relevance", label: "Relevance" },
-  { value: "citations", label: "Citations (high → low)" },
-  { value: "year-desc", label: "Year (new → old)" },
-  { value: "year-asc", label: "Year (old → new)" },
-];
+const SORT_LABELS: Record<string, Record<SortOption, string>> = {
+  ja: { relevance: "関連度順", citations: "引用数順（多→少）", "year-desc": "年順（新→旧）", "year-asc": "年順（旧→新）" },
+  en: { relevance: "Relevance", citations: "Citations (high → low)", "year-desc": "Year (new → old)", "year-asc": "Year (old → new)" },
+  "zh-CN": { relevance: "相关度", citations: "引用数（多→少）", "year-desc": "年份（新→旧）", "year-asc": "年份（旧→新）" },
+  "zh-TW": { relevance: "相關度", citations: "引用數（多→少）", "year-desc": "年份（新→舊）", "year-asc": "年份（舊→新）" },
+  ko: { relevance: "관련도순", citations: "인용 수（높→낮）", "year-desc": "연도（최신→오래된）", "year-asc": "연도（오래된→최신）" },
+  de: { relevance: "Relevanz", citations: "Zitierungen (hoch → niedrig)", "year-desc": "Jahr (neu → alt)", "year-asc": "Jahr (alt → neu)" },
+  fr: { relevance: "Pertinence", citations: "Citations (élevé → faible)", "year-desc": "Année (récent → ancien)", "year-asc": "Année (ancien → récent)" },
+  es: { relevance: "Relevancia", citations: "Citas (alto → bajo)", "year-desc": "Año (nuevo → antiguo)", "year-asc": "Año (antiguo → nuevo)" },
+  "pt-BR": { relevance: "Relevância", citations: "Citações (alto → baixo)", "year-desc": "Ano (novo → antigo)", "year-asc": "Ano (antigo → novo)" },
+  ru: { relevance: "Релевантность", citations: "Цитирования (больше → меньше)", "year-desc": "Год (новые → старые)", "year-asc": "Год (старые → новые)" },
+  it: { relevance: "Rilevanza", citations: "Citazioni (alto → basso)", "year-desc": "Anno (nuovo → vecchio)", "year-asc": "Anno (vecchio → nuovo)" },
+  hi: { relevance: "प्रासंगिकता", citations: "उद्धरण (अधिक → कम)", "year-desc": "वर्ष (नया → पुराना)", "year-asc": "वर्ष (पुराना → नया)" },
+  tr: { relevance: "İlgililik", citations: "Atıflar (çok → az)", "year-desc": "Yıl (yeni → eski)", "year-asc": "Yıl (eski → yeni)" },
+  ar: { relevance: "الصلة", citations: "الاستشهادات (أكثر → أقل)", "year-desc": "السنة (جديد → قديم)", "year-asc": "السنة (قديم → جديد)" },
+  id: { relevance: "Relevansi", citations: "Sitasi (tinggi → rendah)", "year-desc": "Tahun (baru → lama)", "year-asc": "Tahun (lama → baru)" },
+  pl: { relevance: "Trafność", citations: "Cytowania (dużo → mało)", "year-desc": "Rok (nowy → stary)", "year-asc": "Rok (stary → nowy)" },
+  fa: { relevance: "مرتبط‌ترین", citations: "ارجاعات (بیشتر → کمتر)", "year-desc": "سال (جدید → قدیم)", "year-asc": "سال (قدیم → جدید)" },
+};
+
+function getSortLabels(locale: string): Record<SortOption, string> {
+  return SORT_LABELS[locale] ?? SORT_LABELS.en;
+}
+
+const SORT_OPTION_KEYS: SortOption[] = ["relevance", "citations", "year-desc", "year-asc"];
+
+// Search history persistence
+interface SearchHistoryEntry {
+  query: string;
+  results: PaperCandidate[];
+  timestamp: number;
+}
+
+const MAX_HISTORY_ENTRIES = 50;
+
+function getHistoryStorageKey(documentId: string): string {
+  return `unmute:search-history:${documentId}`;
+}
+
+function loadSearchHistory(documentId: string): SearchHistoryEntry[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(getHistoryStorageKey(documentId));
+    if (!raw) return [];
+    return JSON.parse(raw) as SearchHistoryEntry[];
+  } catch {
+    return [];
+  }
+}
+
+function saveSearchHistory(documentId: string, history: SearchHistoryEntry[]): void {
+  try {
+    localStorage.setItem(getHistoryStorageKey(documentId), JSON.stringify(history));
+  } catch {
+    // localStorage full or unavailable -- silently ignore
+  }
+}
+
+function formatTimeAgo(timestamp: number): string {
+  const diffMs = Date.now() - timestamp;
+  const diffMin = Math.floor(diffMs / 60_000);
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin} min ago`;
+  const diffHours = Math.floor(diffMin / 60);
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+}
+
+function truncateQuery(query: string, maxLength: number = 30): string {
+  if (query.length <= maxLength) return query;
+  return query.slice(0, maxLength) + "...";
+}
 
 function computeRelevanceScore(paper: PaperCandidate): number {
   const currentYear = new Date().getFullYear();
@@ -108,14 +175,32 @@ interface EvidenceSearchProps {
 export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
   const locale = useLocale();
   const searchExamples = useMemo(() => getSearchExamples(locale), [locale]);
+  const sortLabels = useMemo(() => getSortLabels(locale), [locale]);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<PaperCandidate[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchStatus, setSearchStatus] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("relevance");
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<SearchHistoryEntry[]>([]);
   const [, startTransition] = useTransition();
   const isComposingRef = useRef(false);
+
+  // Load search history on mount
+  useEffect(() => {
+    setSearchHistory(loadSearchHistory(documentId));
+  }, [documentId]);
+
+  const restoreHistoryEntry = useCallback((entry: SearchHistoryEntry) => {
+    setQuery(entry.query);
+    setResults(entry.results);
+    setSearchStatus(`Found ${entry.results.length} papers`);
+  }, []);
+
+  const clearHistory = useCallback(() => {
+    setSearchHistory([]);
+    saveSearchHistory(documentId, []);
+  }, [documentId]);
 
   const sortedResults = useMemo(() => sortPapers(results, sortBy), [results, sortBy]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -150,6 +235,18 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
       setSearchStatus(`Found ${data.candidates.length} papers`);
       startTransition(() => {
         setResults(data.candidates);
+      });
+
+      // Save to search history
+      const newEntry: SearchHistoryEntry = {
+        query: query.trim(),
+        results: data.candidates,
+        timestamp: Date.now(),
+      };
+      setSearchHistory((prev) => {
+        const updated = [newEntry, ...prev].slice(0, MAX_HISTORY_ENTRIES);
+        saveSearchHistory(documentId, updated);
+        return updated;
       });
     } catch {
       setSearchStatus("Search failed. Please try again.");
@@ -225,21 +322,21 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
           >
             <span className="flex items-center gap-1.5">
               <ArrowUpDown className="h-3 w-3" />
-              {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+              {sortLabels[sortBy]}
             </span>
             <ChevronDown className={`h-3 w-3 transition-transform ${isSortOpen ? "rotate-180" : ""}`} />
           </Button>
           {isSortOpen && (
             <div className="absolute z-10 mt-1 w-full bg-background border border-border rounded-md shadow-md py-1">
-              {SORT_OPTIONS.map((option) => (
+              {SORT_OPTION_KEYS.map((key) => (
                 <button
-                  key={option.value}
-                  onClick={() => { setSortBy(option.value); setIsSortOpen(false); }}
+                  key={key}
+                  onClick={() => { setSortBy(key); setIsSortOpen(false); }}
                   className={`w-full text-left px-3 py-1.5 text-xs hover:bg-accent transition-colors ${
-                    sortBy === option.value ? "text-primary font-medium" : "text-foreground"
+                    sortBy === key ? "text-primary font-medium" : "text-foreground"
                   }`}
                 >
-                  {option.label}
+                  {sortLabels[key]}
                 </button>
               ))}
             </div>
@@ -247,8 +344,8 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
         </div>
       )}
 
-      {/* Search Guide (shown when no query and no results) */}
-      {!query.trim() && results.length === 0 && !isSearching && (
+      {/* Search Guide (shown when no query and no results and no history) */}
+      {!query.trim() && results.length === 0 && !isSearching && searchHistory.length === 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
             <Lightbulb className="h-4 w-4 text-amber-500" />
@@ -273,6 +370,47 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
           <p className="text-xs text-muted-foreground text-center pt-1">
             Click an example to use it, or type your own query
           </p>
+        </div>
+      )}
+
+      {/* Search History (shown when input is empty, no results, and history exists) */}
+      {!query.trim() && results.length === 0 && !isSearching && searchHistory.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span>Search History</span>
+          </div>
+          <div className="border-t border-border" />
+          <div className="space-y-1">
+            {searchHistory.map((entry, i) => (
+              <button
+                key={`${entry.timestamp}-${i}`}
+                onClick={() => restoreHistoryEntry(entry)}
+                className="w-full text-left px-3 py-2 rounded-md hover:bg-accent/50 transition-colors group flex items-center justify-between gap-2"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm text-foreground truncate">
+                    &quot;{truncateQuery(entry.query)}&quot;
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {entry.results.length} paper{entry.results.length !== 1 ? "s" : ""} · {formatTimeAgo(entry.timestamp)}
+                  </p>
+                </div>
+                <ArrowRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+              </button>
+            ))}
+          </div>
+          <div className="flex justify-center pt-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearHistory}
+              className="gap-1.5 text-xs text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="h-3 w-3" />
+              Clear History
+            </Button>
+          </div>
         </div>
       )}
 
