@@ -1,45 +1,61 @@
 "use client";
 
-import { useState, useRef, useTransition } from "react";
+import { useState, useRef, useTransition, useMemo } from "react";
+import { useLocale } from "next-intl";
 import { Search, Loader2, Lightbulb, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PaperCard } from "./paper-card";
 import { PaperCardSkeleton } from "./paper-card-skeleton";
 import type { PaperCandidate, SectionType } from "@/types/evidence";
 
-const SEARCH_EXAMPLES = [
-  {
-    category: "Research topic",
-    query: "deep learning for medical image segmentation",
-    description: "Search by research topic or theme",
-  },
-  {
-    category: "Research question",
-    query: "What methods improve transformer efficiency for long sequences?",
-    description: "Ask a research question in natural language",
-  },
-  {
-    category: "Keywords",
-    query: "CRISPR gene editing efficiency in vivo delivery",
-    description: "Combine multiple keywords",
-  },
-  {
-    category: "Japanese",
-    query: "大規模言語モデルの幻覚問題と対策手法",
-    description: "Japanese queries are automatically translated",
-  },
-  {
-    category: "Specific finding",
-    query: "attention mechanism outperforms recurrent networks for machine translation",
-    description: "Search for papers supporting a specific claim",
-  },
+interface SearchExample {
+  category: string;
+  query: string;
+  description: string;
+}
+
+// Native-language example per locale (shows "you can search in your language")
+const NATIVE_LANGUAGE_EXAMPLES: Record<string, SearchExample> = {
+  ja: { category: "日本語検索", query: "大規模言語モデルの幻覚問題と対策手法", description: "日本語のクエリは自動的に英語に翻訳されます" },
+  "zh-CN": { category: "中文搜索", query: "大语言模型幻觉问题与缓解方法", description: "中文查询会自动翻译为英文" },
+  "zh-TW": { category: "中文搜尋", query: "大型語言模型幻覺問題與緩解方法", description: "中文查詢會自動翻譯為英文" },
+  ko: { category: "한국어 검색", query: "대규모 언어 모델의 환각 문제와 완화 기법", description: "한국어 쿼리는 자동으로 영어로 번역됩니다" },
+  de: { category: "Deutsche Suche", query: "Halluzinationsproblem bei großen Sprachmodellen und Gegenmaßnahmen", description: "Deutsche Anfragen werden automatisch ins Englische übersetzt" },
+  fr: { category: "Recherche en français", query: "Problème d'hallucination des grands modèles de langage et méthodes d'atténuation", description: "Les requêtes en français sont automatiquement traduites en anglais" },
+  es: { category: "Búsqueda en español", query: "Problema de alucinación en modelos de lenguaje grandes y métodos de mitigación", description: "Las consultas en español se traducen automáticamente al inglés" },
+  "pt-BR": { category: "Pesquisa em português", query: "Problema de alucinação em modelos de linguagem grandes e métodos de mitigação", description: "Consultas em português são traduzidas automaticamente para inglês" },
+  ru: { category: "Поиск на русском", query: "Проблема галлюцинаций больших языковых моделей и методы борьбы", description: "Запросы на русском автоматически переводятся на английский" },
+  it: { category: "Ricerca in italiano", query: "Problema delle allucinazioni nei modelli linguistici di grandi dimensioni e metodi di mitigazione", description: "Le query in italiano vengono tradotte automaticamente in inglese" },
+  hi: { category: "हिन्दी खोज", query: "बड़े भाषा मॉडल में मतिभ्रम समस्या और समाधान विधियाँ", description: "हिन्दी प्रश्न स्वचालित रूप से अंग्रेजी में अनुवादित होते हैं" },
+  tr: { category: "Türkçe arama", query: "Büyük dil modellerinde halüsinasyon sorunu ve azaltma yöntemleri", description: "Türkçe sorgular otomatik olarak İngilizce'ye çevrilir" },
+  ar: { category: "البحث بالعربية", query: "مشكلة الهلوسة في النماذج اللغوية الكبيرة وطرق التخفيف", description: "يتم ترجمة الاستعلامات العربية تلقائيًا إلى الإنجليزية" },
+  id: { category: "Pencarian Bahasa Indonesia", query: "Masalah halusinasi model bahasa besar dan metode mitigasi", description: "Kueri Bahasa Indonesia diterjemahkan secara otomatis ke Bahasa Inggris" },
+  pl: { category: "Wyszukiwanie po polsku", query: "Problem halucynacji dużych modeli językowych i metody łagodzenia", description: "Zapytania po polsku są automatycznie tłumaczone na angielski" },
+  fa: { category: "جستجو به فارسی", query: "مشکل توهم در مدل‌های زبانی بزرگ و روش‌های کاهش", description: "پرسش‌های فارسی به‌طور خودکار به انگلیسی ترجمه می‌شوند" },
+};
+
+// Common English examples (shown for all locales)
+const ENGLISH_EXAMPLES: SearchExample[] = [
+  { category: "Research topic", query: "deep learning for medical image segmentation", description: "Search by research topic or theme" },
+  { category: "Research question", query: "What methods improve transformer efficiency for long sequences?", description: "Ask a research question in natural language" },
+  { category: "Keywords", query: "CRISPR gene editing efficiency in vivo delivery", description: "Combine multiple keywords" },
+  { category: "Specific finding", query: "attention mechanism outperforms recurrent networks for machine translation", description: "Search for papers supporting a specific claim" },
 ];
+
+function getSearchExamples(locale: string): SearchExample[] {
+  const nativeExample = NATIVE_LANGUAGE_EXAMPLES[locale];
+  if (locale === "en") return ENGLISH_EXAMPLES;
+  // For non-English locales: show native example first, then English examples
+  return nativeExample ? [nativeExample, ...ENGLISH_EXAMPLES] : ENGLISH_EXAMPLES;
+}
 
 interface EvidenceSearchProps {
   documentId: string;
 }
 
 export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
+  const locale = useLocale();
+  const searchExamples = useMemo(() => getSearchExamples(locale), [locale]);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<PaperCandidate[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -141,7 +157,7 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
             <span>How to search</span>
           </div>
           <div className="space-y-2">
-            {SEARCH_EXAMPLES.map((example) => (
+            {searchExamples.map((example) => (
               <button
                 key={example.category}
                 onClick={() => setQuery(example.query)}
