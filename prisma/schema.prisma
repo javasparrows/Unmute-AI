@@ -47,6 +47,7 @@ model User {
   documents            Document[]
   usageRecords         UsageRecord[]
   apiUsageLogs         ApiUsageLog[]
+  feedbacks            UserFeedback[]
   role                 UserRole       @default(USER)
   plan                 Plan           @default(FREE)
   planOverride         Plan?          // 管理者手動付与（NULL=無効、設定時はStripeより優先）
@@ -109,13 +110,17 @@ model VerificationToken {
 // ===== Application tables =====
 
 model Document {
-  id        String            @id @default(cuid())
-  title     String            @default("無題の翻訳")
-  userId    String
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  versions  DocumentVersion[]
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id                   String               @id @default(cuid())
+  title                String               @default("無題の翻訳")
+  userId               String
+  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions             DocumentVersion[]
+  manuscriptCitations  ManuscriptCitation[]
+  manuscriptClaims     ManuscriptClaim[]
+  agentRuns            AgentRun[]
+  reviewFindings       ReviewFinding[]
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
 
   @@index([userId])
 }
@@ -251,4 +256,189 @@ model AdminActionLog {
 
   @@index([createdAt])
   @@index([targetUserId])
+}
+
+// ===== Citation Evidence System =====
+
+model CanonicalPaper {
+  id              String            @id @default(cuid())
+  title           String
+  abstract        String?           @db.Text
+  year            Int?
+  venue           String?
+  citationCount   Int               @default(0)
+  influentialCount Int              @default(0)
+  fieldsOfStudy   String[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  identifiers     PaperIdentifier[]
+  snapshots       ProviderSnapshot[]
+  relations       PaperRelation[]   @relation("fromPaper")
+  relatedTo       PaperRelation[]   @relation("toPaper")
+  evidenceSnippets EvidenceSnippet[]
+  claimCards      ClaimCard[]
+  manuscriptCitations ManuscriptCitation[]
+}
+
+model PaperIdentifier {
+  id          String          @id @default(cuid())
+  paperId     String
+  provider    String          // "openalex" | "semantic_scholar" | "crossref" | "pubmed" | "arxiv"
+  externalId  String
+  paper       CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, externalId])
+  @@index([paperId])
+}
+
+model ProviderSnapshot {
+  id          String          @id @default(cuid())
+  paperId     String
+  provider    String
+  data        Json
+  fetchedAt   DateTime        @default(now())
+  paper       CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@index([paperId])
+}
+
+model PaperRelation {
+  id          String          @id @default(cuid())
+  fromPaperId String
+  toPaperId   String
+  type        String          // "cites" | "cited_by" | "related"
+  fromPaper   CanonicalPaper  @relation("fromPaper", fields: [fromPaperId], references: [id], onDelete: Cascade)
+  toPaper     CanonicalPaper  @relation("toPaper", fields: [toPaperId], references: [id], onDelete: Cascade)
+
+  @@unique([fromPaperId, toPaperId, type])
+  @@index([fromPaperId])
+  @@index([toPaperId])
+}
+
+model EvidenceSnippet {
+  id            String          @id @default(cuid())
+  paperId       String
+  sourceType    String          // "FULLTEXT" | "ABSTRACT"
+  sectionLabel  String?
+  text          String          @db.Text
+  charStart     Int?
+  charEnd       Int?
+  provenanceUrl String?
+  createdAt     DateTime        @default(now())
+  paper         CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  claimCardEvidence ClaimCardEvidence[]
+
+  @@index([paperId])
+}
+
+model ClaimCard {
+  id              String          @id @default(cuid())
+  paperId         String
+  subject         String
+  relation        String
+  object          String
+  qualifiers      Json            @default("{}")
+  polarity        String          @default("positive") // "positive" | "negative" | "neutral"
+  supportLabel    String          // "SUPPORTED" | "PARTIAL" | "CONTRADICTED" | "INSUFFICIENT"
+  evidenceTier    String          // "FULLTEXT" | "ABSTRACT_ONLY"
+  confidence      Float
+  createdAt       DateTime        @default(now())
+  paper           CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  evidence        ClaimCardEvidence[]
+  manuscriptSupports ManuscriptClaimSupport[]
+
+  @@index([paperId])
+  @@index([confidence])
+}
+
+model ClaimCardEvidence {
+  id              String          @id @default(cuid())
+  claimCardId     String
+  snippetId       String
+  claimCard       ClaimCard       @relation(fields: [claimCardId], references: [id], onDelete: Cascade)
+  snippet         EvidenceSnippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  @@unique([claimCardId, snippetId])
+}
+
+model ManuscriptCitation {
+  id          String          @id @default(cuid())
+  documentId  String
+  paperId     String
+  sectionType String?         // "INTRODUCTION" | "METHODS" | "RESULTS" | "DISCUSSION"
+  citeKey     String?         // e.g., "smith2024"
+  createdAt   DateTime        @default(now())
+  document    Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  paper       CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, paperId])
+  @@index([documentId])
+}
+
+model ManuscriptClaim {
+  id            String          @id @default(cuid())
+  documentId    String
+  sectionType   String
+  sentenceIndex Int
+  claimText     String          @db.Text
+  createdAt     DateTime        @default(now())
+  document      Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  supports      ManuscriptClaimSupport[]
+
+  @@index([documentId])
+}
+
+model ManuscriptClaimSupport {
+  id              String          @id @default(cuid())
+  manuscriptClaimId String
+  claimCardId     String
+  manuscriptClaim ManuscriptClaim @relation(fields: [manuscriptClaimId], references: [id], onDelete: Cascade)
+  claimCard       ClaimCard       @relation(fields: [claimCardId], references: [id], onDelete: Cascade)
+
+  @@unique([manuscriptClaimId, claimCardId])
+}
+
+model AgentRun {
+  id          String          @id @default(cuid())
+  documentId  String?
+  agentType   String          // "discovery" | "verification" | "writing" | "review"
+  status      String          @default("pending") // "pending" | "running" | "completed" | "failed"
+  input       Json
+  output      Json?
+  error       String?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime        @default(now())
+  document    Document?       @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@index([status])
+}
+
+model ReviewFinding {
+  id              String          @id @default(cuid())
+  documentId      String
+  severity        String          // "BLOCKER" | "MAJOR" | "MINOR"
+  type            String          // "UNSUPPORTED" | "MISATTRIBUTED" | "MISSING_KEY_PAPER" | "LOGIC_GAP" | "STYLE"
+  targetSentenceId String?
+  explanation     String          @db.Text
+  suggestedFix    String?         @db.Text
+  resolved        Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  document        Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+}
+
+model UserFeedback {
+  id          String          @id @default(cuid())
+  userId      String
+  paperId     String?
+  feedbackType String         // "relevance" | "reject" | "manual_citation"
+  data        Json
+  createdAt   DateTime        @default(now())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
