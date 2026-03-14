@@ -1,4 +1,4 @@
-export type LanguageCode = "ja" | "en" | "zh" | "ko" | "de" | "fr" | "es" | "pt";
+export type LanguageCode = "ja" | "en" | "zh-CN" | "zh-TW" | "ko" | "de" | "fr" | "es" | "pt-BR" | "ru" | "it" | "hi" | "tr" | "ar" | "id" | "pl" | "fa";
 
 export interface Language {
   code: LanguageCode;

@@ -10,6 +10,20 @@ JAPANESE-SPECIFIC RULES:
 - Do NOT use です・ます調 (desu/masu style, also known as 敬体).
 - Examples: 「〜である。」「〜した。」「〜と考えられる。」「〜を示す。」`;
   }
+  if (targetLang === "ar") {
+    return `
+ARABIC-SPECIFIC RULES:
+- Use Modern Standard Arabic (فصحى) for academic writing.
+- Write in right-to-left direction.
+- Use formal third-person voice, avoiding first-person where possible.`;
+  }
+  if (targetLang === "fa") {
+    return `
+PERSIAN-SPECIFIC RULES:
+- Use formal academic Persian (فارسی رسمی).
+- Write in right-to-left direction.
+- Prefer Persian equivalents over Arabic loanwords where standard academic usage exists.`;
+  }
   return "";
 }
 
@@ -49,7 +63,11 @@ Translate naturally and idiomatically for academic publication. Maintain technic
 }
 
 export function buildDetectLanguagePrompt(): string {
-  return `Detect the language of the given text. Respond with ONLY the ISO 639-1 language code (e.g., "ja", "en", "zh", "ko", "de", "fr", "es", "pt"). If uncertain, respond with "en". Do not include any other text in your response.`;
+  return `Detect the language of the given text. Respond with ONLY one of these language codes: "ja", "en", "zh-CN", "zh-TW", "ko", "de", "fr", "es", "pt-BR", "ru", "it", "hi", "tr", "ar", "id", "pl", "fa".
+
+For Chinese text: use "zh-CN" for Simplified Chinese and "zh-TW" for Traditional Chinese.
+For Portuguese text: use "pt-BR".
+If uncertain, respond with "en". Do not include any other text in your response.`;
 }
 
 export function buildStructureCheckPrompt(
