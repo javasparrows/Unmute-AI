@@ -12,24 +12,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const LOCALE_CONFIG: Record<string, { flag: string; label: string }> = {
-  ja: { flag: "🇯🇵", label: "日本語" },
   en: { flag: "🇺🇸", label: "English" },
-  "zh-CN": { flag: "🇨🇳", label: "简体中文" },
-  "zh-TW": { flag: "🇹🇼", label: "繁體中文" },
-  ko: { flag: "🇰🇷", label: "한국어" },
+  ar: { flag: "🇸🇦", label: "العربية" },
   de: { flag: "🇩🇪", label: "Deutsch" },
-  fr: { flag: "🇫🇷", label: "Français" },
   es: { flag: "🇪🇸", label: "Español" },
+  fa: { flag: "🇮🇷", label: "فارسی" },
+  fr: { flag: "🇫🇷", label: "Français" },
+  hi: { flag: "🇮🇳", label: "हिन्दी" },
+  id: { flag: "🇮🇩", label: "Bahasa Indonesia" },
+  it: { flag: "🇮🇹", label: "Italiano" },
+  ja: { flag: "🇯🇵", label: "日本語" },
+  ko: { flag: "🇰🇷", label: "한국어" },
+  pl: { flag: "🇵🇱", label: "Polski" },
   "pt-BR": { flag: "🇧🇷", label: "Português (BR)" },
   ru: { flag: "🇷🇺", label: "Русский" },
-  it: { flag: "🇮🇹", label: "Italiano" },
-  hi: { flag: "🇮🇳", label: "हिन्दी" },
   tr: { flag: "🇹🇷", label: "Türkçe" },
-  ar: { flag: "🇸🇦", label: "العربية" },
-  id: { flag: "🇮🇩", label: "Bahasa Indonesia" },
-  pl: { flag: "🇵🇱", label: "Polski" },
-  fa: { flag: "🇮🇷", label: "فارسی" },
+  "zh-CN": { flag: "🇨🇳", label: "简体中文" },
+  "zh-TW": { flag: "🇹🇼", label: "繁體中文" },
 };
+
+// Display order: English first, then alphabetical by English language name
+const LOCALE_DISPLAY_ORDER = [
+  "en", "ar", "de", "es", "fa", "fr", "hi", "id", "it",
+  "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW",
+];
 
 export function LocaleSwitcher() {
   const locale = useLocale();
@@ -49,7 +55,7 @@ export function LocaleSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {routing.locales.map((l) => (
+        {LOCALE_DISPLAY_ORDER.map((l) => (
           <DropdownMenuItem
             key={l}
             onClick={() => switchLocale(l)}
