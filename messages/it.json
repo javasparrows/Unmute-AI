@@ -1,4 +1,30 @@
 {
+  "metadata": {
+    "landing": {
+      "title": "Unmute AI - AI Academic Translation for Researchers",
+      "description": "Write papers in your native language, publish in any language. AI-powered academic translation with journal style formatting, LaTeX support, and IMRAD structure checking.",
+      "ogTitle": "Unmute AI | AI Academic Translation Tool",
+      "ogDescription": "Focus on the research. We handle the language. Journal-aware, LaTeX-compatible AI translation for academic papers."
+    },
+    "pricing": {
+      "title": "Pricing Plans",
+      "description": "Unmute AI pricing plans. Choose from Free, Pro, or Max plans starting at 980 JPY/month for AI-powered academic translation.",
+      "ogTitle": "Pricing | Unmute AI",
+      "ogDescription": "AI academic translation tool pricing. Start free, upgrade when you need more."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "Unmute AI Privacy Policy. How we collect, use, and protect your personal information."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "Unmute AI Terms of Service. Usage conditions, data handling, and intellectual property rights."
+    },
+    "tokushoho": {
+      "title": "Specified Commercial Transactions Act Disclosure",
+      "description": "Legal disclosure under Japan's Specified Commercial Transactions Act for Unmute AI."
+    }
+  },
   "landing": {
     "hero": {
       "title1": "Concentratevi sulla ricerca.",

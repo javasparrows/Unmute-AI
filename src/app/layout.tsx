@@ -19,7 +19,11 @@ const fontMono = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "Unmute AI",
+  metadataBase: new URL("https://unmute-ai.com"),
+  title: {
+    default: "Unmute AI",
+    template: "%s | Unmute AI",
+  },
   description: "Focus on the research. We handle the language.",
 };
 

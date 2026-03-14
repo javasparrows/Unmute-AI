@@ -1,4 +1,30 @@
 {
+  "metadata": {
+    "landing": {
+      "title": "Unmute AI - AI学術翻訳で論文執筆を革新",
+      "description": "母語で論文を書いて、どの言語でも出版。ジャーナルスタイル対応のAI学術翻訳ツール。論文執筆AIの新しい形。",
+      "ogTitle": "Unmute AI | AI学術翻訳ツール - 論文執筆を革新",
+      "ogDescription": "研究に集中しよう。言語は私たちにお任せください。ジャーナルスタイル対応・LaTeX対応のAI学術翻訳。"
+    },
+    "pricing": {
+      "title": "料金プラン",
+      "description": "Unmute AI の料金プラン。Free・Pro・Maxの3プランから研究スタイルに合ったプランを選べます。月額980円から。",
+      "ogTitle": "料金プラン | Unmute AI",
+      "ogDescription": "学術翻訳AIツールの料金プラン。無料プランから始められます。"
+    },
+    "privacy": {
+      "title": "プライバシーポリシー",
+      "description": "Unmute AI のプライバシーポリシー。個人情報の収集・利用・保護について。"
+    },
+    "terms": {
+      "title": "利用規約",
+      "description": "Unmute AI の利用規約。サービスの利用条件、データの取り扱い、知的財産権について。"
+    },
+    "tokushoho": {
+      "title": "特定商取引法に基づく表記",
+      "description": "Unmute AI の特定商取引法に基づく表記。"
+    }
+  },
   "landing": {
     "hero": {
       "title1": "研究に集中しよう。",
