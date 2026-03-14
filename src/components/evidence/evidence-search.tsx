@@ -2,7 +2,7 @@
 
 import { useState, useRef, useTransition, useMemo } from "react";
 import { useLocale } from "next-intl";
-import { Search, Loader2, Lightbulb, ArrowRight } from "lucide-react";
+import { Search, Loader2, Lightbulb, ArrowRight, ArrowUpDown, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PaperCard } from "./paper-card";
 import { PaperCardSkeleton } from "./paper-card-skeleton";
@@ -49,6 +49,58 @@ function getSearchExamples(locale: string): SearchExample[] {
   return nativeExample ? [nativeExample, ...ENGLISH_EXAMPLES] : ENGLISH_EXAMPLES;
 }
 
+// Ranking & sorting
+type SortOption = "relevance" | "citations" | "year-desc" | "year-asc";
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "relevance", label: "Relevance" },
+  { value: "citations", label: "Citations (high → low)" },
+  { value: "year-desc", label: "Year (new → old)" },
+  { value: "year-asc", label: "Year (old → new)" },
+];
+
+function computeRelevanceScore(paper: PaperCandidate): number {
+  const currentYear = new Date().getFullYear();
+
+  // Citation score: log-normalize to handle wide range (0 to 100k+)
+  const citationCount = paper.citationCount ?? 0;
+  const citationScore = citationCount > 0 ? Math.log10(citationCount + 1) / 5 : 0; // max ~1.0
+
+  // Recency boost: papers from last 3 years get full boost, decays after
+  const year = paper.year ?? currentYear - 10;
+  const age = currentYear - year;
+  const recencyScore = age <= 3 ? 1.0 : age <= 5 ? 0.7 : age <= 10 ? 0.4 : 0.2;
+
+  // Provider relevance (if returned by provider)
+  const providerScore = paper.relevanceScore ?? 0.5;
+
+  // Has abstract (more useful for evidence extraction)
+  const abstractScore = paper.abstract ? 1.0 : 0.0;
+
+  return (
+    0.40 * citationScore +
+    0.30 * Math.min(providerScore, 1.0) +
+    0.20 * recencyScore +
+    0.10 * abstractScore
+  );
+}
+
+function sortPapers(papers: PaperCandidate[], sortBy: SortOption): PaperCandidate[] {
+  const sorted = [...papers];
+  switch (sortBy) {
+    case "relevance":
+      return sorted.sort((a, b) => computeRelevanceScore(b) - computeRelevanceScore(a));
+    case "citations":
+      return sorted.sort((a, b) => (b.citationCount ?? 0) - (a.citationCount ?? 0));
+    case "year-desc":
+      return sorted.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+    case "year-asc":
+      return sorted.sort((a, b) => (a.year ?? 0) - (b.year ?? 0));
+    default:
+      return sorted;
+  }
+}
+
 interface EvidenceSearchProps {
   documentId: string;
 }
@@ -60,8 +112,12 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
   const [results, setResults] = useState<PaperCandidate[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchStatus, setSearchStatus] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("relevance");
+  const [isSortOpen, setIsSortOpen] = useState(false);
   const [, startTransition] = useTransition();
   const isComposingRef = useRef(false);
+
+  const sortedResults = useMemo(() => sortPapers(results, sortBy), [results, sortBy]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   function autoResize() {
@@ -158,6 +214,39 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
         </div>
       )}
 
+      {/* Sort controls (shown when results exist) */}
+      {results.length > 0 && (
+        <div className="relative">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSortOpen(!isSortOpen)}
+            className="gap-1.5 text-xs h-7 w-full justify-between"
+          >
+            <span className="flex items-center gap-1.5">
+              <ArrowUpDown className="h-3 w-3" />
+              {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+            </span>
+            <ChevronDown className={`h-3 w-3 transition-transform ${isSortOpen ? "rotate-180" : ""}`} />
+          </Button>
+          {isSortOpen && (
+            <div className="absolute z-10 mt-1 w-full bg-background border border-border rounded-md shadow-md py-1">
+              {SORT_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => { setSortBy(option.value); setIsSortOpen(false); }}
+                  className={`w-full text-left px-3 py-1.5 text-xs hover:bg-accent transition-colors ${
+                    sortBy === option.value ? "text-primary font-medium" : "text-foreground"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Search Guide (shown when no query and no results) */}
       {!query.trim() && results.length === 0 && !isSearching && (
         <div className="space-y-3">
@@ -196,7 +285,7 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
             <PaperCardSkeleton />
           </>
         )}
-        {results.map((paper, i) => (
+        {sortedResults.map((paper, i) => (
           <PaperCard
             key={`${paper.externalIds.doi || paper.title}-${i}`}
             paper={paper}
