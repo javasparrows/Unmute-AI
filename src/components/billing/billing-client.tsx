@@ -1,5 +1,8 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +14,10 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { isUnlimited } from "@/lib/plans";
-import { createPortalSession } from "@/app/actions/stripe";
+import {
+  createPortalSession,
+  reactivateSubscription,
+} from "@/app/actions/stripe";
 import type { Plan } from "@/generated/prisma/client";
 
 interface UsageItem {
@@ -25,6 +31,7 @@ interface BillingClientProps {
   price: number;
   subscriptionStatus: string | null;
   currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
   usage: {
     translationChars: UsageItem;
     structureChecks: UsageItem;
@@ -70,8 +77,12 @@ export function BillingClient({
   price,
   subscriptionStatus,
   currentPeriodEnd,
+  cancelAtPeriodEnd,
   usage,
 }: BillingClientProps) {
+  const router = useRouter();
+  const [reactivating, setReactivating] = useState(false);
+
   async function handleManageSubscription() {
     const result = await createPortalSession();
     if (result.url) {
@@ -79,8 +90,56 @@ export function BillingClient({
     }
   }
 
+  async function handleReactivate() {
+    setReactivating(true);
+    try {
+      const result = await reactivateSubscription();
+      if (result.success) {
+        router.refresh();
+      } else {
+        alert(
+          result.error ?? "キャンセルの取り消しに失敗しました。もう一度お試しください。",
+        );
+      }
+    } finally {
+      setReactivating(false);
+    }
+  }
+
   return (
     <div className="space-y-6">
+      {/* Cancellation warning banner */}
+      {cancelAtPeriodEnd && currentPeriodEnd && (
+        <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
+          <CardContent className="flex items-start gap-3 pt-6">
+            <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="flex-1 space-y-3">
+              <p className="text-sm text-amber-800 dark:text-amber-200">
+                現在のプランは{" "}
+                {new Date(currentPeriodEnd).toLocaleDateString("ja-JP")}{" "}
+                に終了し、Freeプランに変更されます。
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleReactivate}
+                disabled={reactivating}
+                className="border-amber-500 text-amber-800 hover:bg-amber-100 dark:text-amber-200 dark:hover:bg-amber-950/40"
+              >
+                {reactivating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    処理中...
+                  </>
+                ) : (
+                  "キャンセルを取り消す"
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Current plan card */}
       <Card>
         <CardHeader>

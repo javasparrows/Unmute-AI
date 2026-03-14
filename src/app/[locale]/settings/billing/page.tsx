@@ -17,12 +17,16 @@ export default async function BillingPage() {
       select: {
         subscriptionStatus: true,
         currentPeriodEnd: true,
+        stripeSubscriptionId: true,
       },
     }),
   ]);
 
   const planInfo = getPlanInfo(plan);
   const usage = await getUsageSummary(session.user.id, plan);
+
+  const cancelAtPeriodEnd =
+    user?.subscriptionStatus === "canceling";
 
   return (
     <BillingClient
@@ -31,6 +35,7 @@ export default async function BillingPage() {
       price={planInfo.price}
       subscriptionStatus={user?.subscriptionStatus ?? null}
       currentPeriodEnd={user?.currentPeriodEnd?.toISOString() ?? null}
+      cancelAtPeriodEnd={cancelAtPeriodEnd}
       usage={usage}
     />
   );

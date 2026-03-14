@@ -77,6 +77,11 @@ async function handleSubscriptionUpdate(
   const planInfo = priceId ? getPlanByPriceId(priceId) : undefined;
   const plan = planInfo?.id ?? "FREE";
 
+  // Use "canceling" status when subscription is set to cancel at period end
+  const status = subscription.cancel_at_period_end
+    ? "canceling"
+    : subscription.status;
+
   // Fetch current effective plan before updating
   const currentUser = await prisma.user.findFirst({
     where: { stripeCustomerId: customerId },
@@ -89,7 +94,7 @@ async function handleSubscriptionUpdate(
       stripeSubscriptionId: subscription.id,
       stripePriceId: priceId,
       plan,
-      subscriptionStatus: subscription.status,
+      subscriptionStatus: status,
       currentPeriodEnd: new Date(
         subscription.items.data[0]?.current_period_end * 1000,
       ),
