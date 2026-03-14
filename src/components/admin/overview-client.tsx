@@ -15,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 
 interface KPIs {
   totalUsers: number;
@@ -112,6 +113,7 @@ export function OverviewClient() {
         <KPICard
           title="Total Users"
           value={loading ? "..." : data?.kpis.totalUsers.toLocaleString() ?? "0"}
+          href="/admin/users"
         />
         <KPICard
           title="Signups Today"
@@ -287,13 +289,15 @@ function KPICard({
   title,
   value,
   subtitle,
+  href,
 }: {
   title: string;
   value: string;
   subtitle?: string;
+  href?: string;
 }) {
-  return (
-    <Card>
+  const card = (
+    <Card className={href ? "cursor-pointer transition-colors hover:bg-muted/50" : undefined}>
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
         <CardTitle className="text-2xl">{value}</CardTitle>
@@ -305,4 +309,9 @@ function KPICard({
       )}
     </Card>
   );
+
+  if (href) {
+    return <Link href={href}>{card}</Link>;
+  }
+  return card;
 }

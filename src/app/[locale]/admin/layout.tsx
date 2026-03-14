@@ -6,6 +6,7 @@ const ADMIN_TABS = [
   { href: "/admin/overview", label: "Overview" },
   { href: "/admin/acquisition", label: "Acquisition" },
   { href: "/admin/plans", label: "Plans" },
+  { href: "/admin/users", label: "Users" },
 ] as const;
 
 export default async function AdminLayout({
