@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { X, Search, Library, ShieldCheck } from "lucide-react";
+import { X, Search, Library, ShieldCheck, Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EvidenceSearch } from "./evidence-search";
 import { EvidenceLibrary } from "./evidence-library";
@@ -14,6 +14,9 @@ interface EvidencePanelProps {
 }
 
 type TabId = "search" | "library" | "review";
+type PanelWidth = "normal" | "wide";
+
+const STORAGE_KEY_WIDTH = "unmute:evidence-panel-width";
 
 const TABS = [
   { id: "search" as const, label: "Search", icon: Search },
@@ -23,6 +26,19 @@ const TABS = [
 
 export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("search");
+  const [panelWidth, setPanelWidth] = useState<PanelWidth>(() => {
+    if (typeof window === "undefined") return "normal";
+    const saved = localStorage.getItem(STORAGE_KEY_WIDTH);
+    return saved === "wide" ? "wide" : "normal";
+  });
+
+  const toggleWidth = useCallback(() => {
+    setPanelWidth((prev) => {
+      const next = prev === "normal" ? "wide" : "normal";
+      localStorage.setItem(STORAGE_KEY_WIDTH, next);
+      return next;
+    });
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -43,7 +59,7 @@ export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProp
   if (!isOpen) return null;
 
   return (
-    <div className="w-[380px] border-l bg-background flex flex-col h-full shrink-0">
+    <div className={`${panelWidth === "wide" ? "w-[600px]" : "w-[380px]"} border-l bg-background flex flex-col h-full shrink-0 transition-[width] duration-200`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex gap-1">
@@ -60,9 +76,18 @@ export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProp
             </Button>
           ))}
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-7 w-7">
-          <X className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-0.5">
+          <Button variant="ghost" size="icon" onClick={toggleWidth} className="h-7 w-7">
+            {panelWidth === "wide" ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
+          </Button>
+          <Button variant="ghost" size="icon" onClick={onClose} className="h-7 w-7">
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {/* Content */}

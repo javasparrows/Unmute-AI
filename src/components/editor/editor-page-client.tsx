@@ -77,10 +77,17 @@ export function EditorPageClient({
     initialVersion?.versionNumber ?? 1,
   );
 
-  const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(false);
+  const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("unmute:evidence-panel-open") === "true";
+  });
 
   const toggleEvidencePanel = useCallback(() => {
-    setIsEvidencePanelOpen((prev) => !prev);
+    setIsEvidencePanelOpen((prev) => {
+      const next = !prev;
+      localStorage.setItem("unmute:evidence-panel-open", String(next));
+      return next;
+    });
   }, []);
 
   // Cmd+E to toggle evidence panel
@@ -603,7 +610,10 @@ export function EditorPageClient({
         {/* Evidence side panel */}
         <EvidencePanel
           isOpen={isEvidencePanelOpen}
-          onClose={() => setIsEvidencePanelOpen(false)}
+          onClose={() => {
+            setIsEvidencePanelOpen(false);
+            localStorage.setItem("unmute:evidence-panel-open", "false");
+          }}
           documentId={documentId}
         />
       </div>
