@@ -62,6 +62,14 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
   const [searchStatus, setSearchStatus] = useState("");
   const [, startTransition] = useTransition();
   const isComposingRef = useRef(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  function autoResize() {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.max(el.scrollHeight, 72)}px`; // min 72px (~3 rows)
+  }
 
   async function handleSearch() {
     if (!query.trim() || isSearching) return;
@@ -109,14 +117,15 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
       {/* Search Input */}
       <div className="space-y-2">
         <textarea
-          placeholder="研究トピックやキーワードを入力...&#10;例: 深層学習を用いた医用画像セグメンテーション"
+          ref={textareaRef}
+          placeholder="研究トピックやキーワードを入力...&#10;例: deep learning for medical image segmentation"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => { setQuery(e.target.value); autoResize(); }}
           onKeyDown={handleKeyDown}
           onCompositionStart={() => { isComposingRef.current = true; }}
           onCompositionEnd={() => { isComposingRef.current = false; }}
           rows={3}
-          className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-sm"
         />
         <Button
           onClick={handleSearch}
