@@ -73,8 +73,10 @@ export function BillingClient({
   usage,
 }: BillingClientProps) {
   async function handleManageSubscription() {
-    const url = await createPortalSession();
-    if (url) window.location.href = url;
+    const result = await createPortalSession();
+    if (result.url) {
+      window.location.href = result.url;
+    }
   }
 
   return (
