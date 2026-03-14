@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 import { calculateCost } from "@/lib/analytics";
 
 const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
@@ -74,26 +74,26 @@ export async function GET() {
     last30DaysLogs,
   ] = await Promise.all([
     // Total users
-    prisma.user.count(),
+    prismaAdmin.user.count(),
 
     // Signups today (JST)
-    prisma.user.count({
+    prismaAdmin.user.count({
       where: { createdAt: { gte: startOfDayUTC } },
     }),
 
     // Signups this week (JST, Monday start)
-    prisma.user.count({
+    prismaAdmin.user.count({
       where: { createdAt: { gte: startOfWeekUTC } },
     }),
 
     // Active users today (distinct userId from ApiUsageLog)
-    prisma.apiUsageLog.groupBy({
+    prismaAdmin.apiUsageLog.groupBy({
       by: ["userId"],
       where: { createdAt: { gte: startOfDayUTC } },
     }),
 
     // Today's API usage logs for token/cost calculation
-    prisma.apiUsageLog.findMany({
+    prismaAdmin.apiUsageLog.findMany({
       where: { createdAt: { gte: startOfDayUTC } },
       select: {
         model: true,
@@ -103,18 +103,18 @@ export async function GET() {
     }),
 
     // Last 30 days user signups (for trend)
-    prisma.user.findMany({
+    prismaAdmin.user.findMany({
       where: { createdAt: { gte: thirtyDaysAgo } },
       select: { createdAt: true },
     }),
 
     // Plan distribution using raw query for effective plan (planOverride ?? plan)
-    prisma.user.findMany({
+    prismaAdmin.user.findMany({
       select: { plan: true, planOverride: true },
     }),
 
     // Last 30 days API usage logs (for token trend)
-    prisma.apiUsageLog.findMany({
+    prismaAdmin.apiUsageLog.findMany({
       where: { createdAt: { gte: thirtyDaysAgo } },
       select: {
         model: true,

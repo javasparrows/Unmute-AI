@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 
 /**
  * Build a JST-aware "start of today" in UTC.
@@ -56,7 +56,7 @@ export async function GET() {
   const startOfTodayUTC = getJSTStartOfToday();
 
   // Fetch all page views for last 30 days in one query
-  const pageViews = await prisma.pageView.findMany({
+  const pageViews = await prismaAdmin.pageView.findMany({
     where: { createdAt: { gte: thirtyDaysAgo } },
     select: {
       visitorId: true,
@@ -181,7 +181,7 @@ export async function GET() {
     }
 
     // Query PlanChangeLog for these users
-    const planChanges = await prisma.planChangeLog.findMany({
+    const planChanges = await prismaAdmin.planChangeLog.findMany({
       where: {
         userId: { in: Array.from(attributedUserIds) },
         fromPlan: "FREE",

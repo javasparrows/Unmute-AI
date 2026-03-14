@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 import type { Plan, PlanChangeSource } from "@/generated/prisma/client";
 
 interface RecordPlanChangeParams {
@@ -52,7 +52,7 @@ export async function recordPlanChange(
   // Use upsert for STRIPE_WEBHOOK with externalEventId to handle
   // duplicate webhook deliveries idempotently
   if (source === "STRIPE_WEBHOOK" && externalEventId) {
-    await prisma.planChangeLog.upsert({
+    await prismaAdmin.planChangeLog.upsert({
       where: { externalEventId },
       create: data,
       update: {},
@@ -60,5 +60,5 @@ export async function recordPlanChange(
     return;
   }
 
-  await prisma.planChangeLog.create({ data });
+  await prismaAdmin.planChangeLog.create({ data });
 }

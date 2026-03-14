@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 import { getPlanByPriceId } from "@/lib/plans";
 import { recordPlanChange } from "@/lib/plan-change-log";
 import type Stripe from "stripe";
@@ -56,8 +56,11 @@ export async function POST(request: Request) {
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice;
       if (invoice.customer) {
-        await prisma.user.updateMany({
-          where: { stripeCustomerId: invoice.customer as string },
+        await prismaAdmin.user.updateMany({
+          where: {
+            stripeCustomerId: invoice.customer as string,
+            deletedAt: null,
+          },
           data: { subscriptionStatus: "past_due" },
         });
       }
@@ -83,12 +86,18 @@ async function handleSubscriptionUpdate(
     : subscription.status;
 
   // Fetch current effective plan before updating
-  const currentUser = await prisma.user.findFirst({
+  const currentUser = await prismaAdmin.user.findFirst({
     where: { stripeCustomerId: customerId },
-    select: { id: true, plan: true, planOverride: true },
+    select: { id: true, plan: true, planOverride: true, deletedAt: true },
   });
 
-  await prisma.user.updateMany({
+  // Skip webhook processing for soft-deleted users
+  if (currentUser?.deletedAt) {
+    console.log(`Skipping webhook for soft-deleted user: ${currentUser.id}`);
+    return;
+  }
+
+  await prismaAdmin.user.updateMany({
     where: { stripeCustomerId: customerId },
     data: {
       stripeSubscriptionId: subscription.id,
@@ -123,12 +132,18 @@ async function handleSubscriptionDeleted(
   const customerId = subscription.customer as string;
 
   // Fetch current effective plan before updating
-  const currentUser = await prisma.user.findFirst({
+  const currentUser = await prismaAdmin.user.findFirst({
     where: { stripeCustomerId: customerId },
-    select: { id: true, plan: true, planOverride: true },
+    select: { id: true, plan: true, planOverride: true, deletedAt: true },
   });
 
-  await prisma.user.updateMany({
+  // Skip webhook processing for soft-deleted users
+  if (currentUser?.deletedAt) {
+    console.log(`Skipping webhook for soft-deleted user: ${currentUser.id}`);
+    return;
+  }
+
+  await prismaAdmin.user.updateMany({
     where: { stripeCustomerId: customerId },
     data: {
       plan: "FREE",

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 import type { Plan } from "@/generated/prisma/client";
 
 const PLAN_RANK: Record<Plan, number> = {
@@ -43,7 +43,7 @@ export async function GET() {
   }
 
   // 1. Plan distribution
-  const users = await prisma.user.findMany({
+  const users = await prismaAdmin.user.findMany({
     select: { plan: true, planOverride: true },
   });
 
@@ -63,7 +63,7 @@ export async function GET() {
     .sort((a, b) => (PLAN_RANK[a.plan as Plan] ?? 0) - (PLAN_RANK[b.plan as Plan] ?? 0));
 
   // 2. Recent plan changes (last 50)
-  const recentChanges = await prisma.planChangeLog.findMany({
+  const recentChanges = await prismaAdmin.planChangeLog.findMany({
     take: 50,
     orderBy: { createdAt: "desc" },
     include: {
@@ -84,7 +84,7 @@ export async function GET() {
 
   // 3. Change trend (last 30 days)
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const changeLogs = await prisma.planChangeLog.findMany({
+  const changeLogs = await prismaAdmin.planChangeLog.findMany({
     where: { createdAt: { gte: thirtyDaysAgo } },
     select: { fromPlan: true, toPlan: true, createdAt: true },
     orderBy: { createdAt: "asc" },

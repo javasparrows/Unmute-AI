@@ -26,6 +26,14 @@ enum PlanChangeSource {
   BACKFILL
 }
 
+enum AdminActionType {
+  ROLE_CHANGE
+  PLAN_OVERRIDE_SET
+  PLAN_OVERRIDE_CLEAR
+  SOFT_DELETE
+  RESTORE
+}
+
 // ===== Auth.js required tables =====
 
 model User {
@@ -50,9 +58,18 @@ model User {
   currentPeriodEnd     DateTime?
   hasSeenWelcome       Boolean        @default(false)
   createdAt            DateTime       @default(now())
+  updatedAt            DateTime?      @updatedAt
+  deletedAt            DateTime?
+  deletedById          String?
+  deletedByUser        User?          @relation("UserDeletedBy", fields: [deletedById], references: [id], onDelete: SetNull)
+  deletedUsers         User[]         @relation("UserDeletedBy")
   pageViews            PageView[]
   planChanges          PlanChangeLog[]
   loginDevices         LoginDevice[]
+  adminActionsPerformed AdminActionLog[] @relation("AdminActionActor")
+  adminActionsReceived  AdminActionLog[] @relation("AdminActionTarget")
+
+  @@index([deletedAt])
 }
 
 model Account {
@@ -218,4 +235,20 @@ model PlanChangeLog {
   @@index([createdAt])
   @@index([toPlan, createdAt])
   @@index([source, createdAt])
+}
+
+model AdminActionLog {
+  id           String          @id @default(cuid())
+  actorId      String
+  actor        User            @relation("AdminActionActor", fields: [actorId], references: [id], onDelete: Cascade)
+  targetUserId String
+  targetUser   User            @relation("AdminActionTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  action       AdminActionType
+  reason       String?
+  before       Json?
+  after        Json?
+  createdAt    DateTime        @default(now())
+
+  @@index([createdAt])
+  @@index([targetUserId])
 }

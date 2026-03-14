@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 import { sendLoginNotification } from "@/lib/email";
 
 /**
@@ -26,26 +26,26 @@ export async function handleLoginDevice(params: {
   const deviceHash = createHash("sha256").update(raw).digest("hex");
 
   // Check if the user has any devices registered at all
-  const deviceCount = await prisma.loginDevice.count({
+  const deviceCount = await prismaAdmin.loginDevice.count({
     where: { userId },
   });
 
   if (deviceCount === 0) {
     // First ever login -- just register, don't notify
-    await prisma.loginDevice.create({
+    await prismaAdmin.loginDevice.create({
       data: { userId, deviceHash, userAgent, ip },
     });
     return;
   }
 
   // Check if THIS specific device is already known
-  const existing = await prisma.loginDevice.findUnique({
+  const existing = await prismaAdmin.loginDevice.findUnique({
     where: { userId_deviceHash: { userId, deviceHash } },
   });
 
   if (existing) {
     // Known device -- just update lastSeenAt, no notification
-    await prisma.loginDevice.update({
+    await prismaAdmin.loginDevice.update({
       where: { id: existing.id },
       data: { lastSeenAt: new Date() },
     });
@@ -53,7 +53,7 @@ export async function handleLoginDevice(params: {
   }
 
   // New device on an existing account -- register and notify
-  await prisma.loginDevice.create({
+  await prismaAdmin.loginDevice.create({
     data: { userId, deviceHash, userAgent, ip },
   });
 
