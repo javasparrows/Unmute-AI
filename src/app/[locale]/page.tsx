@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
@@ -23,6 +25,52 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+
+const BASE_URL = "https://unmute-ai.com";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata.landing" });
+
+  const languages: Record<string, string> = {};
+  for (const loc of routing.locales) {
+    languages[loc] =
+      loc === routing.defaultLocale ? BASE_URL : `${BASE_URL}/${loc}`;
+  }
+
+  const url =
+    locale === routing.defaultLocale ? BASE_URL : `${BASE_URL}/${locale}`;
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: {
+      canonical: url,
+      languages,
+    },
+    openGraph: {
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      url,
+      siteName: "Unmute AI",
+      locale: locale.replace("-", "_"),
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+    },
+  };
+}
 
 export default async function LandingPage() {
   const t = await getTranslations("landing");

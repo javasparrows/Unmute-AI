@@ -1,11 +1,40 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { SiteFooter } from "@/components/layout/site-footer";
 
-export const metadata: Metadata = {
-  title: "プライバシーポリシー | Unmute AI",
-  description: "Unmute AI のプライバシーポリシー",
-};
+const BASE_URL = "https://unmute-ai.com";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata.privacy" });
+
+  const languages: Record<string, string> = {};
+  for (const loc of routing.locales) {
+    const prefix = loc === routing.defaultLocale ? "" : `/${loc}`;
+    languages[loc] = `${BASE_URL}${prefix}/privacy`;
+  }
+
+  const url =
+    locale === routing.defaultLocale
+      ? `${BASE_URL}/privacy`
+      : `${BASE_URL}/${locale}/privacy`;
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: { canonical: url, languages },
+  };
+}
 
 export default function PrivacyPage() {
   return (

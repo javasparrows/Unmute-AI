@@ -1,11 +1,40 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { SiteFooter } from "@/components/layout/site-footer";
 
-export const metadata: Metadata = {
-  title: "特定商取引法に基づく表記 | Unmute AI",
-  description: "Unmute AI の特定商取引法に基づく表記",
-};
+const BASE_URL = "https://unmute-ai.com";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata.tokushoho" });
+
+  const languages: Record<string, string> = {};
+  for (const loc of routing.locales) {
+    const prefix = loc === routing.defaultLocale ? "" : `/${loc}`;
+    languages[loc] = `${BASE_URL}${prefix}/legal/tokushoho`;
+  }
+
+  const url =
+    locale === routing.defaultLocale
+      ? `${BASE_URL}/legal/tokushoho`
+      : `${BASE_URL}/${locale}/legal/tokushoho`;
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: { canonical: url, languages },
+  };
+}
 
 const rows = [
   {

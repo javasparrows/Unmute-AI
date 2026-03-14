@@ -1,9 +1,52 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { PLANS } from "@/lib/plans";
 import { PricingCard } from "@/components/pricing/pricing-card";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import type { Plan } from "@/generated/prisma/client";
+
+const BASE_URL = "https://unmute-ai.com";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata.pricing" });
+
+  const languages: Record<string, string> = {};
+  for (const loc of routing.locales) {
+    const prefix = loc === routing.defaultLocale ? "" : `/${loc}`;
+    languages[loc] = `${BASE_URL}${prefix}/pricing`;
+  }
+
+  const url =
+    locale === routing.defaultLocale
+      ? `${BASE_URL}/pricing`
+      : `${BASE_URL}/${locale}/pricing`;
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    alternates: { canonical: url, languages },
+    openGraph: {
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+      url,
+      siteName: "Unmute AI",
+      locale: locale.replace("-", "_"),
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+    },
+  };
+}
 
 export default async function PricingPage() {
   const session = await auth();

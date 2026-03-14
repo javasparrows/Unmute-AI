@@ -16,6 +16,7 @@
   "dependencies": {
     "@ai-sdk/google": "^3.0.33",
     "@auth/prisma-adapter": "^2.11.1",
+    "@floating-ui/dom": "^1.7.6",
     "@neondatabase/serverless": "^1.0.2",
     "@prisma/adapter-neon": "^7.4.2",
     "@prisma/client": "^7.4.2",
@@ -38,7 +39,8 @@
     "resend": "^6.9.3",
     "sonner": "^2.0.7",
     "stripe": "^20.4.0",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
