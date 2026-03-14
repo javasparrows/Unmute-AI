@@ -135,6 +135,15 @@
     "analytics": "Analiza użycia",
     "logout": "Wyloguj"
   },
+  "welcome": {
+    "title": "Witamy w Unmute AI!",
+    "subtitle": "Twoje badania zasługują na to, by być słyszane na całym świecie. Pomagamy Ci pisać jasno i z pewnością.",
+    "feature1": "Tłumaczenie akademickie oparte na AI",
+    "feature2": "Wsparcie dla ponad 17 języków",
+    "feature3": "Zachowaj swój oryginalny styl",
+    "createFirst": "Utwórz swój pierwszy dokument",
+    "goToDashboard": "Przejdź do panelu"
+  },
   "common": {
     "loading": "Ładowanie...",
     "appName": "Unmute AI"

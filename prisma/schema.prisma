@@ -48,6 +48,7 @@ model User {
   stripePriceId        String?
   subscriptionStatus   String?        // "active", "canceled", "past_due"
   currentPeriodEnd     DateTime?
+  hasSeenWelcome       Boolean        @default(false)
   createdAt            DateTime       @default(now())
   pageViews            PageView[]
   planChanges          PlanChangeLog[]

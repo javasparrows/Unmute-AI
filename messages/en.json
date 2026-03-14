@@ -135,6 +135,15 @@
     "analytics": "Usage Analytics",
     "logout": "Log out"
   },
+  "welcome": {
+    "title": "Welcome to Unmute AI!",
+    "subtitle": "Your research deserves to be heard worldwide. We're here to help you write with clarity and confidence.",
+    "feature1": "AI-powered academic translation",
+    "feature2": "Support for 17+ languages",
+    "feature3": "Maintain your original voice and style",
+    "createFirst": "Create Your First Document",
+    "goToDashboard": "Go to Dashboard"
+  },
   "common": {
     "loading": "Loading...",
     "appName": "Unmute AI"
