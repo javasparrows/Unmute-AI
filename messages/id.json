@@ -135,6 +135,15 @@
     "analytics": "Analisis Penggunaan",
     "logout": "Keluar"
   },
+  "welcome": {
+    "title": "Selamat Datang di Unmute AI!",
+    "subtitle": "Penelitian Anda layak didengar di seluruh dunia. Kami di sini untuk membantu Anda menulis dengan jelas dan percaya diri.",
+    "feature1": "Terjemahan akademis berbasis AI",
+    "feature2": "Dukungan untuk 17+ bahasa",
+    "feature3": "Pertahankan suara dan gaya asli Anda",
+    "createFirst": "Buat Dokumen Pertama Anda",
+    "goToDashboard": "Ke Dasbor"
+  },
   "common": {
     "loading": "Memuat...",
     "appName": "Unmute AI"

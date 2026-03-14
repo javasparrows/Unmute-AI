@@ -135,6 +135,15 @@
     "analytics": "Analyse d'utilisation",
     "logout": "Déconnexion"
   },
+  "welcome": {
+    "title": "Bienvenue sur Unmute AI !",
+    "subtitle": "Votre recherche mérite d'être entendue dans le monde entier. Nous vous aidons à écrire avec clarté et confiance.",
+    "feature1": "Traduction académique par IA",
+    "feature2": "Prise en charge de 17+ langues",
+    "feature3": "Conservez votre style d'écriture original",
+    "createFirst": "Créer votre premier document",
+    "goToDashboard": "Aller au tableau de bord"
+  },
   "common": {
     "loading": "Chargement...",
     "appName": "Unmute AI"

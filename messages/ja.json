@@ -135,6 +135,15 @@
     "analytics": "利用分析",
     "logout": "ログアウト"
   },
+  "welcome": {
+    "title": "Unmute AI へようこそ！",
+    "subtitle": "あなたの研究を、世界中に届けましょう。明確で自信に満ちた論文執筆をお手伝いします。",
+    "feature1": "AIによる学術翻訳",
+    "feature2": "17以上の言語に対応",
+    "feature3": "あなたの文体をそのまま維持",
+    "createFirst": "最初のドキュメントを作成",
+    "goToDashboard": "ダッシュボードへ"
+  },
   "common": {
     "loading": "読み込み中...",
     "appName": "Unmute AI"

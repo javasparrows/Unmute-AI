@@ -135,6 +135,15 @@
     "analytics": "Nutzungsanalyse",
     "logout": "Abmelden"
   },
+  "welcome": {
+    "title": "Willkommen bei Unmute AI!",
+    "subtitle": "Ihre Forschung verdient es, weltweit gehört zu werden. Wir helfen Ihnen, klar und selbstbewusst zu schreiben.",
+    "feature1": "KI-gestützte akademische Übersetzung",
+    "feature2": "Unterstützung für 17+ Sprachen",
+    "feature3": "Bewahren Sie Ihren originalen Stil",
+    "createFirst": "Erstes Dokument erstellen",
+    "goToDashboard": "Zum Dashboard"
+  },
   "common": {
     "loading": "Wird geladen...",
     "appName": "Unmute AI"

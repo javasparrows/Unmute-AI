@@ -135,6 +135,15 @@
     "analytics": "使用分析",
     "logout": "退出登录"
   },
+  "welcome": {
+    "title": "欢迎使用 Unmute AI！",
+    "subtitle": "您的研究值得被全世界听见。我们帮助您清晰、自信地撰写论文。",
+    "feature1": "AI驱动的学术翻译",
+    "feature2": "支持17种以上语言",
+    "feature3": "保持您原有的文风",
+    "createFirst": "创建第一个文档",
+    "goToDashboard": "前往工作台"
+  },
   "common": {
     "loading": "加载中...",
     "appName": "Unmute AI"

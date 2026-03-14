@@ -1,9 +1,11 @@
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { getDocuments } from "@/app/actions/document";
 import { SiteHeader } from "@/components/layout/site-header";
 import { DocumentList } from "@/components/dashboard/document-list";
 import { CreateDocumentButton } from "@/components/dashboard/create-document-button";
+import { WelcomeDialog } from "@/components/welcome/welcome-dialog";
 import { Badge } from "@/components/ui/badge";
 import { getUserPlanById } from "@/lib/user-plan";
 import { getPlanInfo, isUnlimited } from "@/lib/plans";
@@ -13,6 +15,15 @@ export default async function DashboardPage() {
   const session = await auth();
   const t = await getTranslations("dashboard");
   const documents = await getDocuments();
+
+  const showWelcome = session?.user?.id
+    ? !(
+        await prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { hasSeenWelcome: true },
+        })
+      )?.hasSeenWelcome
+    : false;
 
   const plan = session?.user?.id
     ? (await getUserPlanById(session.user.id)).plan
@@ -47,6 +58,8 @@ export default async function DashboardPage() {
 
         <DocumentList documents={documents} />
       </main>
+
+      {showWelcome && <WelcomeDialog open={true} />}
     </div>
   );
 }

@@ -135,6 +135,15 @@
     "analytics": "사용 분석",
     "logout": "로그아웃"
   },
+  "welcome": {
+    "title": "Unmute AI에 오신 것을 환영합니다!",
+    "subtitle": "당신의 연구는 전 세계에 알려질 자격이 있습니다. 명확하고 자신감 있는 논문 작성을 도와드립니다.",
+    "feature1": "AI 기반 학술 번역",
+    "feature2": "17개 이상의 언어 지원",
+    "feature3": "원래의 문체를 그대로 유지",
+    "createFirst": "첫 문서 만들기",
+    "goToDashboard": "대시보드로 이동"
+  },
   "common": {
     "loading": "로딩 중...",
     "appName": "Unmute AI"

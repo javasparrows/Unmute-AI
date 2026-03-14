@@ -135,6 +135,15 @@
     "analytics": "Kullanım Analizi",
     "logout": "Çıkış Yap"
   },
+  "welcome": {
+    "title": "Unmute AI'a Hoş Geldiniz!",
+    "subtitle": "Araştırmanız dünya çapında duyulmayı hak ediyor. Netlik ve güvenle yazmanıza yardımcı olmak için buradayız.",
+    "feature1": "Yapay zeka destekli akademik çeviri",
+    "feature2": "17'den fazla dil desteği",
+    "feature3": "Orijinal sesinizi ve tarzınızı koruyun",
+    "createFirst": "İlk Belgenizi Oluşturun",
+    "goToDashboard": "Kontrol Paneline Git"
+  },
   "common": {
     "loading": "Yükleniyor...",
     "appName": "Unmute AI"
