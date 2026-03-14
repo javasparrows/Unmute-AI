@@ -2,7 +2,7 @@ import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prismaBase: PrismaClient | undefined;
 };
 
 function createPrismaClient() {
@@ -10,8 +10,29 @@ function createPrismaClient() {
   return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+// Raw client - use for auth adapter, webhooks, admin queries
+export const prismaAdmin = globalForPrisma.prismaBase ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+  globalForPrisma.prismaBase = prismaAdmin;
 }
+
+// Filtered client - auto-excludes soft-deleted users
+export const prisma = prismaAdmin.$extends({
+  query: {
+    user: {
+      async findMany({ args, query }) {
+        args.where = { ...args.where, deletedAt: null };
+        return query(args);
+      },
+      async findFirst({ args, query }) {
+        args.where = { ...args.where, deletedAt: null };
+        return query(args);
+      },
+      async count({ args, query }) {
+        args.where = { ...args.where, deletedAt: null };
+        return query(args);
+      },
+    },
+  },
+});

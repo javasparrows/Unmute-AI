@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { prismaAdmin } from "@/lib/prisma";
 
 interface UserRow {
   id: string;
@@ -14,9 +14,10 @@ interface UserRow {
   lastActiveAt: string | null;
   totalDocuments: number;
   totalTokens: number;
+  deletedAt: string | null;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   // Auth check
   const session = await auth();
   if (!session?.user?.id) {
@@ -25,6 +26,17 @@ export async function GET() {
   if (session.user.role !== "ADMIN") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+
+  // Parse status filter from query params
+  const { searchParams } = new URL(request.url);
+  const status = searchParams.get("status") ?? "active";
+
+  const deletedAtFilter =
+    status === "deleted"
+      ? { deletedAt: { not: null } }
+      : status === "all"
+        ? {}
+        : { deletedAt: null };
 
   // Run queries in parallel for efficiency
   const [
@@ -35,8 +47,9 @@ export async function GET() {
     lastPageViews,
     lastLoginDevices,
   ] = await Promise.all([
-    // All users
-    prisma.user.findMany({
+    // All users (filtered by status)
+    prismaAdmin.user.findMany({
+      where: deletedAtFilter,
       select: {
         id: true,
         name: true,
@@ -46,18 +59,19 @@ export async function GET() {
         planOverride: true,
         subscriptionStatus: true,
         createdAt: true,
+        deletedAt: true,
       },
       orderBy: { createdAt: "desc" },
     }),
 
     // Document counts per user
-    prisma.document.groupBy({
+    prismaAdmin.document.groupBy({
       by: ["userId"],
       _count: true,
     }),
 
     // Token totals per user (sum of input + output)
-    prisma.apiUsageLog.groupBy({
+    prismaAdmin.apiUsageLog.groupBy({
       by: ["userId"],
       _sum: {
         inputTokens: true,
@@ -66,19 +80,19 @@ export async function GET() {
     }),
 
     // Last API usage per user
-    prisma.apiUsageLog.groupBy({
+    prismaAdmin.apiUsageLog.groupBy({
       by: ["userId"],
       _max: { createdAt: true },
     }),
 
     // Last page view per user
-    prisma.pageView.groupBy({
+    prismaAdmin.pageView.groupBy({
       by: ["userId"],
       _max: { createdAt: true },
     }),
 
     // Last login device activity per user
-    prisma.loginDevice.groupBy({
+    prismaAdmin.loginDevice.groupBy({
       by: ["userId"],
       _max: { lastSeenAt: true },
     }),
@@ -135,6 +149,7 @@ export async function GET() {
       lastActiveAt: lastActive ? lastActive.toISOString() : null,
       totalDocuments: docCountMap.get(user.id) ?? 0,
       totalTokens: tokenMap.get(user.id) ?? 0,
+      deletedAt: user.deletedAt ? user.deletedAt.toISOString() : null,
     };
   });
 
