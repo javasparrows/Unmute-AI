@@ -93,25 +93,23 @@ export function PricingCard({
             {isLoggedIn ? (isDowngrade ? "ダウングレード" : "現在のプラン") : "無料で始める"}
           </Button>
         ) : (
-          <form action={handleSubscribe} className="w-full">
-            <Button
-              type="submit"
-              className="w-full"
-              variant={popular ? "default" : "outline"}
-              disabled={!isLoggedIn || loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  処理中...
-                </>
-              ) : !isLoggedIn
-                ? "ログインして申し込む"
-                : isDowngrade
-                  ? "ダウングレード"
-                  : "アップグレード"}
-            </Button>
-          </form>
+          <Button
+            className="w-full"
+            variant={popular ? "default" : "outline"}
+            disabled={!isLoggedIn || loading}
+            onClick={handleSubscribe}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                処理中...
+              </>
+            ) : !isLoggedIn
+              ? "ログインして申し込む"
+              : isDowngrade
+                ? "ダウングレード"
+                : "アップグレード"}
+          </Button>
         )}
       </CardFooter>
     </Card>
