@@ -36,8 +36,12 @@ export function PricingCard({
 
   async function handleSubscribe() {
     if (!plan.stripePriceId) return;
-    const url = await createCheckoutSession(plan.stripePriceId);
-    if (url) window.location.href = url;
+    const result = await createCheckoutSession(plan.stripePriceId);
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      alert(result.error ?? "Something went wrong. Please try again.");
+    }
   }
 
   return (
