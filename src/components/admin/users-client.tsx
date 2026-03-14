@@ -56,16 +56,19 @@ function maskEmail(email: string): string {
 }
 
 /**
- * Format ISO date string to readable format (YYYY/MM/DD HH:mm).
+ * Format ISO date string to JST datetime (YYYY/MM/DD HH:mm).
  */
 function formatDateTime(isoDate: string): string {
   const d = new Date(isoDate);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  const h = String(d.getHours()).padStart(2, "0");
-  const min = String(d.getMinutes()).padStart(2, "0");
-  return `${y}/${m}/${day} ${h}:${min}`;
+  return d.toLocaleString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 }
 
 /**
@@ -357,23 +360,16 @@ export function UsersClient() {
                         {user.totalTokens.toLocaleString()}
                       </td>
 
-                      {/* Last Active */}
-                      <td
-                        className="py-2 pr-4 whitespace-nowrap text-muted-foreground"
-                        title={
-                          user.lastActiveAt
-                            ? formatDateTime(user.lastActiveAt)
-                            : undefined
-                        }
-                      >
+                      {/* Last Active (JST) */}
+                      <td className="py-2 pr-4 whitespace-nowrap text-muted-foreground">
                         {user.lastActiveAt
-                          ? formatRelativeTime(user.lastActiveAt)
+                          ? formatDateTime(user.lastActiveAt)
                           : "\u2014"}
                       </td>
 
-                      {/* Signed Up */}
+                      {/* Signed Up (JST) */}
                       <td className="py-2 whitespace-nowrap text-muted-foreground">
-                        {formatDate(user.createdAt)}
+                        {formatDateTime(user.createdAt)}
                       </td>
                     </tr>
                   ))}

@@ -27,46 +27,62 @@ export async function GET() {
   }
 
   // Run queries in parallel for efficiency
-  const [users, documentCounts, tokenTotals, lastActiveDates] =
-    await Promise.all([
-      // All users
-      prisma.user.findMany({
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true,
-          plan: true,
-          planOverride: true,
-          subscriptionStatus: true,
-          createdAt: true,
-        },
-        orderBy: { createdAt: "desc" },
-      }),
+  const [
+    users,
+    documentCounts,
+    tokenTotals,
+    lastApiUsage,
+    lastPageViews,
+    lastLoginDevices,
+  ] = await Promise.all([
+    // All users
+    prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        plan: true,
+        planOverride: true,
+        subscriptionStatus: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+    }),
 
-      // Document counts per user
-      prisma.document.groupBy({
-        by: ["userId"],
-        _count: true,
-      }),
+    // Document counts per user
+    prisma.document.groupBy({
+      by: ["userId"],
+      _count: true,
+    }),
 
-      // Token totals per user (sum of input + output)
-      prisma.apiUsageLog.groupBy({
-        by: ["userId"],
-        _sum: {
-          inputTokens: true,
-          outputTokens: true,
-        },
-      }),
+    // Token totals per user (sum of input + output)
+    prisma.apiUsageLog.groupBy({
+      by: ["userId"],
+      _sum: {
+        inputTokens: true,
+        outputTokens: true,
+      },
+    }),
 
-      // Last active date per user (latest ApiUsageLog.createdAt)
-      prisma.apiUsageLog.groupBy({
-        by: ["userId"],
-        _max: {
-          createdAt: true,
-        },
-      }),
-    ]);
+    // Last API usage per user
+    prisma.apiUsageLog.groupBy({
+      by: ["userId"],
+      _max: { createdAt: true },
+    }),
+
+    // Last page view per user
+    prisma.pageView.groupBy({
+      by: ["userId"],
+      _max: { createdAt: true },
+    }),
+
+    // Last login device activity per user
+    prisma.loginDevice.groupBy({
+      by: ["userId"],
+      _max: { lastSeenAt: true },
+    }),
+  ]);
 
   // Build lookup maps
   const docCountMap = new Map<string, number>();
@@ -81,11 +97,25 @@ export async function GET() {
     tokenMap.set(row.userId, input + output);
   }
 
+  // Build last active map from multiple sources (API usage, page views, login devices)
   const lastActiveMap = new Map<string, Date>();
-  for (const row of lastActiveDates) {
-    if (row._max.createdAt) {
-      lastActiveMap.set(row.userId, row._max.createdAt);
+
+  function updateLastActive(userId: string, date: Date) {
+    const existing = lastActiveMap.get(userId);
+    if (!existing || date > existing) {
+      lastActiveMap.set(userId, date);
     }
+  }
+
+  for (const row of lastApiUsage) {
+    if (row._max.createdAt) updateLastActive(row.userId, row._max.createdAt);
+  }
+  for (const row of lastPageViews) {
+    if (row.userId && row._max.createdAt)
+      updateLastActive(row.userId, row._max.createdAt);
+  }
+  for (const row of lastLoginDevices) {
+    if (row._max.lastSeenAt) updateLastActive(row.userId, row._max.lastSeenAt);
   }
 
   // Merge data
