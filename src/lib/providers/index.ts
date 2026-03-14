@@ -51,4 +51,16 @@ function deduplicateCandidates(
   return Array.from(seen.values());
 }
 
-export type { ProviderAdapter, SearchOptions } from "./types";
+export type {
+  ProviderAdapter,
+  SearchOptions,
+  FullTextResult,
+  PaperSection,
+  FullTextProvider,
+} from "./types";
+export { unpaywallAdapter } from "./unpaywall";
+export { pmcAdapter } from "./pmc";
+export { s2orcAdapter } from "./s2orc";
+export { arxivFullTextAdapter } from "./arxiv-fulltext";
+export { coreAdapter } from "./core";
+export { resolveFullText, getEvidenceTier } from "./fulltext-resolver";
