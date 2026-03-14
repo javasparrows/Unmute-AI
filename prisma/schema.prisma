@@ -170,6 +170,21 @@ model PageView {
   @@index([countryCode, createdAt])
 }
 
+model PageViewDaily {
+  id             String   @id @default(cuid())
+  date           DateTime @db.Date
+  path           String
+  locale         String   @default("")
+  countryCode    String   @default("") @db.VarChar(2)
+  views          Int
+  uniqueVisitors Int
+  createdAt      DateTime @default(now())
+
+  @@unique([date, path, locale, countryCode])
+  @@index([date])
+  @@index([path, date])
+}
+
 model PlanChangeLog {
   id                   String           @id @default(cuid())
   userId               String
