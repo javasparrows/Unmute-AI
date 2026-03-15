@@ -71,6 +71,7 @@ model User {
   adminActionsReceived  AdminActionLog[] @relation("AdminActionTarget")
   writingSessions      WritingSession[]
   achievements         Achievement[]
+  literatureWatches    LiteratureWatch[]
 
   @@index([deletedAt])
 }
@@ -668,4 +669,23 @@ model Achievement {
 
   @@unique([userId, type])
   @@index([userId])
+}
+
+model LiteratureWatch {
+  id          String   @id @default(cuid())
+  userId      String
+  topic       String
+  query       String                    // Search query for OpenAlex/S2
+  enabled     Boolean  @default(true)
+  frequency   String   @default("weekly")  // daily | weekly
+  lastChecked DateTime?
+  results     Json?                     // Latest results snapshot
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, enabled])
 }
