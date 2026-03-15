@@ -108,7 +108,7 @@
     }
   },
   "header": {
-    "dashboard": "Dashboard",
+    "dashboard": "My Papers",
     "features": "Features",
     "pricing": "Pricing",
     "login": "Log in",
@@ -124,19 +124,19 @@
     "guarantee": "14-day money-back guarantee. Cancel anytime."
   },
   "dashboard": {
-    "myDocuments": "My Documents",
-    "createNew": "+ New Document",
+    "myDocuments": "My Papers",
+    "createNew": "+ New Paper",
     "creating": "Creating...",
-    "createError": "Failed to create document",
+    "createError": "Failed to create paper",
     "checkPlan": "Check plan",
-    "noDocuments": "No documents yet",
-    "noDocumentsHint": "Click \"+ New Document\" to start writing",
+    "noDocuments": "No papers yet",
+    "noDocumentsHint": "Click \"New Paper\" to start writing",
     "updated": "Updated:",
     "save": "Save",
     "cancel": "Cancel",
     "rename": "Rename",
     "delete": "Delete",
-    "confirmDelete": "Delete this document?"
+    "confirmDelete": "Delete this paper?"
   },
   "settings": {
     "title": "Settings",
@@ -181,7 +181,7 @@
   },
   "userMenu": {
     "defaultName": "User",
-    "dashboard": "Dashboard",
+    "dashboard": "My Papers",
     "settings": "Settings",
     "billing": "Plan & Billing",
     "analytics": "Usage Analytics",
@@ -193,8 +193,8 @@
     "feature1": "AI-powered citation & evidence tools",
     "feature2": "Verified citations from 8 academic databases",
     "feature3": "Multilingual writing in 17+ languages",
-    "createFirst": "Create Your First Document",
-    "goToDashboard": "Go to Dashboard"
+    "createFirst": "Create Your First Paper",
+    "goToDashboard": "Go to My Papers"
   },
   "faq": {
     "title": "Frequently Asked Questions",

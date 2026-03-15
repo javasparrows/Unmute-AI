@@ -108,7 +108,7 @@
     }
   },
   "header": {
-    "dashboard": "ダッシュボード",
+    "dashboard": "マイペーパー",
     "features": "機能",
     "pricing": "料金",
     "login": "ログイン",
@@ -124,19 +124,19 @@
     "guarantee": "14日間の返金保証。いつでもキャンセル可能。"
   },
   "dashboard": {
-    "myDocuments": "マイドキュメント",
+    "myDocuments": "マイペーパー",
     "createNew": "+ 新規作成",
     "creating": "作成中...",
-    "createError": "ドキュメントの作成に失敗しました",
+    "createError": "ペーパーの作成に失敗しました",
     "checkPlan": "プランを確認",
-    "noDocuments": "まだドキュメントがありません",
-    "noDocumentsHint": "「新規作成」をクリックして論文を書き始めましょう",
+    "noDocuments": "まだペーパーがありません",
+    "noDocumentsHint": "「新しい論文を始める」をクリックして論文を書き始めましょう",
     "updated": "更新:",
     "save": "保存",
     "cancel": "キャンセル",
     "rename": "名前を変更",
     "delete": "削除",
-    "confirmDelete": "このドキュメントを削除しますか？"
+    "confirmDelete": "このペーパーを削除しますか？"
   },
   "settings": {
     "title": "設定",
@@ -181,7 +181,7 @@
   },
   "userMenu": {
     "defaultName": "ユーザー",
-    "dashboard": "ダッシュボード",
+    "dashboard": "マイペーパー",
     "settings": "設定",
     "billing": "プラン・課金",
     "analytics": "利用分析",
@@ -193,8 +193,8 @@
     "feature1": "AI引用検索・エビデンスツール",
     "feature2": "8つの学術データベースから検証済み引用",
     "feature3": "17以上の言語で多言語執筆",
-    "createFirst": "最初のドキュメントを作成",
-    "goToDashboard": "ダッシュボードへ"
+    "createFirst": "最初のペーパーを作成",
+    "goToDashboard": "マイペーパーへ"
   },
   "faq": {
     "title": "よくある質問",

@@ -150,7 +150,7 @@ function DocumentCard({
 
   return (
     <Link
-      href={`/documents/${doc.id}`}
+      href={`/papers/${doc.id}`}
       className="group flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/50"
     >
       <div className="flex items-center gap-3 min-w-0">

@@ -13,6 +13,7 @@ import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { UserMenu } from "@/components/auth/user-menu";
+import { Badge } from "@/components/ui/badge";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { getGroupIndices } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
@@ -130,6 +131,17 @@ export function EditorPageClient({
     document.addEventListener("keydown", handleEvidenceShortcut);
     return () => document.removeEventListener("keydown", handleEvidenceShortcut);
   }, [toggleEvidencePanel]);
+
+  const [currentPhase, setCurrentPhase] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/v2/journey/${documentId}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.currentPhase) setCurrentPhase(data.currentPhase);
+      })
+      .catch(() => {});
+  }, [documentId]);
 
   const [displayTitle, setDisplayTitle] = useState(documentTitle);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -459,7 +471,7 @@ export function EditorPageClient({
                 </Button>
               </Link>
             </TooltipTrigger>
-            <TooltipContent>一覧に戻る</TooltipContent>
+            <TooltipContent>マイペーパー</TooltipContent>
           </Tooltip>
           {isEditingTitle ? (
             <input
@@ -478,6 +490,11 @@ export function EditorPageClient({
               <span className="truncate max-w-[40vw] sm:max-w-none">{displayTitle}</span>
               <Pencil className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover/title:opacity-50 transition-opacity" />
             </button>
+          )}
+          {currentPhase && (
+            <Badge variant="outline" className="text-xs shrink-0">
+              Phase {currentPhase}/7
+            </Badge>
           )}
           <TranslationStatus isTranslating={isSyncing} error={error} />
         </div>
@@ -549,7 +566,7 @@ export function EditorPageClient({
           />
           <Tooltip>
             <TooltipTrigger asChild>
-              <Link href={`/settings/preferences?returnTo=/documents/${documentId}`}>
+              <Link href={`/settings/preferences?returnTo=/papers/${documentId}`}>
                 <Button variant="ghost" size="sm">
                   <Settings className="h-4 w-4" />
                 </Button>
