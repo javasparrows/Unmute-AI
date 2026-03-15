@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { providers } from "@/lib/providers";
 import { generateCiteKey } from "@/lib/evidence/cite-key";
 import { generateBibTeXEntry, renderBibTeX } from "@/lib/evidence/bibtex";
+import { findOrCreateCanonicalPaper } from "@/lib/evidence/paper-ingest";
 import type { PaperCandidate } from "@/types/evidence";
 
 interface AcceptRequest {
@@ -40,10 +41,11 @@ export async function POST(request: Request) {
   // 1. Verify paper exists (DOI lookup)
   const doi = candidate.externalIds?.doi;
   let verified = false;
+  let crossrefData = null;
 
   if (doi) {
-    const crossrefResult = await providers.crossref.lookupByDoi!(doi);
-    if (crossrefResult) verified = true;
+    crossrefData = await providers.crossref.lookupByDoi!(doi);
+    if (crossrefData) verified = true;
   }
 
   if (!verified && candidate.externalIds?.pmid) {
@@ -60,46 +62,13 @@ export async function POST(request: Request) {
     );
   }
 
-  // 2. Create or find CanonicalPaper
-  let paper = doi
-    ? await prisma.canonicalPaper.findFirst({
-        where: {
-          identifiers: { some: { provider: "crossref", externalId: doi } },
-        },
-        include: { identifiers: true },
-      })
-    : null;
-
-  if (!paper) {
-    paper = await prisma.canonicalPaper.create({
-      data: {
-        title: candidate.title,
-        abstract: candidate.abstract,
-        authors: candidate.authors?.map((a) => ({ name: a.name })) ?? [],
-        year: candidate.year,
-        venue: candidate.venue,
-        citationCount: candidate.citationCount ?? 0,
-        influentialCount: candidate.influentialCitationCount ?? 0,
-        fieldsOfStudy: candidate.fieldsOfStudy ?? [],
-        identifiers: {
-          create: Object.entries(candidate.externalIds)
-            .filter(([, v]) => v)
-            .map(([provider, externalId]) => ({
-              provider:
-                provider === "doi"
-                  ? "crossref"
-                  : provider === "pmid"
-                    ? "pubmed"
-                    : provider === "arxiv_id"
-                      ? "arxiv"
-                      : provider,
-              externalId: externalId!,
-            })),
-        },
-      },
-      include: { identifiers: true },
-    });
-  }
+  // 2. Find or create CanonicalPaper (unified service)
+  const { paper } = await findOrCreateCanonicalPaper(candidate, {
+    enrichment: crossrefData,
+    providerSnapshot: crossrefData
+      ? { provider: "crossref", data: crossrefData }
+      : undefined,
+  });
 
   // 3. Generate cite key
   const existingCitations = await prisma.manuscriptCitation.findMany({
