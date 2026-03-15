@@ -21,6 +21,7 @@ export async function GET(request: Request) {
         select: {
           id: true,
           title: true,
+          authors: true,
           year: true,
           venue: true,
           citationCount: true,
