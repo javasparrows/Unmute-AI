@@ -122,6 +122,7 @@ model Document {
   evidenceMappings     EvidenceMapping[]
   paragraphAnalyses    ParagraphAnalysis[]
   journey              PaperJourney?
+  complianceReports    ComplianceReport[]
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
 
@@ -577,4 +578,23 @@ model TaskCompletion {
 
   @@unique([journeyId, taskId])
   @@index([journeyId])
+}
+
+// ===== Guideline Compliance System =====
+
+model ComplianceReport {
+  id              String   @id @default(cuid())
+  documentId      String
+  guidelineId     String                   // "CONSORT-AI" | "TRIPOD-AI" | "CLAIM" | "STARD-AI" | "GAMER"
+  results         Json                     // ComplianceResult[]
+  metCount        Int      @default(0)
+  totalCount      Int      @default(0)
+  score           Int?                     // 0-100 percentage
+
+  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([documentId])
+  @@index([documentId, guidelineId])
 }
