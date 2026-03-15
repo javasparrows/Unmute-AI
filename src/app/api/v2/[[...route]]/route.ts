@@ -4,6 +4,9 @@ import { errorHandler } from "@/server/middleware/error-handler";
 import { evidenceRoutes } from "@/server/routes/evidence";
 import { journeyRoutes } from "@/server/routes/journey";
 import { sessionRoutes } from "@/server/routes/sessions";
+import { adminRoutes } from "@/server/routes/admin";
+import { exportRoutes } from "@/server/routes/exports";
+import { miscRoutes, publicMiscRoutes } from "@/server/routes/misc";
 
 const app = new Hono().basePath("/api/v2");
 
@@ -14,6 +17,10 @@ app.onError(errorHandler);
 app.route("/evidence", evidenceRoutes);
 app.route("/journey", journeyRoutes);
 app.route("/sessions", sessionRoutes);
+app.route("/admin", adminRoutes);
+app.route("/export", exportRoutes);
+app.route("/", publicMiscRoutes);
+app.route("/", miscRoutes);
 
 // Health check
 app.get("/health", (c) =>
