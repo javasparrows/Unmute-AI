@@ -93,10 +93,22 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
     if (res.ok) setJourney(await res.json());
   };
 
-  if (loading || !journey) {
+  if (loading) {
     return (
-      <div className={cn("border-r bg-muted/10 flex items-center justify-center transition-all duration-200", collapsed ? "w-12" : "w-72", className)}>
-        {loading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+      <div className={cn("w-72 border-r bg-muted/10 flex items-center justify-center transition-all duration-200 shrink-0", className)}>
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!journey) {
+    return (
+      <div className={cn("w-72 border-r bg-muted/10 flex flex-col items-center justify-center p-4 text-center shrink-0", className)}>
+        <Sparkles className="h-8 w-8 text-muted-foreground/30 mb-3" />
+        <p className="text-xs text-muted-foreground mb-1">ジャーニーを読み込めませんでした</p>
+        <Button variant="outline" size="sm" className="text-xs" onClick={fetchJourney}>
+          再試行
+        </Button>
       </div>
     );
   }
