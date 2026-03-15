@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { searchAllProviders } from "@/lib/providers";
 import type {
   EvidenceDiscoverRequest,
@@ -85,10 +86,21 @@ Generate:
   // Deduplicate across all query results
   const uniqueCandidates = deduplicateByDoi(candidates);
 
+  const agentRun = await prisma.agentRun.create({
+    data: {
+      agentType: "discovery",
+      status: "completed",
+      input: { query, section, fieldHint } as any,
+      output: { candidateCount: uniqueCandidates.length, searchIntent: intent } as any,
+      startedAt: new Date(),
+      completedAt: new Date(),
+    },
+  });
+
   const response: EvidenceDiscoverResponse = {
     candidates: uniqueCandidates.slice(0, 50),
     searchIntent: intent,
-    agentRunId: "", // TODO: create AgentRun record
+    agentRunId: agentRun.id,
   };
 
   return Response.json(response);

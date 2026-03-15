@@ -98,7 +98,7 @@ export function EvidencePanel({ isOpen, onClose, documentId, draftText, onCiteIn
       <div className="flex-1 overflow-y-auto">
         {activeTab === "search" && <EvidenceSearch documentId={documentId} />}
         {activeTab === "library" && <EvidenceLibrary documentId={documentId} />}
-        {activeTab === "review" && <EvidenceReview documentId={documentId} />}
+        {activeTab === "review" && <EvidenceReview documentId={documentId} draftText={draftText} />}
         {activeTab === "autopilot" && (
           <CitationAutopilot
             documentId={documentId}

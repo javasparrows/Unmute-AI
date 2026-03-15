@@ -21,6 +21,7 @@ interface ReviewFinding {
 
 interface EvidenceReviewProps {
   documentId: string;
+  draftText: string;
 }
 
 const SEVERITY_ICON: Record<ReviewSeverity, React.ReactNode> = {
@@ -40,7 +41,7 @@ const SEVERITY_BADGE_VARIANT: Record<
 
 type Verdict = "PASS" | "BLOCKED" | "NEEDS_REVISION";
 
-export function EvidenceReview({ documentId }: EvidenceReviewProps) {
+export function EvidenceReview({ documentId, draftText }: EvidenceReviewProps) {
   const [isRunning, setIsRunning] = useState(false);
   const [findings, setFindings] = useState<ReviewFinding[]>([]);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
@@ -51,13 +52,12 @@ export function EvidenceReview({ documentId }: EvidenceReviewProps) {
     setVerdict(null);
 
     try {
-      // TODO: Get draft text from editor context
       const res = await fetch("/api/evidence/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           documentId,
-          draftText: "", // Will be connected to editor state
+          draftText,
           section: "INTRODUCTION",
         }),
       });
