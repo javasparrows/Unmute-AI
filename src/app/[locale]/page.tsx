@@ -46,6 +46,7 @@ export async function generateMetadata({
     languages[loc] =
       loc === routing.defaultLocale ? BASE_URL : `${BASE_URL}/${loc}`;
   }
+  languages["x-default"] = BASE_URL;
 
   const url =
     locale === routing.defaultLocale ? BASE_URL : `${BASE_URL}/${locale}`;
@@ -231,6 +232,7 @@ export default async function LandingPage() {
       <JsonLd data={howToSchema} />
       <SiteHeader />
 
+      <main>
       <article itemScope itemType="https://schema.org/WebApplication">
         <meta itemProp="name" content="Unmute AI" />
         <meta itemProp="applicationCategory" content="Academic Translation Tool" />
@@ -243,7 +245,7 @@ export default async function LandingPage() {
             <br />
             <span className="text-primary">{t("hero.title2")}</span>
           </h1>
-          <p className="mt-6 text-lg text-secondary-foreground/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-lg text-secondary-foreground/80 max-w-2xl mx-auto leading-relaxed">
             {t("hero.description")}
           </p>
           <div className="mt-10">
@@ -298,7 +300,7 @@ export default async function LandingPage() {
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl text-secondary-foreground">
               {t("howItWorks.title")}
             </h2>
-            <p className="mt-4 text-secondary-foreground/70 text-lg">
+            <p className="mt-4 text-secondary-foreground/80 text-lg">
               {t("howItWorks.subtitle")}
             </p>
           </div>
@@ -315,7 +317,7 @@ export default async function LandingPage() {
                 <h3 className="text-xl font-bold text-secondary-foreground mb-3">
                   {step.title}
                 </h3>
-                <p className="text-sm text-secondary-foreground/70 leading-relaxed">
+                <p className="text-sm text-secondary-foreground/80 leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -393,10 +395,10 @@ export default async function LandingPage() {
                   <tr key={key} className="border-b border-border/50">
                     <td className="py-3 pe-4">{t(`comparison.${key}`)}</td>
                     <td className="py-3 px-4 text-center text-green-600 dark:text-green-400">&#10003;</td>
-                    <td className="py-3 px-4 text-center text-muted-foreground/60">
+                    <td className="py-3 px-4 text-center text-muted-foreground">
                       {key === "feature1" || key === "feature6" ? "\u25B3" : "\u2717"}
                     </td>
-                    <td className="py-3 px-4 text-center text-muted-foreground/60">
+                    <td className="py-3 px-4 text-center text-muted-foreground">
                       {key === "feature1" ? "\u25B3" : key === "feature6" ? "\u2713" : "\u2717"}
                     </td>
                   </tr>
@@ -415,7 +417,7 @@ export default async function LandingPage() {
             <br />
             {t("cta.title2")}
           </h2>
-          <p className="mt-6 text-secondary-foreground/70 text-lg max-w-xl mx-auto">
+          <p className="mt-6 text-secondary-foreground/80 text-lg max-w-xl mx-auto">
             {t("cta.description")}
           </p>
           <div className="mt-10">
@@ -430,6 +432,7 @@ export default async function LandingPage() {
       </section>
 
       </article>
+      </main>
 
       {/* Footer */}
       <footer className="border-t py-8">
