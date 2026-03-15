@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { PaperCandidate, SectionType } from "@/types/evidence";
 import { AgentPipelineStatus, type PipelineStep } from "./agent-pipeline-status";
+import { citationStore } from "@/lib/citation-store";
 
 interface AnalyzedSentence {
   index: number;
@@ -303,6 +304,16 @@ export function CitationAutopilot({
           paperTitle: data.paperTitle,
           bibtex: data.bibtex,
         };
+
+        const currentCandidate = candidate;
+        citationStore.set(data.citeKey, {
+          citeKey: data.citeKey,
+          paperId: data.paperId,
+          title: data.paperTitle,
+          authors: currentCandidate.authors ?? [],
+          year: currentCandidate.year,
+          venue: currentCandidate.venue,
+        });
 
         setAcceptedCitations((prev) => [...prev, citation]);
         onCiteInsert?.(data.sentenceIndex, data.citeCommand);

@@ -10,6 +10,7 @@ import {
   getSentenceIndexAtPosition,
 } from "@/extensions/highlight-sentence";
 import type { SentenceRange } from "@/extensions/highlight-sentence";
+import { CitationHighlight } from "@/extensions/citation-highlight";
 import { textToDoc, textsAreDifferent } from "@/lib/tiptap-utils";
 
 interface TipTapEditorProps {
@@ -48,7 +49,7 @@ export function TipTapEditor({
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [PlainTextOnly, HighlightSentence],
+    extensions: [PlainTextOnly, HighlightSentence, CitationHighlight],
     content: textToDoc(content),
     editorProps: {
       attributes: {
