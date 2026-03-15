@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { PaperCandidate } from "@/types/evidence";
+import { citationStore } from "@/lib/citation-store";
 
 interface PaperCardProps {
   paper: PaperCandidate;
@@ -56,6 +57,17 @@ export function PaperCard({ paper, documentId }: PaperCardProps) {
         }),
       });
       if (res.ok) {
+        const data = await res.json();
+        if (data.citeKey) {
+          citationStore.set(data.citeKey, {
+            citeKey: data.citeKey,
+            paperId: data.paperId,
+            title: data.paperTitle ?? paper.title,
+            authors: paper.authors?.map((a) => ({ name: a.name })) ?? [],
+            year: paper.year,
+            venue: paper.venue,
+          });
+        }
         setAddedToLibrary(true);
       }
     } catch {
