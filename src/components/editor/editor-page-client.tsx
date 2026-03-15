@@ -23,7 +23,7 @@ import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
 
 import { renameDocument } from "@/app/actions/document";
-import { JourneyNav } from "./journey-nav";
+import { JourneySidebar } from "@/components/journey/journey-sidebar";
 import type { TaskDefinition } from "@/lib/journey/task-registry";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { ExportDialog } from "./export-dialog";
@@ -435,7 +435,16 @@ export function EditorPageClient({
   );
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex h-screen">
+      {/* Journey Sidebar */}
+      <JourneySidebar
+        documentId={documentId}
+        onTaskClick={handleJourneyTaskClick}
+        className="h-full"
+      />
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1 min-w-0">
       {/* Header */}
       <header className="flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 bg-secondary text-secondary-foreground shadow-md gap-2">
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
@@ -598,7 +607,6 @@ export function EditorPageClient({
 
       {/* Workflow tabs */}
       <WorkflowTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      <JourneyNav documentId={documentId} onTaskClick={handleJourneyTaskClick} />
       <SectionRail sections={sections} activeSection={activeSection} onSectionClick={setActiveSection} />
 
       {/* Write tab: Editor panels with sync buttons */}
@@ -725,6 +733,7 @@ export function EditorPageClient({
         citationCount={citationCount}
         hasContent={rightText.trim().length > 0}
       />
+      </div>{/* End main content wrapper */}
     </div>
   );
 }
