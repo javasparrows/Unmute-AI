@@ -1,49 +1,20 @@
 "use client";
 
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { createDocument } from "@/app/actions/document";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { StartPaperDialog } from "./start-paper-dialog";
 
 export function CreateDocumentButton() {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const t = useTranslations("dashboard");
-
-  const handleCreate = () => {
-    startTransition(async () => {
-      try {
-        const doc = await createDocument();
-        router.push(`/documents/${doc.id}`);
-      } catch (err) {
-        const message = err instanceof Error ? err.message : t("createError");
-        toast.error(message, {
-          action: {
-            label: t("checkPlan"),
-            onClick: () => router.push("/pricing"),
-          },
-        });
-      }
-    });
-  };
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <button
-      type="button"
-      onClick={handleCreate}
-      disabled={isPending}
-      className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 disabled:opacity-50"
-    >
-      {isPending ? (
-        <span className="flex items-center gap-2">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          {t("creating")}
-        </span>
-      ) : (
-        t("createNew")
-      )}
-    </button>
+    <>
+      <Button onClick={() => setDialogOpen(true)} className="gap-1.5">
+        <Plus className="h-4 w-4" />
+        新しい論文を始める
+      </Button>
+      <StartPaperDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+    </>
   );
 }
