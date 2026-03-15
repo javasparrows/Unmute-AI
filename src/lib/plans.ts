@@ -5,6 +5,7 @@ export interface PlanLimits {
   maxDocuments: number; // -1 = unlimited
   maxVersionsPerDoc: number; // -1 = unlimited
   structureChecksPerMonth: number; // -1 = unlimited
+  citationSearchesPerMonth: number; // -1 = unlimited
   allowedJournalIds: string[] | "all";
 }
 
@@ -30,12 +31,13 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: 3,
       maxVersionsPerDoc: 5,
       structureChecksPerMonth: 3,
+      citationSearchesPerMonth: 5,
       allowedJournalIds: ["general"],
     },
     features: [
       "月10,000文字のAI執筆支援",
       "最大3ドキュメント",
-      "バージョン5個/ドキュメント",
+      "月5回の引用検索",
       "Gemini 2.5 Flash",
       "General Academicスタイル",
       "月3回の構成チェック",
@@ -52,6 +54,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: 20,
       maxVersionsPerDoc: 50,
       structureChecksPerMonth: 30,
+      citationSearchesPerMonth: -1,
       allowedJournalIds: "all",
     },
     features: [
@@ -74,6 +77,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
       maxDocuments: -1,
       maxVersionsPerDoc: -1,
       structureChecksPerMonth: -1,
+      citationSearchesPerMonth: -1,
       allowedJournalIds: "all",
     },
     features: [
