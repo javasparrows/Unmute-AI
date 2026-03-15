@@ -7,6 +7,7 @@ import { sessionRoutes } from "@/server/routes/sessions";
 import { adminRoutes } from "@/server/routes/admin";
 import { exportRoutes } from "@/server/routes/exports";
 import { miscRoutes, publicMiscRoutes } from "@/server/routes/misc";
+import { submissionRoutes } from "@/server/routes/submission";
 
 const app = new Hono().basePath("/api/v2");
 
@@ -19,6 +20,7 @@ app.route("/journey", journeyRoutes);
 app.route("/sessions", sessionRoutes);
 app.route("/admin", adminRoutes);
 app.route("/export", exportRoutes);
+app.route("/submission", submissionRoutes);
 app.route("/", publicMiscRoutes);
 app.route("/", miscRoutes);
 
