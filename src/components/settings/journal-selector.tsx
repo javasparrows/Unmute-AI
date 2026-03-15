@@ -27,7 +27,7 @@ export function JournalSelector({
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px] h-8 text-sm">
+      <SelectTrigger className="w-[120px] sm:w-[180px] h-8 text-sm">
         <SelectValue placeholder="ジャーナル選択" />
       </SelectTrigger>
       <SelectContent>

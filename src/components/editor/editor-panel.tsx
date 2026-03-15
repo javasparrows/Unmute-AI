@@ -29,7 +29,7 @@ export function EditorPanel({
   containerRef,
 }: EditorPanelProps) {
   return (
-    <div className="flex flex-col flex-1 min-w-0 bg-card">
+    <div className="flex flex-col flex-1 min-w-0 min-h-0 bg-card">
       <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-accent-foreground bg-accent/60">
         {label}
       </div>

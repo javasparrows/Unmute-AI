@@ -2,7 +2,7 @@
 
 import { useRef, useCallback, useMemo, useState, useEffect, useTransition } from "react";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowLeftIcon, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
@@ -403,15 +403,15 @@ export function EditorPageClient({
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 bg-secondary text-secondary-foreground shadow-md gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
           <Link href="/dashboard" className="text-sm font-serif font-bold tracking-tight hover:opacity-80 transition-opacity hidden sm:inline">
             Unmute AI
           </Link>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/dashboard">
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
                   <ArrowLeftIcon className="h-4 w-4" />
                 </Button>
               </Link>
@@ -425,20 +425,20 @@ export function EditorPageClient({
               onChange={(e) => setEditTitle(e.target.value)}
               onBlur={handleSaveTitle}
               onKeyDown={handleTitleKeyDown}
-              className="text-lg font-semibold tracking-tight bg-transparent border-b border-secondary-foreground/40 outline-none px-1 min-w-[120px] text-secondary-foreground"
+              className="text-base sm:text-lg font-semibold tracking-tight bg-transparent border-b border-secondary-foreground/40 outline-none px-1 min-w-[80px] max-w-[40vw] sm:max-w-none text-secondary-foreground"
             />
           ) : (
             <button
               onClick={handleStartTitleEdit}
-              className="group/title flex items-center gap-1 text-lg font-semibold tracking-tight hover:opacity-70 transition-opacity cursor-text"
+              className="group/title flex items-center gap-1 text-base sm:text-lg font-semibold tracking-tight hover:opacity-70 transition-opacity cursor-text min-w-0"
             >
-              {displayTitle}
-              <Pencil className="h-3.5 w-3.5 opacity-0 group-hover/title:opacity-50 transition-opacity" />
+              <span className="truncate max-w-[40vw] sm:max-w-none">{displayTitle}</span>
+              <Pencil className="h-3.5 w-3.5 shrink-0 opacity-0 group-hover/title:opacity-50 transition-opacity" />
             </button>
           )}
           <TranslationStatus isTranslating={isSyncing} error={error} />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -501,7 +501,7 @@ export function EditorPageClient({
           </Tooltip>
           {user && (
             <>
-              <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
+              <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20 hidden sm:block" />
               <UserMenu user={user} role={user.role} />
             </>
           )}
@@ -509,7 +509,7 @@ export function EditorPageClient({
       </header>
 
       {/* Language bar */}
-      <div className="flex items-center justify-center gap-3 px-6 py-2 bg-card shadow-sm">
+      <div className="flex items-center justify-center gap-2 sm:gap-3 px-3 sm:px-6 py-2 bg-card shadow-sm flex-wrap">
         <LanguageSelector value={leftLang} onChange={handleLeftLangChange} />
         <Tooltip>
           <TooltipTrigger asChild>
@@ -517,7 +517,7 @@ export function EditorPageClient({
               variant="ghost"
               size="sm"
               onClick={handleSwapLanguages}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground px-1.5 sm:px-3"
             >
               ⇄
             </Button>
@@ -525,13 +525,13 @@ export function EditorPageClient({
           <TooltipContent>言語を入れ替え</TooltipContent>
         </Tooltip>
         <LanguageSelector value={rightLang} onChange={handleRightLangChange} />
-        <Separator orientation="vertical" className="h-6" />
+        <Separator orientation="vertical" className="h-6 hidden sm:block" />
         <JournalSelector
           value={journal}
           onChange={setJournal}
           allowedJournalIds={planLimits?.allowedJournalIds}
         />
-        <Separator orientation="vertical" className="h-6" />
+        <Separator orientation="vertical" className="h-6 hidden sm:block" />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -548,7 +548,7 @@ export function EditorPageClient({
       </div>
 
       {/* Editor panels with sync buttons */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-col md:flex-row flex-1 min-h-0">
         <EditorPanel
           label="原文"
           content={leftText}
@@ -562,8 +562,8 @@ export function EditorPageClient({
           containerRef={setLeftEditorRef}
         />
 
-        {/* Sync buttons column */}
-        <div className="flex flex-col items-center justify-center gap-3 px-2 bg-muted/30 border-x">
+        {/* Sync buttons - horizontal on mobile, vertical on desktop */}
+        <div className="flex flex-row md:flex-col items-center justify-center gap-3 px-2 py-2 md:py-0 bg-muted/30 border-y md:border-y-0 md:border-x">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -576,7 +576,10 @@ export function EditorPageClient({
                 {syncingDirection === "left" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight className="h-4 w-4 hidden md:block" />
+                )}
+                {syncingDirection !== "left" && (
+                  <ArrowDown className="h-4 w-4 md:hidden" />
                 )}
               </Button>
             </TooltipTrigger>
@@ -596,7 +599,10 @@ export function EditorPageClient({
                 {syncingDirection === "right" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <ArrowLeft className="h-4 w-4" />
+                  <ArrowLeft className="h-4 w-4 hidden md:block" />
+                )}
+                {syncingDirection !== "right" && (
+                  <ArrowUp className="h-4 w-4 md:hidden" />
                 )}
               </Button>
             </TooltipTrigger>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { ListChecks } from "lucide-react";
 import type { LanguageCode, StructureCheckResult } from "@/types";
 import { ParagraphFeedbackComponent } from "./paragraph-feedback";
 import {
@@ -13,6 +14,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface StructureCheckDialogProps {
@@ -82,16 +88,22 @@ export function StructureCheckDialog({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground"
-          disabled={!hasText}
-        >
-          構成チェック
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground gap-1.5"
+              disabled={!hasText}
+            >
+              <ListChecks className="h-4 w-4" />
+              <span className="hidden sm:inline">構成チェック</span>
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>構成チェック</TooltipContent>
+      </Tooltip>
       <DialogContent className="max-w-2xl max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>論理構成チェック</DialogTitle>

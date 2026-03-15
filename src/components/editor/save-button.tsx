@@ -82,7 +82,7 @@ export function SaveButton({
           ) : (
             <Save className="h-4 w-4" />
           )}
-          保存
+          <span className="hidden sm:inline">保存</span>
         </Button>
       </TooltipTrigger>
       <TooltipContent>新しいバージョンとして保存</TooltipContent>

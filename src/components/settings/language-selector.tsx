@@ -16,10 +16,13 @@ interface LanguageSelectorProps {
 }
 
 export function LanguageSelector({ value, onChange }: LanguageSelectorProps) {
+  const selected = languages.find((l) => l.code === value);
   return (
     <Select value={value} onValueChange={(v) => onChange(v as LanguageCode)}>
-      <SelectTrigger className="w-[140px] h-8 text-sm">
-        <SelectValue />
+      <SelectTrigger className="w-[80px] sm:w-[140px] h-8 text-sm">
+        {/* Show short code on mobile, full native name on desktop */}
+        <span className="sm:hidden truncate">{selected?.code.toUpperCase() ?? value}</span>
+        <span className="hidden sm:inline"><SelectValue /></span>
       </SelectTrigger>
       <SelectContent>
         {languages.map((lang) => (
