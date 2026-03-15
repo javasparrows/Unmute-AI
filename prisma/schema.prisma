@@ -139,6 +139,7 @@ model DocumentVersion {
   leftRanges          Json?
   rightRanges         Json?
   sentenceAlignments  Json?
+  sections            Json?             // DocumentSectionMeta: section boundaries
   createdAt           DateTime @default(now())
 
   @@unique([documentId, versionNumber])

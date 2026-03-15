@@ -39,6 +39,7 @@ interface InitialVersion {
   leftRanges: { from: number; to: number }[] | null;
   rightRanges: { from: number; to: number }[] | null;
   sentenceAlignments: AlignmentGroup[] | null;
+  sections: Record<string, unknown> | null;
 }
 
 interface PlanLimitsProps {
