@@ -1,14 +1,14 @@
 {
   "metadata": {
     "landing": {
-      "title": "Unmute AI - AI Academic Translation for Researchers",
-      "description": "Write papers in your native language, publish in any language. AI-powered academic translation with journal style formatting, LaTeX support, and IMRAD structure checking.",
-      "ogTitle": "Unmute AI | AI Academic Translation Tool",
-      "ogDescription": "Focus on the research. We handle the language. Journal-aware, LaTeX-compatible AI translation for academic papers."
+      "title": "Unmute AI - AI Paper Writing Platform for Researchers",
+      "description": "AI-powered academic paper writing platform with citation management, evidence-grounded drafting, multilingual support in 17+ languages, journal style formatting, and LaTeX preservation.",
+      "ogTitle": "Unmute AI | AI Paper Writing Platform",
+      "ogDescription": "Focus on the research. We handle the rest. Citation management, evidence-grounded writing, and multilingual support for academic papers."
     },
     "pricing": {
       "title": "Pricing Plans",
-      "description": "Unmute AI pricing plans. Choose from Free, Pro, or Max plans starting at 980 JPY/month for AI-powered academic translation.",
+      "description": "Unmute AI pricing plans. Choose from Free, Pro, or Max plans starting at 980 JPY/month for AI-powered academic paper writing.",
       "ogTitle": "Pricing | Unmute AI",
       "ogDescription": "AI academic translation tool pricing. Start free, upgrade when you need more."
     },
@@ -32,24 +32,24 @@
   "landing": {
     "hero": {
       "title1": "Focus on the research.",
-      "title2": "We handle the language.",
-      "description": "AI-powered academic translation that understands journal styles, paper structure, and your intent. Write in your language, publish in any.",
+      "title2": "We handle the rest.",
+      "description": "AI-powered paper writing that understands citations, journal styles, and your intent. Write with evidence, publish with confidence.",
       "cta": "Start Writing for Free"
     },
     "problem": {
-      "title1": "Don't let the language barrier",
-      "title2": "slow your intellect.",
-      "description": "Non-native English speakers face systemic barriers in academic publishing. Up to 40% of research time is spent wrestling with language instead of advancing science."
+      "title1": "Don't let the writing process",
+      "title2": "slow your research.",
+      "description": "Researchers spend a median of 177 hours per paper, juggling fragmented tools for writing, citations, and formatting. Up to 40% of time is spent on non-research tasks."
     },
     "howItWorks": {
       "title": "How It Works",
       "subtitle": "From draft to submission in three steps.",
       "step1Title": "Draft Freely",
-      "step1Description": "Write your paper in any language you think in. No mental translation required.",
-      "step2Title": "Structure Instantly",
-      "step2Description": "AI translates and adapts to your target journal's style in real time, sentence by sentence.",
+      "step1Description": "Write your paper in any language. AI assists with citations and evidence as you write.",
+      "step2Title": "Cite & Verify",
+      "step2Description": "Auto-Pilot suggests citations sentence by sentence. Every reference is DOI/PMID verified.",
       "step3Title": "Refine & Submit",
-      "step3Description": "Edit in either language. Polish your manuscript and submit with confidence."
+      "step3Description": "Structure check, adversarial review, and export to LaTeX/Word. Submit with confidence."
     },
     "features": {
       "sectionTitle": "Built for researchers, by researchers.",
@@ -59,18 +59,18 @@
       "zeroCognitiveLoadDescription": "Think in your language, publish in any. No more context-switching between writing and translating.",
       "securityPrivacyTitle": "Security & Privacy",
       "securityPrivacyDescription": "Your research stays yours. Transparent API usage, no data retention, full cost visibility.",
-      "realtimeTranslationTitle": "Real-time Bidirectional Translation",
-      "realtimeTranslationDescription": "Edit source and translation side by side. Changes sync instantly with sentence-level precision.",
+      "realtimeTranslationTitle": "Multilingual Writing",
+      "realtimeTranslationDescription": "Think in your language, write in any. Bidirectional editing with real-time sync.",
       "journalStylingTitle": "Journal-Specific Styling",
       "journalStylingDescription": "Choose from 8 academic journal styles. Your translation matches the target publication's conventions.",
-      "latexAwareTitle": "LaTeX-Aware Translation",
-      "latexAwareDescription": "Preserves \\cite{}, \\ref{}, equations, and all LaTeX commands intact. Your markup stays untouched.",
+      "latexAwareTitle": "LaTeX-Aware Editing",
+      "latexAwareDescription": "Preserves \\cite{}, \\ref{}, equations, and all LaTeX commands intact during editing. Your markup stays untouched.",
       "structureCheckTitle": "AI Paper Structure Check",
       "structureCheckDescription": "Automatic IMRAD structure validation. Catch missing sections before submission.",
       "versionControlTitle": "Version Control",
-      "versionControlDescription": "Save and restore versions of your translation. Never lose progress on a revision.",
+      "versionControlDescription": "Save and restore versions of your manuscript. Never lose progress on a revision.",
       "costTrackingTitle": "Transparent Cost Tracking",
-      "costTrackingDescription": "See exactly what each translation costs in real time. No surprise bills."
+      "costTrackingDescription": "See exactly what each operation costs in real time. No surprise bills."
     },
     "cta": {
       "title1": "Evaluated by merit,",
@@ -92,7 +92,7 @@
       "unmute": "Unmute AI",
       "chatgpt": "ChatGPT",
       "deepl": "DeepL",
-      "feature1": "Academic Translation Specialized",
+      "feature1": "Academic Paper Writing Specialized",
       "feature2": "Journal Style Formatting",
       "feature3": "LaTeX Preservation",
       "feature4": "IMRAD Structure Check",
@@ -115,7 +115,7 @@
     "getStarted": "Get Started"
   },
   "login": {
-    "tagline": "Focus on the research. We handle the language.",
+    "tagline": "Focus on the research. We handle the rest.",
     "continueWithGoogle": "Continue with Google"
   },
   "pricing": {
@@ -130,7 +130,7 @@
     "createError": "Failed to create document",
     "checkPlan": "Check plan",
     "noDocuments": "No documents yet",
-    "noDocumentsHint": "Click \"+ New Document\" to start translating",
+    "noDocumentsHint": "Click \"+ New Document\" to start writing",
     "updated": "Updated:",
     "save": "Save",
     "cancel": "Cancel",
@@ -143,7 +143,7 @@
     "description": "Manage your account and application settings",
     "nav": {
       "profile": "Profile",
-      "preferences": "Translation Settings",
+      "preferences": "Editor Settings",
       "billing": "Plan & Billing",
       "analytics": "Usage Analytics"
     }
@@ -190,9 +190,9 @@
   "welcome": {
     "title": "Welcome to Unmute AI!",
     "subtitle": "Your research deserves to be heard worldwide. We're here to help you write with clarity and confidence.",
-    "feature1": "AI-powered academic translation",
-    "feature2": "Support for 17+ languages",
-    "feature3": "Maintain your original voice and style",
+    "feature1": "AI-powered citation & evidence tools",
+    "feature2": "Verified citations from 8 academic databases",
+    "feature3": "Multilingual writing in 17+ languages",
     "createFirst": "Create Your First Document",
     "goToDashboard": "Go to Dashboard"
   },
@@ -202,11 +202,11 @@
     "items": [
       {
         "question": "What is Unmute AI?",
-        "answer": "Unmute AI is an AI-powered academic translation tool that helps researchers write papers in their native language and publish in any language. It offers journal-specific style formatting, LaTeX preservation, IMRAD structure checking, and automatic citation search and insertion."
+        "answer": "Unmute AI is an AI-powered academic paper writing platform that helps researchers write better papers faster. It offers automatic citation search and insertion (Citation Auto-Pilot), evidence-grounded AI drafting, multilingual writing in 17+ languages, journal-specific style formatting, LaTeX preservation, and IMRAD structure checking."
       },
       {
         "question": "Can AI be used for academic paper writing?",
-        "answer": "Yes. Unmute AI specializes in translation and citation management for academic papers. Unlike general-purpose AI like ChatGPT, it understands academic conventions and supports journal-specific styles. However, researchers should always review and verify AI-generated content."
+        "answer": "Yes. Unmute AI is purpose-built for academic paper writing, offering citation management, evidence-grounded drafting, and journal-specific formatting. Unlike general-purpose AI like ChatGPT, it understands academic conventions and verifies every citation. However, researchers should always review and verify AI-generated content."
       },
       {
         "question": "How is Unmute AI different from ChatGPT?",
