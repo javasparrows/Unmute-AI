@@ -1,6 +1,7 @@
 "use client";
 
 import { FlowAnalysisPanel } from "./flow-analysis-panel";
+import { CompliancePanel } from "./compliance-panel";
 
 interface ReviewViewProps {
   documentId: string;
@@ -16,6 +17,8 @@ export function ReviewView({ documentId, text, sectionType }: ReviewViewProps) {
         text={text}
         sectionType={sectionType}
       />
+      <div className="border-t my-4" />
+      <CompliancePanel documentId={documentId} text={text} />
     </div>
   );
 }
