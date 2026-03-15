@@ -1,0 +1,133 @@
+# Unmute AI - Detailed Product Information
+
+> AI-powered academic translation SaaS for researchers worldwide.
+> Write papers in your native language, publish in any language.
+
+## Product Overview
+
+Unmute AI addresses a critical problem in academic publishing: non-native English speaking researchers spend up to 40% of their research time struggling with language rather than advancing science. Unmute AI eliminates this barrier by providing AI-powered translation that understands academic conventions, journal styles, and research terminology.
+
+Unlike general-purpose translation tools (Google Translate, DeepL) or general AI assistants (ChatGPT), Unmute AI is purpose-built for academic paper translation with features like journal style formatting, LaTeX preservation, and IMRAD structure validation.
+
+## Detailed Features
+
+### 1. Real-time Bidirectional Translation
+Write in your native language on the left panel, see the translation update in real-time on the right. Edit in either language - changes sync at the sentence level.
+
+### 2. Journal Style Formatting
+Choose from 8 academic journal styles. The AI adapts:
+- Citation formatting
+- Section heading conventions
+- Tone and voice (passive vs. active)
+- Terminology preferences
+- Abbreviation standards
+
+### 3. LaTeX-Aware Translation
+Academic papers often use LaTeX. Unmute AI preserves:
+- \cite{} and \ref{} commands
+- Mathematical equations
+- All LaTeX markup and commands
+- Table and figure environments
+
+### 4. IMRAD Structure Checking
+AI validates your paper structure against the IMRAD standard:
+- Introduction
+- Methods
+- Results
+- And Discussion
+Identifies missing or weak sections before journal submission.
+
+### 5. Citation Auto-Pilot
+Sentence-by-sentence citation suggestion with one-click insertion. Evidence-grounded writing with verified citations (DOI/PMID verified).
+
+### 6. Version Control
+Save and restore translation versions. Track revision progress across multiple editing sessions.
+
+### 7. Transparent Cost Tracking
+See the cost of each translation in real-time. No surprise bills.
+
+## Technology
+
+- AI Model: Google Gemini 2.5 Flash
+- Hosting: Vercel (Tokyo region, hnd1)
+- Database: Neon (PostgreSQL)
+- Payments: Stripe
+- Authentication: Google OAuth
+
+## Supported Languages (17)
+
+| Language | Code | Script Direction |
+|----------|------|-----------------|
+| Japanese | ja | LTR |
+| English | en | LTR |
+| Chinese (Simplified) | zh-CN | LTR |
+| Chinese (Traditional) | zh-TW | LTR |
+| Korean | ko | LTR |
+| German | de | LTR |
+| French | fr | LTR |
+| Spanish | es | LTR |
+| Portuguese (Brazilian) | pt-BR | LTR |
+| Russian | ru | LTR |
+| Italian | it | LTR |
+| Hindi | hi | LTR |
+| Turkish | tr | LTR |
+| Arabic | ar | RTL |
+| Indonesian | id | LTR |
+| Polish | pl | LTR |
+| Persian | fa | RTL |
+
+## Pricing Details
+
+### Free Plan (0 JPY/month)
+- 10,000 characters/month translation
+- 3 documents maximum
+- 5 versions per document
+- General Academic style only
+- 3 structure checks/month
+- Gemini 2.5 Flash
+
+### Pro Plan (980 JPY/month, ~$6.50 USD)
+- 100,000 characters/month translation
+- 20 documents maximum
+- 50 versions per document
+- All 8 journal styles
+- 30 structure checks/month
+- Gemini 2.5 Flash
+
+### Max Plan (2,980 JPY/month, ~$20 USD)
+- Unlimited translation
+- Unlimited documents
+- Unlimited versions
+- All 8 journal styles
+- Unlimited structure checks
+- Gemini 2.5 Flash
+
+## Comparison with Alternatives
+
+### Unmute AI vs. ChatGPT for Paper Writing
+- ChatGPT: General-purpose, no journal style awareness, no LaTeX preservation, no structure checking
+- Unmute AI: Purpose-built for academic papers, journal-specific formatting, LaTeX-aware, IMRAD validation
+
+### Unmute AI vs. DeepL
+- DeepL: General translation, no academic specialization, no document management
+- Unmute AI: Academic-specialized, journal style formatting, bidirectional editing, version control
+
+### Unmute AI vs. Grammarly
+- Grammarly: English editing/proofreading only, no translation
+- Unmute AI: Full translation between 17 languages with academic awareness
+
+## Company
+
+- Product: Unmute AI
+- Domain: unmute-ai.com
+- Contact: support@unmute-ai.com
+- Region: Japan (primary market)
+- Jurisdiction: Japanese law, Sendai District Court
+
+## Links
+
+- Website: https://unmute-ai.com
+- Pricing: https://unmute-ai.com/pricing
+- Terms of Service: https://unmute-ai.com/terms
+- Privacy Policy: https://unmute-ai.com/privacy
+- Specified Commercial Transactions Act: https://unmute-ai.com/legal/tokushoho

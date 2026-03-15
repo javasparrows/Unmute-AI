@@ -74,6 +74,28 @@
       "description": "Great research happens everywhere. We believe the world's best ideas deserve an equal voice, regardless of the language they were born in.",
       "button": "Try Unmute AI Today"
     },
+    "stats": {
+      "stat1Value": "17",
+      "stat1Label": "Languages Supported",
+      "stat2Value": "8",
+      "stat2Label": "Journal Styles",
+      "stat3Value": "40%",
+      "stat3Label": "of research time spent on language by non-native speakers"
+    },
+    "comparison": {
+      "title": "Academic Writing AI Comparison",
+      "subtitle": "How Unmute AI differs from ChatGPT and DeepL",
+      "unmute": "Unmute AI",
+      "chatgpt": "ChatGPT",
+      "deepl": "DeepL",
+      "feature1": "Academic Translation Specialized",
+      "feature2": "Journal Style Formatting",
+      "feature3": "LaTeX Preservation",
+      "feature4": "IMRAD Structure Check",
+      "feature5": "Auto Citation Search & Insert",
+      "feature6": "Bidirectional Real-time Editing",
+      "feature7": "Version Control"
+    },
     "footer": {
       "pricing": "Pricing",
       "terms": "Terms",
