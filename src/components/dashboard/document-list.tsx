@@ -19,6 +19,11 @@ interface DocumentItem {
   updatedAt: Date;
   versions: { versionNumber: number; sourceLang: string; targetLang: string; journal: string | null }[];
   _count: { manuscriptCitations: number };
+  journey: {
+    currentPhase: number;
+    currentTask: string;
+    taskStatuses: unknown;
+  } | null;
 }
 
 interface DocumentListProps {
@@ -175,6 +180,11 @@ function DocumentCard({
               {doc._count.manuscriptCitations > 0 && (
                 <Badge variant="secondary" className="text-xs">
                   {doc._count.manuscriptCitations} 引用
+                </Badge>
+              )}
+              {doc.journey && (
+                <Badge variant="outline" className="text-xs">
+                  Phase {doc.journey.currentPhase}: タスク {doc.journey.currentTask}
                 </Badge>
               )}
             </div>

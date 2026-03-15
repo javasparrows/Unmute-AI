@@ -121,6 +121,7 @@ model Document {
   reviewFindings       ReviewFinding[]
   evidenceMappings     EvidenceMapping[]
   paragraphAnalyses    ParagraphAnalysis[]
+  journey              PaperJourney?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
 
@@ -536,4 +537,44 @@ model ParagraphAnalysis {
 
   @@index([documentId])
   @@index([documentId, sectionType])
+}
+
+// ===== Guided Workflow System =====
+
+model PaperJourney {
+  id              String   @id @default(cuid())
+  documentId      String   @unique
+  currentPhase    Int      @default(1)
+  currentTask     String   @default("1.1")
+  phaseStatuses   Json     @default("{}")  // { "1": "in_progress", "2": "not_started", ... }
+  taskStatuses    Json     @default("{}")  // { "1.1": "completed", "1.2": "in_progress", ... }
+  guideVisible    Boolean  @default(true)
+
+  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  taskCompletions TaskCompletion[]
+
+  startedAt       DateTime @default(now())
+  lastActivityAt  DateTime @default(now()) @updatedAt
+
+  @@index([documentId])
+}
+
+model TaskCompletion {
+  id              String   @id @default(cuid())
+  journeyId       String
+  taskId          String   // e.g., "2.1"
+  status          String   @default("not_started") // not_started | in_progress | completed | skipped
+  autoCompleted   Boolean  @default(false)
+  completedAt     DateTime?
+  skippedReason   String?
+  metadata        Json?    // snapshot at completion time
+
+  journey         PaperJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([journeyId, taskId])
+  @@index([journeyId])
 }

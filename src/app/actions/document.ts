@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getUserPlanById } from "@/lib/user-plan";
 import { checkDocumentLimit } from "@/app/actions/usage";
+import { createJourney } from "@/lib/journey/auto-complete";
 
 async function getUserId(): Promise<string> {
   const session = await auth();
@@ -30,6 +31,13 @@ export async function getDocuments() {
       _count: {
         select: {
           manuscriptCitations: true,
+        },
+      },
+      journey: {
+        select: {
+          currentPhase: true,
+          currentTask: true,
+          taskStatuses: true,
         },
       },
     },
@@ -73,6 +81,10 @@ export async function createDocument(options?: CreateDocumentOptions): Promise<{
       },
     },
   });
+
+  // Initialize guided workflow journey for the new document
+  await createJourney(doc.id);
+
   return { id: doc.id };
 }
 
