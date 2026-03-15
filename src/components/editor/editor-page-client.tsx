@@ -16,6 +16,8 @@ import { UserMenu } from "@/components/auth/user-menu";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { getGroupIndices } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
+import { CoverageBar } from "./coverage-bar";
+import { ParagraphActions } from "./paragraph-actions";
 import { TranslationStatus } from "./translation-status";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
@@ -86,7 +88,9 @@ export function EditorPageClient({
 
   const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(() => {
     if (typeof window === "undefined") return false;
-    return localStorage.getItem("unmute:evidence-panel-open") === "true";
+    const stored = localStorage.getItem("unmute:evidence-panel-open");
+    if (stored !== null) return stored === "true";
+    return (initialVersion?.translatedText?.trim().length ?? 0) > 0;
   });
 
   const [activeTab, setActiveTab] = useState<WorkflowTab>("write");
@@ -96,6 +100,11 @@ export function EditorPageClient({
     () => normalizeSections(initialVersion?.sections ?? null, rightText),
     [initialVersion?.sections, rightText],
   );
+
+  const citationCount = useMemo(() => {
+    const matches = rightText.match(/\\cite\{[^}]+\}/g);
+    return matches?.length ?? 0;
+  }, [rightText]);
 
   const toggleEvidencePanel = useCallback(() => {
     setIsEvidencePanelOpen((prev) => {
@@ -567,6 +576,8 @@ export function EditorPageClient({
 
       {/* Write tab: Editor panels with sync buttons */}
       {activeTab === "write" && (
+        <>
+        <CoverageBar citationCount={citationCount} onOpenEvidence={() => setIsEvidencePanelOpen(true)} />
         <div className="flex flex-col md:flex-row flex-1 min-h-0">
           <EditorPanel
             label="下書き"
@@ -641,6 +652,13 @@ export function EditorPageClient({
             sentenceRanges={translatedSentenceRanges}
             placeholder="原稿がここに表示されます..."
             containerRef={setRightEditorRef}
+            actions={
+              <ParagraphActions
+                onFindCitations={() => setIsEvidencePanelOpen(true)}
+                onCheckEvidence={() => setIsEvidencePanelOpen(true)}
+                onDraftWithAI={() => setIsEvidencePanelOpen(true)}
+              />
+            }
           />
 
           {/* Evidence side panel */}
@@ -655,6 +673,7 @@ export function EditorPageClient({
             onCiteInsert={handleCiteInsert}
           />
         </div>
+        </>
       )}
 
       {/* Citations tab */}

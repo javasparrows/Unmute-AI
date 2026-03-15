@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { TipTapEditor } from "./tiptap-editor";
 import type { SentenceRange } from "@/extensions/highlight-sentence";
 
@@ -14,6 +15,7 @@ interface EditorPanelProps {
   sentenceRanges?: SentenceRange[];
   placeholder?: string;
   containerRef?: (node: HTMLDivElement | null) => void;
+  actions?: ReactNode;
 }
 
 export function EditorPanel({
@@ -27,11 +29,13 @@ export function EditorPanel({
   sentenceRanges,
   placeholder,
   containerRef,
+  actions,
 }: EditorPanelProps) {
   return (
     <div className="flex flex-col flex-1 min-w-0 min-h-0 bg-card">
-      <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-accent-foreground bg-accent/60">
-        {label}
+      <div className="flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-wider text-accent-foreground bg-accent/60">
+        <span>{label}</span>
+        {actions}
       </div>
       <TipTapEditor
         content={content}
