@@ -17,6 +17,8 @@ type VerifyStatus = "unverified" | "verifying" | "verified" | "failed";
 export function PaperCard({ paper, documentId }: PaperCardProps) {
   const [verifyStatus, setVerifyStatus] = useState<VerifyStatus>("unverified");
   const [verifiedPaperId, setVerifiedPaperId] = useState<string | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [addedToLibrary, setAddedToLibrary] = useState(false);
 
   async function handleVerify() {
     setVerifyStatus("verifying");
@@ -40,15 +42,26 @@ export function PaperCard({ paper, documentId }: PaperCardProps) {
 
   async function handleAddToLibrary() {
     if (!verifiedPaperId) return;
+    setIsAdding(true);
     try {
-      await fetch(`/api/evidence/library/${documentId}`, {
+      const res = await fetch("/api/evidence/autopilot/accept", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paperId: verifiedPaperId }),
+        body: JSON.stringify({
+          documentId,
+          candidate: paper,
+          sentenceIndex: -1,
+          sectionType: "INTRODUCTION",
+          action: "ACCEPT",
+        }),
       });
-      // TODO: Add ManuscriptCitation record and show success feedback
+      if (res.ok) {
+        setAddedToLibrary(true);
+      }
     } catch {
-      // Handle error
+      // Handle error silently
+    } finally {
+      setIsAdding(false);
     }
   }
 
@@ -120,7 +133,24 @@ export function PaperCard({ paper, documentId }: PaperCardProps) {
               Verifying...
             </Button>
           )}
-          {verifyStatus === "verified" && (
+          {verifyStatus === "verified" && addedToLibrary && (
+            <Button
+              size="sm"
+              disabled
+              className="text-xs h-7 gap-1 text-green-600"
+              variant="outline"
+            >
+              <CheckCircle2 className="h-3 w-3" />
+              Added
+            </Button>
+          )}
+          {verifyStatus === "verified" && isAdding && !addedToLibrary && (
+            <Button size="sm" disabled className="text-xs h-7 gap-1">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              Adding...
+            </Button>
+          )}
+          {verifyStatus === "verified" && !isAdding && !addedToLibrary && (
             <Button
               size="sm"
               onClick={handleAddToLibrary}
