@@ -7,7 +7,7 @@ import { CitationsView } from "./citations-view";
 import { ReviewView } from "./review-view";
 import { normalizeSections, type SectionType } from "@/lib/sections";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
@@ -24,6 +24,7 @@ import { JournalSelector } from "../settings/journal-selector";
 
 import { renameDocument } from "@/app/actions/document";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
+import { ExportDialog } from "./export-dialog";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
 import { EvidencePanel } from "@/components/evidence/evidence-panel";
@@ -95,6 +96,7 @@ export function EditorPageClient({
 
   const [activeTab, setActiveTab] = useState<WorkflowTab>("write");
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
+  const [isExportOpen, setIsExportOpen] = useState(false);
 
   const sections = useMemo(
     () => normalizeSections(initialVersion?.sections ?? null, rightText),
@@ -476,6 +478,20 @@ export function EditorPageClient({
             </TooltipTrigger>
             <TooltipContent>エビデンスパネル (Cmd+E)</TooltipContent>
           </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsExportOpen(true)}
+                className="gap-1.5"
+              >
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">Export</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Export manuscript</TooltipContent>
+          </Tooltip>
           <StructureCheckDialog
             leftText={leftText}
             rightText={rightText}
@@ -685,6 +701,15 @@ export function EditorPageClient({
       {activeTab === "review" && (
         <ReviewView />
       )}
+
+      {/* Export dialog */}
+      <ExportDialog
+        open={isExportOpen}
+        onOpenChange={setIsExportOpen}
+        documentId={documentId}
+        citationCount={citationCount}
+        hasContent={rightText.trim().length > 0}
+      />
     </div>
   );
 }
