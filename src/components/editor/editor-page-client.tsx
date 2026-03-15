@@ -699,7 +699,11 @@ export function EditorPageClient({
 
       {/* Review tab */}
       {activeTab === "review" && (
-        <ReviewView />
+        <ReviewView
+          documentId={documentId}
+          text={rightText}
+          sectionType={activeSection ?? undefined}
+        />
       )}
 
       {/* Export dialog */}
