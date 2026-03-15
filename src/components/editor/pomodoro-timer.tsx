@@ -26,7 +26,7 @@ export function PomodoroTimer({ documentId, onSessionEnd }: PomodoroTimerProps) 
 
   const startSession = useCallback(async () => {
     try {
-      const res = await fetch("/api/sessions/start", {
+      const res = await fetch("/api/v2/sessions/start", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ documentId }),
@@ -43,7 +43,7 @@ export function PomodoroTimer({ documentId, onSessionEnd }: PomodoroTimerProps) 
   const endSession = useCallback(async () => {
     if (!sessionId) return;
     try {
-      const res = await fetch("/api/sessions/end", {
+      const res = await fetch("/api/v2/sessions/end", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, pomodoroCount }),

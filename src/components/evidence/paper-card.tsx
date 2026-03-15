@@ -24,7 +24,7 @@ export function PaperCard({ paper, documentId }: PaperCardProps) {
   async function handleVerify() {
     setVerifyStatus("verifying");
     try {
-      const res = await fetch("/api/evidence/verify", {
+      const res = await fetch("/api/v2/evidence/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ candidate: paper }),
@@ -45,7 +45,7 @@ export function PaperCard({ paper, documentId }: PaperCardProps) {
     if (!verifiedPaperId) return;
     setIsAdding(true);
     try {
-      const res = await fetch("/api/evidence/autopilot/accept", {
+      const res = await fetch("/api/v2/evidence/autopilot/accept", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

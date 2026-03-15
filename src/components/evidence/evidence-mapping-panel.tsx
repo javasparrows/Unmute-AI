@@ -54,7 +54,7 @@ export function EvidenceMappingPanel({ documentId, draftText }: EvidenceMappingP
 
   const fetchMappings = useCallback(async () => {
     try {
-      const res = await fetch(`/api/evidence/mappings?documentId=${documentId}`);
+      const res = await fetch(`/api/v2/evidence/mappings?documentId=${documentId}`);
       if (res.ok) {
         const data = await res.json();
         setMappings(data.mappings);
@@ -80,7 +80,7 @@ export function EvidenceMappingPanel({ documentId, draftText }: EvidenceMappingP
       .filter((s) => /\\cite\{[^}]+\}/.test(s.text));
 
     // Get all citations for this document
-    const citationsRes = await fetch(`/api/evidence/library?documentId=${documentId}`);
+    const citationsRes = await fetch(`/api/v2/evidence/library?documentId=${documentId}`);
     if (!citationsRes.ok) {
       setMappingInProgress(false);
       return;
@@ -104,7 +104,7 @@ export function EvidenceMappingPanel({ documentId, draftText }: EvidenceMappingP
       if (alreadyMapped) continue;
 
       try {
-        await fetch("/api/evidence/map", {
+        await fetch("/api/v2/evidence/map", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -125,7 +125,7 @@ export function EvidenceMappingPanel({ documentId, draftText }: EvidenceMappingP
 
   const handleVerify = async (mappingId: string, verified: boolean, note?: string) => {
     try {
-      const res = await fetch("/api/evidence/verify-human", {
+      const res = await fetch("/api/v2/evidence/verify-human", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mappingId, verified, note }),

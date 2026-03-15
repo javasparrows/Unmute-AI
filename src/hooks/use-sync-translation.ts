@@ -227,7 +227,7 @@ export function useSyncTranslation(
       setError(null);
 
       try {
-        const response = await fetch("/api/translate-sentence", {
+        const response = await fetch("/api/v2/translate-sentence", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

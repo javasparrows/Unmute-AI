@@ -166,7 +166,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/users?status=${statusFilter}`);
+      const res = await fetch(`/api/v2/admin/users?status=${statusFilter}`);
       if (!res.ok) {
         setError(`Failed to load data (${res.status})`);
         return;
@@ -190,7 +190,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   async function handleRoleChange(userId: string, newRole: string) {
     setActionLoading(userId);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/role`, {
+      const res = await fetch(`/api/v2/admin/users/${userId}/role`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: newRole }),
@@ -213,7 +213,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   async function handlePlanOverride(userId: string, plan: string) {
     setActionLoading(userId);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/plan-override`, {
+      const res = await fetch(`/api/v2/admin/users/${userId}/plan-override`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ planOverride: plan }),
@@ -235,7 +235,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   async function handleClearPlanOverride(userId: string) {
     setActionLoading(userId);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/plan-override`, {
+      const res = await fetch(`/api/v2/admin/users/${userId}/plan-override`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ planOverride: null }),
@@ -257,7 +257,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   async function handleSoftDelete(userId: string) {
     setActionLoading(userId);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/soft-delete`, {
+      const res = await fetch(`/api/v2/admin/users/${userId}/soft-delete`, {
         method: "POST",
       });
       if (!res.ok) {
@@ -278,7 +278,7 @@ export function UsersClient({ currentUserId }: UsersClientProps) {
   async function handleRestore(userId: string) {
     setActionLoading(userId);
     try {
-      const res = await fetch(`/api/admin/users/${userId}/restore`, {
+      const res = await fetch(`/api/v2/admin/users/${userId}/restore`, {
         method: "POST",
       });
       if (!res.ok) {

@@ -48,7 +48,7 @@ export function CompliancePanel({ documentId, text }: CompliancePanelProps) {
     if (!selectedGuideline) return;
     setLoading(true);
     try {
-      const res = await fetch("/api/evidence/compliance", {
+      const res = await fetch("/api/v2/evidence/compliance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -70,7 +70,7 @@ export function CompliancePanel({ documentId, text }: CompliancePanelProps) {
 
   const handleGenerateDisclosure = async () => {
     try {
-      const res = await fetch("/api/evidence/gamer-disclosure");
+      const res = await fetch("/api/v2/evidence/gamer-disclosure");
       if (res.ok) {
         const data = await res.json();
         setDisclosure(data.disclosure);

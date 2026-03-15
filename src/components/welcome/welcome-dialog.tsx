@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { StartPaperDialog } from "@/components/dashboard/start-paper-dialog";
 
 function dismissWelcome() {
-  fetch("/api/user/dismiss-welcome", { method: "POST" }).catch(() => {
+  fetch("/api/v2/user/dismiss-welcome", { method: "POST" }).catch(() => {
     // Fire-and-forget: silently ignore errors
   });
 }

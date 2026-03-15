@@ -27,7 +27,7 @@ export function JourneyNav({ documentId, onTaskClick }: JourneyNavProps) {
 
   const fetchJourney = useCallback(async () => {
     try {
-      const res = await fetch(`/api/journey/${documentId}`);
+      const res = await fetch(`/api/v2/journey/${documentId}`);
       if (res.ok) {
         const data = await res.json();
         setJourney(data);
@@ -47,7 +47,7 @@ export function JourneyNav({ documentId, onTaskClick }: JourneyNavProps) {
   }, [fetchJourney]);
 
   const handleCompleteTask = async (taskId: string) => {
-    const res = await fetch(`/api/journey/${documentId}`, {
+    const res = await fetch(`/api/v2/journey/${documentId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ completeTask: taskId }),
@@ -59,7 +59,7 @@ export function JourneyNav({ documentId, onTaskClick }: JourneyNavProps) {
   };
 
   const handleSkipTask = async (taskId: string) => {
-    const res = await fetch(`/api/journey/${documentId}`, {
+    const res = await fetch(`/api/v2/journey/${documentId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ skipTask: taskId }),
@@ -72,7 +72,7 @@ export function JourneyNav({ documentId, onTaskClick }: JourneyNavProps) {
 
   const handleToggleGuide = async () => {
     if (!journey) return;
-    const res = await fetch(`/api/journey/${documentId}`, {
+    const res = await fetch(`/api/v2/journey/${documentId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ guideVisible: !journey.guideVisible }),

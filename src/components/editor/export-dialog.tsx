@@ -42,10 +42,10 @@ export function ExportDialog({
     try {
       const endpoint =
         format === "bibtex"
-          ? `/api/evidence/bibtex?documentId=${documentId}`
+          ? `/api/v2/evidence/bibtex?documentId=${documentId}`
           : format === "evidence-pptx"
-            ? `/api/export/evidence-pptx?documentId=${documentId}`
-            : `/api/export/${format}?documentId=${documentId}`;
+            ? `/api/v2/export/evidence-pptx?documentId=${documentId}`
+            : `/api/v2/export/${format}?documentId=${documentId}`;
 
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error("Export failed");

@@ -82,7 +82,7 @@ export function CitationAutopilot({
     async (
       sentenceText: string,
     ): Promise<{ candidates: PaperCandidate[]; searchQuery: string }> => {
-      const res = await fetch("/api/evidence/autopilot/suggest", {
+      const res = await fetch("/api/v2/evidence/autopilot/suggest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sentence: sentenceText, section }),
@@ -197,7 +197,7 @@ export function CitationAutopilot({
         ));
       }, 800);
 
-      const res = await fetch("/api/evidence/autopilot/analyze", {
+      const res = await fetch("/api/v2/evidence/autopilot/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: draftText, section }),
@@ -278,7 +278,7 @@ export function CitationAutopilot({
     async (candidate: PaperCandidate, candidateIndex: number) => {
       setAcceptingIndex(candidateIndex);
       try {
-        const res = await fetch("/api/evidence/autopilot/accept", {
+        const res = await fetch("/api/v2/evidence/autopilot/accept", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

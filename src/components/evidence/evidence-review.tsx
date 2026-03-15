@@ -52,7 +52,7 @@ export function EvidenceReview({ documentId, draftText }: EvidenceReviewProps) {
     setVerdict(null);
 
     try {
-      const res = await fetch("/api/evidence/review", {
+      const res = await fetch("/api/v2/evidence/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
