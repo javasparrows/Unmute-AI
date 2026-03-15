@@ -1,5 +1,11 @@
 {
   "regions": ["hnd1"],
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "otherBranches": false
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/pageview-rollup",
