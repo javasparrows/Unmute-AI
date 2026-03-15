@@ -337,7 +337,7 @@ export function EditorPageClient({
   const handlePaste = useCallback(
     async (pastedText: string) => {
       try {
-        const res = await fetch("/api/detect-language", {
+        const res = await fetch("/api/v2/detect-language", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: pastedText }),

@@ -57,7 +57,7 @@ export function FlowAnalysisPanel({ documentId, text, sectionType }: FlowAnalysi
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/evidence/flow/analyze", {
+      const res = await fetch("/api/v2/evidence/flow/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ documentId, sectionType, text }),

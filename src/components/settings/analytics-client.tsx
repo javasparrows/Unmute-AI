@@ -76,7 +76,7 @@ export function AnalyticsClient() {
   const fetchData = useCallback(async (g: Granularity) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/analytics/model-costs?granularity=${g}`);
+      const res = await fetch(`/api/v2/analytics/model-costs?granularity=${g}`);
       const json = await res.json();
       setData(json);
     } catch {

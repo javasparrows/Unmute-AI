@@ -30,7 +30,7 @@ export function LiteratureWatchWidget() {
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
-    fetch("/api/literature-watch")
+    fetch("/api/v2/literature-watch")
       .then((res) => res.ok ? res.json() : { watches: [] })
       .then((data) => setWatches(data.watches))
       .finally(() => setLoading(false));
@@ -40,7 +40,7 @@ export function LiteratureWatchWidget() {
     if (!newTopic.trim()) return;
     setAdding(true);
     try {
-      const res = await fetch("/api/literature-watch", {
+      const res = await fetch("/api/v2/literature-watch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic: newTopic, query: newTopic }),

@@ -60,7 +60,7 @@ export function StructureCheckDialog({
     setResult(null);
 
     try {
-      const res = await fetch("/api/check-structure", {
+      const res = await fetch("/api/v2/check-structure", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text, lang }),

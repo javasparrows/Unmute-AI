@@ -69,7 +69,7 @@ export function AcquisitionClient() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/admin/acquisition");
+      const res = await fetch("/api/v2/admin/acquisition");
       if (!res.ok) throw new Error("Failed to fetch");
       const json = await res.json();
       setData(json);

@@ -78,7 +78,7 @@ export function OverviewClient() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/overview");
+      const res = await fetch("/api/v2/admin/overview");
       if (!res.ok) {
         throw new Error(`Failed to fetch: ${res.status}`);
       }

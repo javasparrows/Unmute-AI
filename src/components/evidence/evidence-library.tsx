@@ -32,7 +32,7 @@ export function EvidenceLibrary({ documentId }: EvidenceLibraryProps) {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/evidence/library?documentId=${encodeURIComponent(documentId)}`
+        `/api/v2/evidence/library?documentId=${encodeURIComponent(documentId)}`
       );
       if (res.ok) {
         const data = await res.json();
@@ -68,7 +68,7 @@ export function EvidenceLibrary({ documentId }: EvidenceLibraryProps) {
     setIsExporting(true);
     try {
       const res = await fetch(
-        `/api/evidence/bibtex?documentId=${encodeURIComponent(documentId)}`
+        `/api/v2/evidence/bibtex?documentId=${encodeURIComponent(documentId)}`
       );
       if (res.ok) {
         const blob = await res.blob();

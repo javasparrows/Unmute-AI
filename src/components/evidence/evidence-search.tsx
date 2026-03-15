@@ -219,7 +219,7 @@ export function EvidenceSearch({ documentId }: EvidenceSearchProps) {
     setSearchStatus("Expanding query...");
 
     try {
-      const res = await fetch("/api/evidence/discover", {
+      const res = await fetch("/api/v2/evidence/discover", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

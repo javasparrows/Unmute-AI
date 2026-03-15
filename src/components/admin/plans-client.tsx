@@ -133,7 +133,7 @@ export function PlansClient() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("/api/admin/plans");
+        const res = await fetch("/api/v2/admin/plans");
         if (!res.ok) {
           setError(`データの読み込みに失敗しました (${res.status})`);
           return;
