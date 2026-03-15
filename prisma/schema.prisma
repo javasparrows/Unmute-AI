@@ -120,6 +120,7 @@ model Document {
   agentRuns            AgentRun[]
   reviewFindings       ReviewFinding[]
   evidenceMappings     EvidenceMapping[]
+  paragraphAnalyses    ParagraphAnalysis[]
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
 
@@ -517,4 +518,22 @@ model PdfCache {
   updatedAt   DateTime @updatedAt
 
   @@index([status])
+}
+
+model ParagraphAnalysis {
+  id              String   @id @default(cuid())
+  documentId      String
+  versionNumber   Int
+  sectionType     String?
+
+  analysis        Json
+  overallScore    Int?
+  issueCount      Int      @default(0)
+
+  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([documentId])
+  @@index([documentId, sectionType])
 }

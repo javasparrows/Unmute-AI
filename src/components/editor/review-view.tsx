@@ -1,15 +1,21 @@
 "use client";
 
-import { ShieldCheck } from "lucide-react";
+import { FlowAnalysisPanel } from "./flow-analysis-panel";
 
-export function ReviewView() {
+interface ReviewViewProps {
+  documentId: string;
+  text: string;
+  sectionType?: string;
+}
+
+export function ReviewView({ documentId, text, sectionType }: ReviewViewProps) {
   return (
-    <div className="flex flex-1 items-center justify-center text-muted-foreground">
-      <div className="text-center space-y-2">
-        <ShieldCheck className="h-12 w-12 mx-auto opacity-30" />
-        <p className="text-sm">Review is coming soon</p>
-        <p className="text-xs">Adversarial Review results will appear here</p>
-      </div>
+    <div className="flex-1 min-h-0 overflow-y-auto">
+      <FlowAnalysisPanel
+        documentId={documentId}
+        text={text}
+        sectionType={sectionType}
+      />
     </div>
   );
 }
