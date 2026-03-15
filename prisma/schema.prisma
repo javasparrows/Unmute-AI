@@ -371,9 +371,23 @@ model ManuscriptCitation {
   createdAt   DateTime        @default(now())
   document    Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
   paper       CanonicalPaper  @relation(fields: [paperId], references: [id], onDelete: Cascade)
+  anchors     ManuscriptCitationAnchor[]
 
   @@unique([documentId, paperId])
   @@index([documentId])
+}
+
+model ManuscriptCitationAnchor {
+  id                    String              @id @default(cuid())
+  manuscriptCitationId  String
+  sectionType           String              // "INTRODUCTION" | "METHODS" | "RESULTS" | "DISCUSSION"
+  sentenceIndex         Int
+  charStart             Int?
+  charEnd               Int?
+  createdAt             DateTime            @default(now())
+  manuscriptCitation    ManuscriptCitation   @relation(fields: [manuscriptCitationId], references: [id], onDelete: Cascade)
+
+  @@index([manuscriptCitationId])
 }
 
 model ManuscriptClaim {
