@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { resolvePdfUrl } from "./pdf-url-resolver";
 
 interface ParsedPage {
   pageNumber: number;
@@ -92,13 +93,16 @@ export async function retrieveCitedPaperText(
       });
     }
 
+    // Resolve a proper PDF URL for the cached entry
+    const resolvedPdfUrl = await resolvePdfUrl(doi ?? null, pmid ?? null);
+
     // Cache the result
     await prisma.pdfCache.upsert({
       where: { paperId },
       create: {
         paperId,
         doi: doi ?? null,
-        pdfUrl: doi ? `https://doi.org/${doi}` : "internal",
+        pdfUrl: resolvedPdfUrl ?? (doi ? `https://doi.org/${doi}` : "internal"),
         storedPath: `text/${paperId}`,
         pageCount: pages.length,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,6 +110,7 @@ export async function retrieveCitedPaperText(
         status: "parsed",
       },
       update: {
+        pdfUrl: resolvedPdfUrl ?? (doi ? `https://doi.org/${doi}` : undefined),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         parsedText: JSON.parse(JSON.stringify({ pages })) as any,
         pageCount: pages.length,
