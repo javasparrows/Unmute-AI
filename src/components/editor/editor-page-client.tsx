@@ -341,6 +341,16 @@ export function EditorPageClient({
     initSnapshots(rightText, tmpText);
   }, [leftLang, rightLang, leftText, rightText, initSnapshots]);
 
+  const handleCiteInsert = useCallback((sentenceIndex: number, citeCommand: string) => {
+    setRightText(prev => {
+      const sentences = prev.split(/(?<=[.!?])\s+/);
+      if (sentenceIndex < sentences.length) {
+        sentences[sentenceIndex] = sentences[sentenceIndex].trimEnd() + " " + citeCommand;
+      }
+      return sentences.join(" ");
+    });
+  }, []);
+
   const handleClear = useCallback(() => {
     setLeftText("");
     setRightText("");
@@ -616,6 +626,8 @@ export function EditorPageClient({
             localStorage.setItem("unmute:evidence-panel-open", "false");
           }}
           documentId={documentId}
+          draftText={rightText}
+          onCiteInsert={handleCiteInsert}
         />
       </div>
     </div>

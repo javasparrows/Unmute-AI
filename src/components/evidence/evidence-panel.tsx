@@ -12,6 +12,8 @@ interface EvidencePanelProps {
   isOpen: boolean;
   onClose: () => void;
   documentId: string;
+  draftText: string;
+  onCiteInsert?: (sentenceIndex: number, citeCommand: string) => void;
 }
 
 type TabId = "search" | "library" | "review" | "autopilot";
@@ -26,7 +28,7 @@ const TABS = [
   { id: "autopilot" as const, label: "Auto-Pilot", icon: Zap },
 ] as const;
 
-export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProps) {
+export function EvidencePanel({ isOpen, onClose, documentId, draftText, onCiteInsert }: EvidencePanelProps) {
   const [activeTab, setActiveTab] = useState<TabId>("search");
   const [panelWidth, setPanelWidth] = useState<PanelWidth>(() => {
     if (typeof window === "undefined") return "normal";
@@ -100,8 +102,9 @@ export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProp
         {activeTab === "autopilot" && (
           <CitationAutopilot
             documentId={documentId}
-            draftText="" // TODO: Connect to editor text
+            draftText={draftText}
             section="INTRODUCTION"
+            onCiteInsert={onCiteInsert}
           />
         )}
       </div>
