@@ -39,19 +39,15 @@ export async function generateMetadata({
 const rows = [
   {
     label: "販売業者",
-    value: "TODO: 事業者名を記載", // TODO: 正式名称に置き換え
-  },
-  {
-    label: "運営責任者",
-    value: "TODO: 責任者名を記載", // TODO: 正式名称に置き換え
+    value: "株式会社AI Driven",
   },
   {
     label: "所在地",
-    value: "TODO: 所在地を記載", // TODO: 正式住所に置き換え
+    value: "〒104-0061 東京都中央区銀座1-12-4 N&E BLD.6F",
   },
   {
     label: "連絡先",
-    value: "support@unmute-ai.com", // TODO: 正式なメールアドレスに置き換え
+    value: "info@ai-driven.jp",
   },
   {
     label: "販売価格",
