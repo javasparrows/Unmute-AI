@@ -203,3 +203,18 @@
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
+
+/* Citation highlight in editor */
+.citation-highlight {
+  background-color: hsl(var(--primary) / 0.12);
+  color: hsl(var(--primary));
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.citation-highlight:hover {
+  background-color: hsl(var(--primary) / 0.25);
+}

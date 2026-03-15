@@ -5,6 +5,7 @@ import { BookOpen, Loader2, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { citationStore } from "@/lib/citation-store";
 
 interface EvidenceLibraryProps {
   documentId: string;
@@ -35,7 +36,22 @@ export function EvidenceLibrary({ documentId }: EvidenceLibraryProps) {
       );
       if (res.ok) {
         const data = await res.json();
-        setCitations(data.citations ?? []);
+        const loadedCitations: CitationEntry[] = data.citations ?? [];
+        setCitations(loadedCitations);
+
+        // Populate citation store for tooltip metadata
+        for (const citation of loadedCitations) {
+          if (citation.citeKey) {
+            citationStore.set(citation.citeKey, {
+              citeKey: citation.citeKey,
+              paperId: citation.paper.id,
+              title: citation.paper.title,
+              authors: [],
+              year: citation.paper.year ?? undefined,
+              venue: citation.paper.venue ?? undefined,
+            });
+          }
+        }
       }
     } catch {
       // Handle error silently
