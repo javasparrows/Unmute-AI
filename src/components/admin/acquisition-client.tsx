@@ -51,11 +51,11 @@ interface AcquisitionData {
 
 const trendChartConfig: ChartConfig = {
   views: {
-    label: "Page Views",
+    label: "PV数",
     color: "var(--chart-1)",
   },
   uniqueVisitors: {
-    label: "Unique Visitors",
+    label: "ユニーク訪問者",
     color: "var(--chart-2)",
   },
 };
@@ -94,22 +94,22 @@ export function AcquisitionClient() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
-          title="Total Page Views (30d)"
+          title="総PV数 (30日)"
           value={data?.pageViews.total}
           loading={loading}
         />
         <KPICard
-          title="Unique Visitors (30d)"
+          title="ユニーク訪問者 (30日)"
           value={data?.pageViews.uniqueVisitors}
           loading={loading}
         />
         <KPICard
-          title="Today's Page Views"
+          title="本日のPV数"
           value={data?.pageViews.today}
           loading={loading}
         />
         <KPICard
-          title="Today's Unique Visitors"
+          title="本日のユニーク訪問者"
           value={data?.pageViews.todayUnique}
           loading={loading}
         />
@@ -118,17 +118,17 @@ export function AcquisitionClient() {
       {/* Page View Trend Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Page View Trend</CardTitle>
-          <CardDescription>Daily page views and unique visitors (last 30 days)</CardDescription>
+          <CardTitle>PV推移</CardTitle>
+          <CardDescription>日別PV数とユニーク訪問者数（過去30日間）</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              Loading...
+              読み込み中...
             </div>
           ) : (data?.pageViewTrend.length ?? 0) === 0 ? (
             <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-              No data available
+              データなし
             </div>
           ) : (
             <ChartContainer config={trendChartConfig} className="h-[300px] w-full">
@@ -168,22 +168,22 @@ export function AcquisitionClient() {
         {/* Top Pages Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Top Pages</CardTitle>
-            <CardDescription>Most viewed pages (last 30 days)</CardDescription>
+            <CardTitle>人気ページ</CardTitle>
+            <CardDescription>閲覧数の多いページ（過去30日間）</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <p className="text-sm text-muted-foreground">Loading...</p>
+              <p className="text-sm text-muted-foreground">読み込み中...</p>
             ) : (data?.topPages.length ?? 0) === 0 ? (
-              <p className="text-sm text-muted-foreground">No data</p>
+              <p className="text-sm text-muted-foreground">データなし</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b text-muted-foreground">
-                      <th className="text-start py-2 font-medium">Path</th>
-                      <th className="text-end py-2 font-medium">Views</th>
-                      <th className="text-end py-2 font-medium">Unique</th>
+                      <th className="text-start py-2 font-medium">パス</th>
+                      <th className="text-end py-2 font-medium">PV</th>
+                      <th className="text-end py-2 font-medium">ユニーク</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,22 +208,22 @@ export function AcquisitionClient() {
         {/* Country Breakdown Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Country Breakdown</CardTitle>
-            <CardDescription>Page views by country (last 30 days)</CardDescription>
+            <CardTitle>国別内訳</CardTitle>
+            <CardDescription>国別PV数（過去30日間）</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <p className="text-sm text-muted-foreground">Loading...</p>
+              <p className="text-sm text-muted-foreground">読み込み中...</p>
             ) : (data?.countryBreakdown.length ?? 0) === 0 ? (
-              <p className="text-sm text-muted-foreground">No data</p>
+              <p className="text-sm text-muted-foreground">データなし</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b text-muted-foreground">
-                      <th className="text-start py-2 font-medium">Country</th>
-                      <th className="text-end py-2 font-medium">Views</th>
-                      <th className="text-end py-2 font-medium">Unique</th>
+                      <th className="text-start py-2 font-medium">国</th>
+                      <th className="text-end py-2 font-medium">PV</th>
+                      <th className="text-end py-2 font-medium">ユニーク</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -249,26 +249,26 @@ export function AcquisitionClient() {
       {/* Conversion Funnel */}
       <Card>
         <CardHeader>
-          <CardTitle>Conversion Funnel</CardTitle>
+          <CardTitle>コンバージョンファネル</CardTitle>
           <CardDescription>
-            Pricing page visitors to paid conversions (last 30 days, 7-day attribution window)
+            料金ページ訪問者から有料転換まで（過去30日間、7日間アトリビューション）
           </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-sm text-muted-foreground">Loading...</p>
+            <p className="text-sm text-muted-foreground">読み込み中...</p>
           ) : !funnel ? (
-            <p className="text-sm text-muted-foreground">No data</p>
+            <p className="text-sm text-muted-foreground">データなし</p>
           ) : (
             <div className="space-y-4">
               <FunnelStage
-                label="Pricing Visitors"
+                label="料金ページ訪問者"
                 count={funnel.pricingVisitors}
                 maxValue={maxFunnelValue}
                 color="var(--chart-1)"
               />
               <FunnelStage
-                label="Attributed Signups"
+                label="登録（アトリビューション）"
                 count={funnel.attributedSignups}
                 maxValue={maxFunnelValue}
                 rate={
@@ -279,7 +279,7 @@ export function AcquisitionClient() {
                 color="var(--chart-2)"
               />
               <FunnelStage
-                label="Paid Conversions"
+                label="有料転換"
                 count={funnel.paidConversions}
                 maxValue={maxFunnelValue}
                 rate={
