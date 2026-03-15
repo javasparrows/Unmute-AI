@@ -1,10 +1,10 @@
 {
   "metadata": {
     "landing": {
-      "title": "Unmute AI - AI学術翻訳で論文執筆を革新",
-      "description": "母語で論文を書いて、どの言語でも出版。ジャーナルスタイル対応のAI学術翻訳ツール。論文執筆AIの新しい形。",
-      "ogTitle": "Unmute AI | AI学術翻訳ツール - 論文執筆を革新",
-      "ogDescription": "研究に集中しよう。言語は私たちにお任せください。ジャーナルスタイル対応・LaTeX対応のAI学術翻訳。"
+      "title": "Unmute AI - 研究者のためのAI論文執筆プラットフォーム",
+      "description": "引用管理、エビデンスに基づいたAI執筆支援、17以上の言語対応、ジャーナルスタイル対応、LaTeX保持。研究者のための論文執筆プラットフォーム。",
+      "ogTitle": "Unmute AI | AI論文執筆プラットフォーム",
+      "ogDescription": "研究に集中しよう。残りは私たちにお任せください。引用管理、エビデンスに基づいた執筆、多言語対応の論文執筆プラットフォーム。"
     },
     "pricing": {
       "title": "料金プラン",
@@ -32,24 +32,24 @@
   "landing": {
     "hero": {
       "title1": "研究に集中しよう。",
-      "title2": "言語は私たちにお任せください。",
-      "description": "ジャーナルのスタイル、論文構成、そしてあなたの意図を理解するAI翻訳。母語で書いて、どの言語でも出版できます。",
+      "title2": "残りは私たちにお任せください。",
+      "description": "引用、ジャーナルスタイル、そしてあなたの意図を理解するAI論文執筆支援。エビデンスとともに書き、自信を持って出版できます。",
       "cta": "無料で始める"
     },
     "problem": {
-      "title1": "言語の壁に",
-      "title2": "知性を止めさせない。",
-      "description": "英語を母語としない研究者は、学術出版において構造的な障壁に直面しています。研究時間の最大40%が、科学の進歩ではなく言語との格闘に費やされています。"
+      "title1": "執筆プロセスに",
+      "title2": "研究を止めさせない。",
+      "description": "研究者は1本の論文に中央値177時間を費やし、執筆・引用・フォーマットのために断片化されたツールを使い分けています。最大40%の時間が研究以外のタスクに消えています。"
     },
     "howItWorks": {
       "title": "使い方",
       "subtitle": "ドラフトから投稿まで3ステップ。",
       "step1Title": "自由に書く",
-      "step1Description": "考える言語で論文を書きましょう。頭の中で翻訳する必要はありません。",
-      "step2Title": "即座に構成",
-      "step2Description": "AIがリアルタイムで翻訳し、ターゲットジャーナルのスタイルに適応させます。",
+      "step1Description": "どの言語でも論文を書けます。AIが執筆中に引用とエビデンスをサポートします。",
+      "step2Title": "引用＆検証",
+      "step2Description": "Auto-Pilotが文ごとに引用を提案。すべての参考文献はDOI/PMIDで検証済みです。",
       "step3Title": "推敲して投稿",
-      "step3Description": "どちらの言語でも編集可能。原稿を磨いて、自信を持って投稿しましょう。"
+      "step3Description": "構成チェック、査読シミュレーション、LaTeX/Wordエクスポート。自信を持って投稿しましょう。"
     },
     "features": {
       "sectionTitle": "研究者のために、研究者が作りました。",
@@ -59,18 +59,18 @@
       "zeroCognitiveLoadDescription": "母語で考え、どの言語でも出版。執筆と翻訳の切り替えは不要です。",
       "securityPrivacyTitle": "セキュリティとプライバシー",
       "securityPrivacyDescription": "あなたの研究はあなたのもの。透明なAPI利用、データ保持なし、完全なコスト可視化。",
-      "realtimeTranslationTitle": "リアルタイム双方向翻訳",
-      "realtimeTranslationDescription": "原文と翻訳を並べて編集。文レベルの精度で変更が即座に同期されます。",
+      "realtimeTranslationTitle": "多言語執筆",
+      "realtimeTranslationDescription": "母語で考え、どの言語でも執筆。双方向編集でリアルタイム同期。",
       "journalStylingTitle": "ジャーナル別スタイル適用",
       "journalStylingDescription": "8種類の学術ジャーナルスタイルから選択。翻訳が投稿先の慣習に合致します。",
-      "latexAwareTitle": "LaTeX対応翻訳",
+      "latexAwareTitle": "LaTeX対応エディタ",
       "latexAwareDescription": "\\cite{}、\\ref{}、数式、すべてのLaTeXコマンドをそのまま保持。マークアップは変更されません。",
       "structureCheckTitle": "AI論文構造チェック",
       "structureCheckDescription": "IMRAD構造の自動検証。投稿前に不足セクションを発見できます。",
       "versionControlTitle": "バージョン管理",
-      "versionControlDescription": "翻訳のバージョンを保存・復元。改訂作業の進捗を失うことはありません。",
+      "versionControlDescription": "原稿のバージョンを保存・復元。改訂作業の進捗を失うことはありません。",
       "costTrackingTitle": "透明なコスト追跡",
-      "costTrackingDescription": "各翻訳のコストをリアルタイムで確認。予想外の請求はありません。"
+      "costTrackingDescription": "各操作のコストをリアルタイムで確認。予想外の請求はありません。"
     },
     "cta": {
       "title1": "評価されるべきは実力であり、",
@@ -92,7 +92,7 @@
       "unmute": "Unmute AI",
       "chatgpt": "ChatGPT",
       "deepl": "DeepL",
-      "feature1": "学術翻訳特化",
+      "feature1": "学術論文執筆特化",
       "feature2": "ジャーナルスタイル対応",
       "feature3": "LaTeX保持",
       "feature4": "IMRAD構造チェック",
@@ -115,7 +115,7 @@
     "getStarted": "始める"
   },
   "login": {
-    "tagline": "研究に集中しよう。言語は私たちにお任せください。",
+    "tagline": "研究に集中しよう。残りは私たちにお任せください。",
     "continueWithGoogle": "Googleで続ける"
   },
   "pricing": {
@@ -130,7 +130,7 @@
     "createError": "ドキュメントの作成に失敗しました",
     "checkPlan": "プランを確認",
     "noDocuments": "まだドキュメントがありません",
-    "noDocumentsHint": "「新規作成」をクリックして翻訳を始めましょう",
+    "noDocumentsHint": "「新規作成」をクリックして論文を書き始めましょう",
     "updated": "更新:",
     "save": "保存",
     "cancel": "キャンセル",
@@ -143,7 +143,7 @@
     "description": "アカウントとアプリケーションの設定を管理します",
     "nav": {
       "profile": "プロフィール",
-      "preferences": "翻訳設定",
+      "preferences": "エディタ設定",
       "billing": "プラン・課金",
       "analytics": "利用分析"
     }
@@ -190,9 +190,9 @@
   "welcome": {
     "title": "Unmute AI へようこそ！",
     "subtitle": "あなたの研究を、世界中に届けましょう。明確で自信に満ちた論文執筆をお手伝いします。",
-    "feature1": "AIによる学術翻訳",
-    "feature2": "17以上の言語に対応",
-    "feature3": "あなたの文体をそのまま維持",
+    "feature1": "AI引用検索・エビデンスツール",
+    "feature2": "8つの学術データベースから検証済み引用",
+    "feature3": "17以上の言語で多言語執筆",
     "createFirst": "最初のドキュメントを作成",
     "goToDashboard": "ダッシュボードへ"
   },
@@ -202,11 +202,11 @@
     "items": [
       {
         "question": "Unmute AI とは何ですか？",
-        "answer": "Unmute AI は、研究者が母語で論文を書き、どの言語でも出版できるようにするAI学術翻訳ツールです。ジャーナルスタイル対応、LaTeX保持、IMRAD構造チェック、引用の自動検索・挿入など、学術論文に特化した機能を提供します。"
+        "answer": "Unmute AI は、研究者がより良い論文をより速く書けるようにするAI論文執筆プラットフォームです。引用の自動検索・挿入（Citation Auto-Pilot）、エビデンスに基づいたAI執筆支援、17以上の言語での多言語執筆、ジャーナルスタイル対応、LaTeX保持、IMRAD構造チェックなど、学術論文に特化した機能を提供します。"
       },
       {
         "question": "論文執筆にAIは使えますか？",
-        "answer": "はい。Unmute AI は論文の翻訳と引用管理に特化したAIツールです。ChatGPT のような汎用AIとは異なり、学術的慣習を理解し、ジャーナル固有のスタイルに対応します。ただし、AIが生成した内容は必ず研究者自身が確認・校正してください。"
+        "answer": "はい。Unmute AI は論文執筆に特化したAIプラットフォームです。引用管理、エビデンスに基づいた執筆支援、ジャーナル固有のスタイル対応を提供します。ChatGPT のような汎用AIとは異なり、学術的慣習を理解し、すべての引用を検証します。ただし、AIが生成した内容は必ず研究者自身が確認・校正してください。"
       },
       {
         "question": "ChatGPT で論文は書けますか？Unmute AI との違いは？",

@@ -47,9 +47,9 @@ export function HistoryPanel({ onRestore, onSave }: HistoryPanelProps) {
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px]">
         <SheetHeader>
-          <SheetTitle>翻訳履歴</SheetTitle>
+          <SheetTitle>バージョン履歴</SheetTitle>
           <SheetDescription>
-            過去の翻訳を復元できます。最大50件保存されます。
+            過去のバージョンを復元できます。最大50件保存されます。
           </SheetDescription>
         </SheetHeader>
         <div className="mt-4 flex gap-2">

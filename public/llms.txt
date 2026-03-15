@@ -1,6 +1,6 @@
 # Unmute AI
 
-> AI-powered academic translation SaaS that helps researchers write papers in their native language and publish in any language.
+> AI-powered academic paper writing platform that helps researchers write better papers faster with citation management, evidence-grounded drafting, and multilingual support.
 
 ## What is Unmute AI?
 

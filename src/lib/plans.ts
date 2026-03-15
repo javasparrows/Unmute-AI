@@ -23,7 +23,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     id: "FREE",
     name: "Free",
     price: 0,
-    description: "基本的な翻訳機能を無料で",
+    description: "論文執筆の基本機能を無料で",
     stripePriceId: null,
     limits: {
       translationCharsPerMonth: 10_000,
@@ -33,7 +33,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
       allowedJournalIds: ["general"],
     },
     features: [
-      "月10,000文字の翻訳",
+      "月10,000文字のAI執筆支援",
       "最大3ドキュメント",
       "バージョン5個/ドキュメント",
       "Gemini 2.5 Flash",
@@ -45,7 +45,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     id: "PRO",
     name: "Pro",
     price: 980,
-    description: "研究者向けの充実した翻訳環境",
+    description: "研究者向けの充実した執筆環境",
     stripePriceId: process.env.STRIPE_PRO_PRICE_ID ?? null,
     limits: {
       translationCharsPerMonth: 100_000,
@@ -55,7 +55,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
       allowedJournalIds: "all",
     },
     features: [
-      "月100,000文字の翻訳",
+      "月100,000文字のAI執筆支援",
       "最大20ドキュメント",
       "バージョン50個/ドキュメント",
       "Gemini 2.5 Flash",
@@ -67,7 +67,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     id: "MAX",
     name: "Max",
     price: 2_980,
-    description: "無制限の翻訳・全機能アクセス",
+    description: "無制限の執筆・全機能アクセス",
     stripePriceId: process.env.STRIPE_MAX_PRICE_ID ?? null,
     limits: {
       translationCharsPerMonth: -1,
@@ -77,7 +77,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
       allowedJournalIds: "all",
     },
     features: [
-      "無制限の翻訳",
+      "無制限のAI執筆支援",
       "無制限のドキュメント",
       "無制限のバージョン",
       "Gemini 2.5 Flash",
