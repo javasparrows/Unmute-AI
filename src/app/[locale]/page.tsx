@@ -64,11 +64,20 @@ export async function generateMetadata({
       siteName: "Unmute AI",
       locale: locale.replace("-", "_"),
       type: "website",
+      images: [
+        {
+          url: `${BASE_URL}/og/landing.png`,
+          width: 2205,
+          height: 1349,
+          alt: "Unmute AI - AI Academic Translation",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("ogTitle"),
       description: t("ogDescription"),
+      images: [`${BASE_URL}/og/landing.png`],
     },
   };
 }
