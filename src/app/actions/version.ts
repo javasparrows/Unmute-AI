@@ -31,6 +31,7 @@ export async function saveVersion(data: {
   leftRanges?: { from: number; to: number }[];
   rightRanges?: { from: number; to: number }[];
   sentenceAlignments?: { left: number[]; right: number[] }[];
+  sections?: Record<string, unknown>;
 }) {
   const userId = await getUserId();
   await verifyDocumentOwnership(data.documentId, userId);
@@ -69,6 +70,9 @@ export async function saveVersion(data: {
         : Prisma.JsonNull,
       sentenceAlignments: data.sentenceAlignments
         ? (data.sentenceAlignments as unknown as Prisma.InputJsonValue)
+        : Prisma.JsonNull,
+      sections: data.sections
+        ? (data.sections as unknown as Prisma.InputJsonValue)
         : Prisma.JsonNull,
     },
   });

@@ -36,6 +36,7 @@ interface VersionData {
   leftRanges: { from: number; to: number }[] | null;
   rightRanges: { from: number; to: number }[] | null;
   sentenceAlignments: { left: number[]; right: number[] }[] | null;
+  sections: Record<string, unknown> | null;
 }
 
 interface VersionPanelProps {
@@ -88,6 +89,7 @@ export function VersionPanel({
           leftRanges: version.leftRanges as { from: number; to: number }[] | null,
           rightRanges: version.rightRanges as { from: number; to: number }[] | null,
           sentenceAlignments: (version as Record<string, unknown>).sentenceAlignments as { left: number[]; right: number[] }[] | null,
+          sections: (version as Record<string, unknown>).sections as Record<string, unknown> | null,
         });
         setIsOpen(false);
       }

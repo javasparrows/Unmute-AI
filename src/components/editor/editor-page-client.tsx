@@ -1,6 +1,11 @@
 "use client";
 
 import { useRef, useCallback, useMemo, useState, useEffect, useTransition } from "react";
+import { WorkflowTabs, type WorkflowTab } from "./workflow-tabs";
+import { SectionRail } from "./section-rail";
+import { CitationsView } from "./citations-view";
+import { ReviewView } from "./review-view";
+import { normalizeSections, type SectionType } from "@/lib/sections";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
@@ -11,6 +16,8 @@ import { UserMenu } from "@/components/auth/user-menu";
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { getGroupIndices } from "@/lib/alignment";
 import { EditorPanel } from "./editor-panel";
+import { CoverageBar } from "./coverage-bar";
+import { ParagraphActions } from "./paragraph-actions";
 import { TranslationStatus } from "./translation-status";
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
@@ -39,6 +46,7 @@ interface InitialVersion {
   leftRanges: { from: number; to: number }[] | null;
   rightRanges: { from: number; to: number }[] | null;
   sentenceAlignments: AlignmentGroup[] | null;
+  sections: Record<string, unknown> | null;
 }
 
 interface PlanLimitsProps {
@@ -80,8 +88,23 @@ export function EditorPageClient({
 
   const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(() => {
     if (typeof window === "undefined") return false;
-    return localStorage.getItem("unmute:evidence-panel-open") === "true";
+    const stored = localStorage.getItem("unmute:evidence-panel-open");
+    if (stored !== null) return stored === "true";
+    return (initialVersion?.translatedText?.trim().length ?? 0) > 0;
   });
+
+  const [activeTab, setActiveTab] = useState<WorkflowTab>("write");
+  const [activeSection, setActiveSection] = useState<SectionType | null>(null);
+
+  const sections = useMemo(
+    () => normalizeSections(initialVersion?.sections ?? null, rightText),
+    [initialVersion?.sections, rightText],
+  );
+
+  const citationCount = useMemo(() => {
+    const matches = rightText.match(/\\cite\{[^}]+\}/g);
+    return matches?.length ?? 0;
+  }, [rightText]);
 
   const toggleEvidencePanel = useCallback(() => {
     setIsEvidencePanelOpen((prev) => {
@@ -547,95 +570,121 @@ export function EditorPageClient({
         </Tooltip>
       </div>
 
-      {/* Editor panels with sync buttons */}
-      <div className="flex flex-col md:flex-row flex-1 min-h-0">
-        <EditorPanel
-          label="原文"
-          content={leftText}
-          onTextChange={handleLeftChange}
-          onSentenceChange={handleLeftSentence}
-          onBlur={handleBlur}
-          onPaste={handlePaste}
-          activeSentenceIndices={activeLeftIndices}
-          sentenceRanges={sourceSentenceRanges}
-          placeholder="ここにテキストを入力またはペースト..."
-          containerRef={setLeftEditorRef}
-        />
+      {/* Workflow tabs */}
+      <WorkflowTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <SectionRail sections={sections} activeSection={activeSection} onSectionClick={setActiveSection} />
 
-        {/* Sync buttons - horizontal on mobile, vertical on desktop */}
-        <div className="flex flex-row md:flex-col items-center justify-center gap-3 px-2 py-2 md:py-0 bg-muted/30 border-y md:border-y-0 md:border-x">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleSyncLeftToRight}
-                disabled={isSyncing || !leftText.trim()}
-                className="h-10 w-10 rounded-full"
-              >
-                {syncingDirection === "left" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <ArrowRight className="h-4 w-4 hidden md:block" />
-                )}
-                {syncingDirection !== "left" && (
-                  <ArrowDown className="h-4 w-4 md:hidden" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              原文の変更を翻訳に反映
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleSyncRightToLeft}
-                disabled={isSyncing || !rightText.trim()}
-                className="h-10 w-10 rounded-full"
-              >
-                {syncingDirection === "right" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <ArrowLeft className="h-4 w-4 hidden md:block" />
-                )}
-                {syncingDirection !== "right" && (
-                  <ArrowUp className="h-4 w-4 md:hidden" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              翻訳の変更を原文に反映
-            </TooltipContent>
-          </Tooltip>
+      {/* Write tab: Editor panels with sync buttons */}
+      {activeTab === "write" && (
+        <>
+        <CoverageBar citationCount={citationCount} onOpenEvidence={() => setIsEvidencePanelOpen(true)} />
+        <div className="flex flex-col md:flex-row flex-1 min-h-0">
+          <EditorPanel
+            label="下書き"
+            content={leftText}
+            onTextChange={handleLeftChange}
+            onSentenceChange={handleLeftSentence}
+            onBlur={handleBlur}
+            onPaste={handlePaste}
+            activeSentenceIndices={activeLeftIndices}
+            sentenceRanges={sourceSentenceRanges}
+            placeholder="ここに下書きを入力..."
+            containerRef={setLeftEditorRef}
+          />
+
+          {/* Sync buttons - horizontal on mobile, vertical on desktop */}
+          <div className="flex flex-row md:flex-col items-center justify-center gap-3 px-2 py-2 md:py-0 bg-muted/30 border-y md:border-y-0 md:border-x">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleSyncLeftToRight}
+                  disabled={isSyncing || !leftText.trim()}
+                  className="h-10 w-10 rounded-full"
+                >
+                  {syncingDirection === "left" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4 hidden md:block" />
+                  )}
+                  {syncingDirection !== "left" && (
+                    <ArrowDown className="h-4 w-4 md:hidden" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                下書きの変更を原稿に反映
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleSyncRightToLeft}
+                  disabled={isSyncing || !rightText.trim()}
+                  className="h-10 w-10 rounded-full"
+                >
+                  {syncingDirection === "right" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowLeft className="h-4 w-4 hidden md:block" />
+                  )}
+                  {syncingDirection !== "right" && (
+                    <ArrowUp className="h-4 w-4 md:hidden" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                原稿の変更を下書きに反映
+              </TooltipContent>
+            </Tooltip>
+          </div>
+
+          <EditorPanel
+            label="原稿"
+            content={rightText}
+            onTextChange={handleRightChange}
+            onSentenceChange={handleRightSentence}
+            onBlur={handleBlur}
+            activeSentenceIndices={activeRightIndices}
+            sentenceRanges={translatedSentenceRanges}
+            placeholder="原稿がここに表示されます..."
+            containerRef={setRightEditorRef}
+            actions={
+              <ParagraphActions
+                onFindCitations={() => setIsEvidencePanelOpen(true)}
+                onCheckEvidence={() => setIsEvidencePanelOpen(true)}
+                onDraftWithAI={() => setIsEvidencePanelOpen(true)}
+              />
+            }
+          />
+
+          {/* Evidence side panel */}
+          <EvidencePanel
+            isOpen={isEvidencePanelOpen}
+            onClose={() => {
+              setIsEvidencePanelOpen(false);
+              localStorage.setItem("unmute:evidence-panel-open", "false");
+            }}
+            documentId={documentId}
+            draftText={rightText}
+            onCiteInsert={handleCiteInsert}
+          />
         </div>
+        </>
+      )}
 
-        <EditorPanel
-          label="翻訳"
-          content={rightText}
-          onTextChange={handleRightChange}
-          onSentenceChange={handleRightSentence}
-          onBlur={handleBlur}
-          activeSentenceIndices={activeRightIndices}
-          sentenceRanges={translatedSentenceRanges}
-          placeholder="翻訳がここに表示されます..."
-          containerRef={setRightEditorRef}
-        />
+      {/* Citations tab */}
+      {activeTab === "citations" && (
+        <CitationsView documentId={documentId} draftText={rightText} onCiteInsert={handleCiteInsert} />
+      )}
 
-        {/* Evidence side panel */}
-        <EvidencePanel
-          isOpen={isEvidencePanelOpen}
-          onClose={() => {
-            setIsEvidencePanelOpen(false);
-            localStorage.setItem("unmute:evidence-panel-open", "false");
-          }}
-          documentId={documentId}
-          draftText={rightText}
-          onCiteInsert={handleCiteInsert}
-        />
-      </div>
+      {/* Review tab */}
+      {activeTab === "review" && (
+        <ReviewView />
+      )}
     </div>
   );
 }
