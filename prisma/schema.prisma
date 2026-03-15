@@ -69,6 +69,8 @@ model User {
   loginDevices         LoginDevice[]
   adminActionsPerformed AdminActionLog[] @relation("AdminActionActor")
   adminActionsReceived  AdminActionLog[] @relation("AdminActionTarget")
+  writingSessions      WritingSession[]
+  achievements         Achievement[]
 
   @@index([deletedAt])
 }
@@ -123,6 +125,8 @@ model Document {
   paragraphAnalyses    ParagraphAnalysis[]
   journey              PaperJourney?
   complianceReports    ComplianceReport[]
+  milestones           DocumentMilestone[]
+  writingSessions      WritingSession[]
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
 
@@ -597,4 +601,71 @@ model ComplianceReport {
 
   @@index([documentId])
   @@index([documentId, guidelineId])
+}
+
+// ===== Productivity Layer =====
+
+model DocumentMilestone {
+  id          String   @id @default(cuid())
+  documentId  String
+  title       String
+  description String?  @db.Text
+  type        String   @default("CUSTOM")  // DRAFT_COMPLETE | CITATIONS_DONE | REVIEW_DONE | SUBMISSION_READY | CUSTOM
+  targetDate  DateTime
+  completedAt DateTime?
+  status      String   @default("NOT_STARTED")  // NOT_STARTED | IN_PROGRESS | COMPLETED
+  sortOrder   Int      @default(0)
+
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([documentId])
+  @@index([documentId, status])
+}
+
+model WritingSession {
+  id            String   @id @default(cuid())
+  userId        String
+  documentId    String
+  status        String   @default("ACTIVE")  // ACTIVE | PAUSED | COMPLETED | ABANDONED
+
+  startedAt     DateTime @default(now())
+  endedAt       DateTime?
+  totalPausedMs Int      @default(0)
+
+  wordsAtStart  Int      @default(0)
+  wordsAtEnd    Int?
+  wordsWritten  Int?
+  citationsAdded Int     @default(0)
+
+  pomodoroCount  Int     @default(0)
+  pomodoroLength Int     @default(25)
+  breakLength    Int     @default(5)
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document      Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@index([documentId])
+  @@index([userId, startedAt])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // FIRST_DOCUMENT | FIRST_CITATION | FIRST_EVIDENCE | FIRST_EXPORT | WRITING_STREAK | WORDS_MILESTONE | POMODORO_MILESTONE
+  documentId  String?
+  metadata    Json?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  achievedAt  DateTime @default(now())
+
+  @@unique([userId, type])
+  @@index([userId])
 }
