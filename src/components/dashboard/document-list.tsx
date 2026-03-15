@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { FileText, Trash2, Pencil, Check, X } from "lucide-react";
 import { deleteDocument, renameDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
@@ -16,7 +17,8 @@ interface DocumentItem {
   id: string;
   title: string;
   updatedAt: Date;
-  versions: { versionNumber: number }[];
+  versions: { versionNumber: number; sourceLang: string; targetLang: string; journal: string | null }[];
+  _count: { manuscriptCitations: number };
 }
 
 interface DocumentListProps {
@@ -45,7 +47,8 @@ function DocumentCard({
   const [displayTitle, setDisplayTitle] = useState(doc.title);
   const [editTitle, setEditTitle] = useState(doc.title);
   const inputRef = useRef<HTMLInputElement>(null);
-  const latestVersion = doc.versions[0]?.versionNumber ?? 0;
+  const latestVersion = doc.versions[0];
+  const versionNumber = latestVersion?.versionNumber ?? 0;
 
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -150,15 +153,32 @@ function DocumentCard({
         <div className="min-w-0">
           <p className="font-medium truncate">
             {displayTitle}
-            {latestVersion > 0 && (
+            {versionNumber > 0 && (
               <span className="ms-2 text-xs text-muted-foreground">
-                (v{latestVersion})
+                (v{versionNumber})
               </span>
             )}
           </p>
           <p className="text-xs text-muted-foreground">
             {t("updated")} {formatDate(doc.updatedAt)}
           </p>
+          {latestVersion && (
+            <div className="flex items-center gap-2 mt-1">
+              {latestVersion.journal && (
+                <Badge variant="outline" className="text-xs">
+                  {latestVersion.journal}
+                </Badge>
+              )}
+              <span className="text-xs text-muted-foreground">
+                {latestVersion.sourceLang} → {latestVersion.targetLang}
+              </span>
+              {doc._count.manuscriptCitations > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {doc._count.manuscriptCitations} 引用
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

@@ -20,14 +20,32 @@ export async function getDocuments() {
       versions: {
         orderBy: { versionNumber: "desc" },
         take: 1,
-        select: { versionNumber: true },
+        select: {
+          versionNumber: true,
+          sourceLang: true,
+          targetLang: true,
+          journal: true,
+        },
+      },
+      _count: {
+        select: {
+          manuscriptCitations: true,
+        },
       },
     },
     orderBy: { updatedAt: "desc" },
   });
 }
 
-export async function createDocument(): Promise<{ id: string }> {
+interface CreateDocumentOptions {
+  title?: string;
+  topic?: string;
+  sourceLang?: string;
+  targetLang?: string;
+  journal?: string;
+}
+
+export async function createDocument(options?: CreateDocumentOptions): Promise<{ id: string }> {
   const userId = await getUserId();
   const { plan } = await getUserPlanById(userId);
   const limitCheck = await checkDocumentLimit(userId, plan);
@@ -37,16 +55,20 @@ export async function createDocument(): Promise<{ id: string }> {
     );
   }
 
+  const title = options?.title || "無題の論文";
+
   const doc = await prisma.document.create({
     data: {
       userId,
+      title,
       versions: {
         create: {
           versionNumber: 1,
           sourceText: "",
           translatedText: "",
-          sourceLang: "ja",
-          targetLang: "en",
+          sourceLang: options?.sourceLang ?? "ja",
+          targetLang: options?.targetLang ?? "en",
+          journal: options?.journal ?? null,
         },
       },
     },
