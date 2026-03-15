@@ -75,6 +75,7 @@ export async function POST(request: Request) {
       data: {
         title: candidate.title,
         abstract: candidate.abstract,
+        authors: candidate.authors?.map((a) => ({ name: a.name })) ?? [],
         year: candidate.year,
         venue: candidate.venue,
         citationCount: candidate.citationCount ?? 0,

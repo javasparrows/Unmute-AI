@@ -66,6 +66,7 @@ export async function POST(request: Request) {
       data: {
         title: crossrefData?.title ?? candidate.title,
         abstract: crossrefData?.abstract ?? candidate.abstract,
+        authors: (crossrefData?.authors ?? candidate.authors)?.map((a) => ({ name: a.name })) ?? [],
         year: crossrefData?.year ?? candidate.year,
         venue: crossrefData?.venue ?? candidate.venue,
         citationCount: crossrefData?.citationCount ?? candidate.citationCount ?? 0,

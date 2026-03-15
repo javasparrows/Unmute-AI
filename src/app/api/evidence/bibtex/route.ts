@@ -32,10 +32,14 @@ export async function GET(request: Request) {
       if (id.provider === "arxiv") identifiers.arxivId = id.externalId;
     }
 
+    const authors = Array.isArray(c.paper.authors)
+      ? (c.paper.authors as { name: string }[])
+      : [{ name: "Unknown" }];
+
     return generateBibTeXEntry(
       {
         title: c.paper.title,
-        authors: [{ name: "Author" }], // TODO: store authors in CanonicalPaper
+        authors,
         year: c.paper.year,
         venue: c.paper.venue,
         doi: identifiers.doi,

@@ -264,6 +264,7 @@ model CanonicalPaper {
   id              String            @id @default(cuid())
   title           String
   abstract        String?           @db.Text
+  authors         Json?             // [{name: string, affiliations?: string[]}]
   year            Int?
   venue           String?
   citationCount   Int               @default(0)
