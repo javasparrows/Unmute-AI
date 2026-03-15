@@ -74,6 +74,28 @@
       "description": "優れた研究は世界中で生まれています。世界最高のアイデアは、それが生まれた言語に関係なく、等しく発言の機会を得るべきだと私たちは信じています。",
       "button": "Unmute AI を試す"
     },
+    "stats": {
+      "stat1Value": "17",
+      "stat1Label": "対応言語",
+      "stat2Value": "8",
+      "stat2Label": "ジャーナルスタイル",
+      "stat3Value": "40%",
+      "stat3Label": "の研究時間を言語に費やす非英語話者"
+    },
+    "comparison": {
+      "title": "論文執筆AIツール比較",
+      "subtitle": "ChatGPT、DeepLとの違い",
+      "unmute": "Unmute AI",
+      "chatgpt": "ChatGPT",
+      "deepl": "DeepL",
+      "feature1": "学術翻訳特化",
+      "feature2": "ジャーナルスタイル対応",
+      "feature3": "LaTeX保持",
+      "feature4": "IMRAD構造チェック",
+      "feature5": "引用の自動検索・挿入",
+      "feature6": "双方向リアルタイム編集",
+      "feature7": "バージョン管理"
+    },
     "footer": {
       "pricing": "料金",
       "terms": "利用規約",

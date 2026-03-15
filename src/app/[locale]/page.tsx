@@ -18,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import { SiteHeader } from "@/components/layout/site-header";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -147,12 +148,86 @@ export default async function LandingPage() {
     },
   ];
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Unmute AI",
+    url: "https://unmute-ai.com",
+    description: "AI-powered academic translation for researchers worldwide",
+  };
+
+  const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Unmute AI",
+    url: "https://unmute-ai.com",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description:
+      "AI-powered academic translation that understands journal styles, paper structure, and your intent.",
+    offers: {
+      "@type": "AggregateOffer",
+      lowPrice: "0",
+      highPrice: "2980",
+      priceCurrency: "JPY",
+      offerCount: 3,
+    },
+    featureList: [
+      "AI-powered academic translation",
+      "Journal-specific style formatting (8 styles)",
+      "LaTeX-aware translation",
+      "IMRAD structure checking",
+      "Real-time bidirectional translation",
+      "Citation Auto-Pilot",
+      "17 language support",
+    ],
+    inLanguage: [
+      "ja",
+      "en",
+      "zh-CN",
+      "zh-TW",
+      "ko",
+      "de",
+      "fr",
+      "es",
+      "pt-BR",
+      "ru",
+      "it",
+      "hi",
+      "tr",
+      "ar",
+      "id",
+      "pl",
+      "fa",
+    ],
+  };
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: t("howItWorks.title"),
+    description: t("howItWorks.subtitle"),
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.title,
+      text: step.description,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={webAppSchema} />
+      <JsonLd data={howToSchema} />
       <SiteHeader />
 
+      <article itemScope itemType="https://schema.org/WebApplication">
+        <meta itemProp="name" content="Unmute AI" />
+        <meta itemProp="applicationCategory" content="Academic Translation Tool" />
+
       {/* Hero */}
-      <section className="bg-secondary py-28 sm:py-36">
+      <section aria-label="Hero" className="bg-secondary py-28 sm:py-36">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-secondary-foreground">
             {t("hero.title1")}
@@ -173,8 +248,28 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Statistics */}
+      <section aria-label="Statistics" className="py-12 border-b">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="grid grid-cols-3 gap-8 text-center">
+            <div>
+              <p className="text-3xl sm:text-4xl font-bold text-primary">{t("stats.stat1Value")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("stats.stat1Label")}</p>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-bold text-primary">{t("stats.stat2Value")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("stats.stat2Label")}</p>
+            </div>
+            <div>
+              <p className="text-3xl sm:text-4xl font-bold text-primary">{t("stats.stat3Value")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("stats.stat3Label")}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Problem */}
-      <section className="py-24">
+      <section aria-label="Problem" className="py-24">
         <div className="mx-auto max-w-4xl px-6 text-center">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             {t("problem.title1")}
@@ -188,7 +283,7 @@ export default async function LandingPage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-secondary py-24">
+      <section aria-label="How It Works" className="bg-secondary py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl text-secondary-foreground">
@@ -221,7 +316,7 @@ export default async function LandingPage() {
       </section>
 
       {/* Core Features */}
-      <section id="features" className="py-24">
+      <section id="features" aria-label="Features" className="py-24">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
@@ -263,8 +358,48 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Comparison */}
+      <section aria-label="Comparison" className="py-24">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+              {t("comparison.title")}
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg">
+              {t("comparison.subtitle")}
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 pe-4 text-muted-foreground font-medium"></th>
+                  <th className="py-3 px-4 text-center font-bold text-primary">{t("comparison.unmute")}</th>
+                  <th className="py-3 px-4 text-center font-medium text-muted-foreground">{t("comparison.chatgpt")}</th>
+                  <th className="py-3 px-4 text-center font-medium text-muted-foreground">{t("comparison.deepl")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(["feature1", "feature2", "feature3", "feature4", "feature5", "feature6", "feature7"] as const).map((key) => (
+                  <tr key={key} className="border-b border-border/50">
+                    <td className="py-3 pe-4">{t(`comparison.${key}`)}</td>
+                    <td className="py-3 px-4 text-center text-green-600 dark:text-green-400">&#10003;</td>
+                    <td className="py-3 px-4 text-center text-muted-foreground/60">
+                      {key === "feature1" || key === "feature6" ? "\u25B3" : "\u2717"}
+                    </td>
+                    <td className="py-3 px-4 text-center text-muted-foreground/60">
+                      {key === "feature1" ? "\u25B3" : key === "feature6" ? "\u2713" : "\u2717"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
-      <section className="bg-secondary py-24">
+      <section aria-label="Call to Action" className="bg-secondary py-24">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight text-secondary-foreground">
             {t("cta.title1")}
@@ -284,6 +419,8 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+
+      </article>
 
       {/* Footer */}
       <footer className="border-t py-8">

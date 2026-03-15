@@ -1,0 +1,35 @@
+# Unmute AI
+
+> AI-powered academic translation SaaS that helps researchers write papers in their native language and publish in any language.
+
+## What is Unmute AI?
+
+Unmute AI is a web application for academic paper translation and citation management. Researchers can write in their native language (e.g., Japanese, Chinese, Korean, German) and get publication-ready translations that match the target journal's style and conventions.
+
+## Key Features
+
+- Real-time bidirectional translation (source and translation side-by-side)
+- Journal-specific style formatting (8 academic journal styles)
+- LaTeX-aware translation (preserves \cite{}, \ref{}, equations)
+- IMRAD structure checking (Introduction, Methods, Results, Discussion)
+- Citation Auto-Pilot (sentence-by-sentence citation suggestion with one-click insertion)
+- Evidence-grounded writing with verified citations (DOI/PMID verified)
+- Version control for translation iterations
+- Transparent cost tracking
+
+## Supported Languages
+
+17 languages: Japanese, English, Chinese (Simplified), Chinese (Traditional), Korean, German, French, Spanish, Portuguese (Brazilian), Russian, Italian, Hindi, Turkish, Arabic, Indonesian, Polish, Persian
+
+## Pricing
+
+- Free: 0 JPY/month - 10,000 chars/month, 3 documents
+- Pro: 980 JPY/month (~$6.50 USD) - 100,000 chars/month, all journal styles
+- Max: 2,980 JPY/month (~$20 USD) - Unlimited translation, all features
+
+## Links
+
+- Website: https://unmute-ai.com
+- Pricing: https://unmute-ai.com/pricing
+- Terms: https://unmute-ai.com/terms
+- Privacy: https://unmute-ai.com/privacy
