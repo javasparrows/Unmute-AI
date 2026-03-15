@@ -11,6 +11,7 @@ import { getUserPlanById } from "@/lib/user-plan";
 import { getPlanInfo, isUnlimited } from "@/lib/plans";
 import { getTranslations } from "next-intl/server";
 import { LoginCheck } from "@/components/auth/login-check";
+import { LiteratureWatchWidget } from "@/components/dashboard/literature-watch-widget";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -58,6 +59,10 @@ export default async function DashboardPage() {
         </div>
 
         <DocumentList documents={documents} />
+
+        <div className="mt-6">
+          <LiteratureWatchWidget />
+        </div>
       </main>
 
       {showWelcome && <WelcomeDialog open={true} />}
