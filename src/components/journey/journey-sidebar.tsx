@@ -27,6 +27,19 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
   const [journey, setJourney] = useState<JourneyData | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
+
+  // Keyboard shortcut: Cmd+\ (or Ctrl+\) to toggle sidebar
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "\\") {
+        e.preventDefault();
+        setCollapsed((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const fetchJourney = useCallback(async () => {
     try {
@@ -48,6 +61,14 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
     return () => clearInterval(interval);
   }, [fetchJourney]);
 
+  // Auto-scroll to current task on load
+  useEffect(() => {
+    if (journey?.currentTask) {
+      const el = document.querySelector(`[data-task-id="${journey.currentTask}"]`);
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [journey?.currentTask]);
+
   const handleCompleteTask = async (taskId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const res = await fetch(`/api/v2/journey/${documentId}`, {
@@ -55,7 +76,11 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ completeTask: taskId }),
     });
-    if (res.ok) setJourney(await res.json());
+    if (res.ok) {
+      setJourney(await res.json());
+      setRecentlyCompleted(taskId);
+      setTimeout(() => setRecentlyCompleted(null), 1500);
+    }
   };
 
   const handleSkipTask = async (taskId: string, e: React.MouseEvent) => {
@@ -70,7 +95,7 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
 
   if (loading || !journey) {
     return (
-      <div className={cn("border-r bg-muted/10 flex items-center justify-center", collapsed ? "w-12" : "w-72", className)}>
+      <div className={cn("border-r bg-muted/10 flex items-center justify-center transition-all duration-200", collapsed ? "w-12" : "w-72", className)}>
         {loading && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
       </div>
     );
@@ -81,7 +106,7 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
   // Collapsed view -- just dots
   if (collapsed) {
     return (
-      <div className={cn("w-12 border-r bg-muted/10 flex flex-col items-center py-3 shrink-0", className)}>
+      <div className={cn("w-12 border-r bg-muted/10 flex flex-col items-center py-3 shrink-0 transition-all duration-200", className)}>
         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 mb-3" onClick={() => setCollapsed(false)}>
           <ChevronRight className="h-3.5 w-3.5" />
         </Button>
@@ -111,7 +136,7 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
   const currentTask = TASKS.find((t) => t.id === journey.currentTask);
 
   return (
-    <div className={cn("w-72 border-r bg-muted/10 flex flex-col shrink-0 overflow-hidden", className)}>
+    <div className={cn("w-72 border-r bg-muted/10 flex flex-col shrink-0 overflow-hidden transition-all duration-200", className)}>
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2.5 border-b">
         <span className="text-xs font-semibold text-foreground">Paper Writing Journey</span>
@@ -205,6 +230,7 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
                   return (
                     <button
                       key={task.id}
+                      data-task-id={task.id}
                       onClick={() => onTaskClick?.(task)}
                       className={cn(
                         "flex items-center gap-2 w-full text-left px-2 py-1 rounded-sm transition-colors group relative",
@@ -213,11 +239,12 @@ export function JourneySidebar({ documentId, onTaskClick, className }: JourneySi
                     >
                       {/* Task dot */}
                       <div className={cn(
-                        "h-2.5 w-2.5 rounded-full shrink-0 relative z-10 -ml-[13px]",
+                        "h-2.5 w-2.5 rounded-full shrink-0 relative z-10 -ml-[13px] transition-all",
                         taskStatus === "completed" ? "bg-green-500" :
                         taskStatus === "skipped" ? "bg-muted-foreground/30" :
                         isCurrentTask ? "bg-primary ring-2 ring-primary/30 animate-pulse" :
                         "bg-muted-foreground/20",
+                        recentlyCompleted === task.id && "scale-150 ring-4 ring-green-500/30",
                       )}>
                         {taskStatus === "completed" && (
                           <Check className="h-2 w-2 text-white absolute top-[1px] left-[1px]" />

@@ -7,7 +7,7 @@ import { CitationsView } from "./citations-view";
 import { ReviewView } from "./review-view";
 import { normalizeSections, type SectionType } from "@/lib/sections";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, Loader2, Pencil, Settings, BookOpenCheck } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, Loader2, Pencil, Settings, BookOpenCheck, Map, X } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
@@ -101,6 +101,7 @@ export function EditorPageClient({
   const [activeTab, setActiveTab] = useState<WorkflowTab>("write");
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [mobileJourneyOpen, setMobileJourneyOpen] = useState(false);
 
   const sections = useMemo(
     () => normalizeSections(initialVersion?.sections ?? null, rightText),
@@ -448,12 +449,14 @@ export function EditorPageClient({
 
   return (
     <div className="flex h-screen">
-      {/* Journey Sidebar */}
-      <JourneySidebar
-        documentId={documentId}
-        onTaskClick={handleJourneyTaskClick}
-        className="h-full"
-      />
+      {/* Journey Sidebar — hidden on mobile */}
+      <div className="hidden md:block">
+        <JourneySidebar
+          documentId={documentId}
+          onTaskClick={handleJourneyTaskClick}
+          className="h-full"
+        />
+      </div>
 
       {/* Main content */}
       <div className="flex flex-col flex-1 min-w-0">
@@ -751,6 +754,50 @@ export function EditorPageClient({
         hasContent={rightText.trim().length > 0}
       />
       </div>{/* End main content wrapper */}
+
+      {/* Mobile journey toggle */}
+      <div className="md:hidden fixed bottom-4 right-4 z-50">
+        <Button
+          variant="default"
+          size="icon"
+          className="h-12 w-12 rounded-full shadow-lg"
+          onClick={() => setMobileJourneyOpen(true)}
+        >
+          <Map className="h-5 w-5" />
+        </Button>
+      </div>
+
+      {/* Mobile journey bottom sheet */}
+      {mobileJourneyOpen && (
+        <div className="md:hidden fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-black/50 transition-opacity"
+            onClick={() => setMobileJourneyOpen(false)}
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-[70vh] bg-background rounded-t-2xl overflow-hidden animate-in slide-in-from-bottom duration-300">
+            <div className="flex items-center justify-between px-4 py-3 border-b">
+              <span className="text-sm font-semibold">Paper Writing Journey</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0"
+                onClick={() => setMobileJourneyOpen(false)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="overflow-y-auto h-full pb-20">
+              <JourneySidebar
+                documentId={documentId}
+                onTaskClick={(task) => {
+                  handleJourneyTaskClick(task);
+                  setMobileJourneyOpen(false);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
