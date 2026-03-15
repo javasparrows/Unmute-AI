@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { PaperCandidate, SectionType } from "@/types/evidence";
+import { AgentPipelineStatus, type PipelineStep } from "./agent-pipeline-status";
 
 interface AnalyzedSentence {
   index: number;
@@ -63,6 +64,7 @@ export function CitationAutopilot({
   const [skippedCount, setSkippedCount] = useState(0);
   const [acceptingIndex, setAcceptingIndex] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [pipelineSteps, setPipelineSteps] = useState<PipelineStep[]>([]);
 
   // Prefetch cache
   const prefetchCache = useRef<
@@ -109,6 +111,13 @@ export function CitationAutopilot({
       setCandidates([]);
       setSearchQuery("");
 
+      // Show search pipeline
+      setPipelineSteps([
+        { id: "query", label: labels.pipelineQuery, icon: "brain", status: "running", startedAt: Date.now() },
+        { id: "search", label: labels.pipelineSearch, icon: "search", status: "waiting" },
+        { id: "rank", label: labels.pipelineRank, icon: "sparkles", status: "waiting" },
+      ]);
+
       // Check prefetch cache
       const cached = prefetchCache.current.get(sentence.index);
       if (cached) {
@@ -116,6 +125,7 @@ export function CitationAutopilot({
           const result = await cached;
           setCandidates(result.candidates);
           setSearchQuery(result.searchQuery);
+          setPipelineSteps(prev => prev.map(s => ({ ...s, status: "done" as const, completedAt: Date.now() })));
           setIsLoadingCandidates(false);
           return;
         } catch {
@@ -124,7 +134,28 @@ export function CitationAutopilot({
       }
 
       try {
+        // Update pipeline as we go
+        setTimeout(() => {
+          setPipelineSteps(prev => prev.map(s =>
+            s.id === "query" ? { ...s, status: "done" as const, completedAt: Date.now() } :
+            s.id === "search" ? { ...s, status: "running" as const, startedAt: Date.now(), detail: "OpenAlex / Crossref / PubMed" } :
+            s
+          ));
+        }, 600);
+
         const result = await fetchSuggestionsRaw(sentence.text);
+
+        setPipelineSteps(prev => prev.map(s =>
+          s.id === "search" ? { ...s, status: "done" as const, completedAt: Date.now(), detail: `${result.candidates.length} papers` } :
+          s.id === "rank" ? { ...s, status: "running" as const, startedAt: Date.now() } :
+          s
+        ));
+
+        await new Promise(r => setTimeout(r, 300));
+        setPipelineSteps(prev => prev.map(s =>
+          s.id === "rank" ? { ...s, status: "done" as const, completedAt: Date.now() } : s
+        ));
+
         setCandidates(result.candidates);
         setSearchQuery(result.searchQuery);
       } catch {
@@ -133,7 +164,7 @@ export function CitationAutopilot({
         setIsLoadingCandidates(false);
       }
     },
-    [fetchSuggestionsRaw, labels.suggestionFailed],
+    [fetchSuggestionsRaw, labels.suggestionFailed, labels.pipelineQuery, labels.pipelineSearch, labels.pipelineRank],
   );
 
   // Start analysis
@@ -147,7 +178,24 @@ export function CitationAutopilot({
     setAcceptedCitations([]);
     setSkippedCount(0);
 
+    // Pipeline steps for analysis
+    const analysisSteps: PipelineStep[] = [
+      { id: "split", label: labels.pipelineSplit, icon: "file", status: "running", startedAt: Date.now() },
+      { id: "classify", label: labels.pipelineClassify, icon: "brain", status: "waiting" },
+      { id: "prepare", label: labels.pipelinePrepare, icon: "sparkles", status: "waiting" },
+    ];
+    setPipelineSteps(analysisSteps);
+
     try {
+      // Step 1 -> 2: Simulate progression (actual LLM call handles all at once)
+      setTimeout(() => {
+        setPipelineSteps(prev => prev.map(s =>
+          s.id === "split" ? { ...s, status: "done" as const, completedAt: Date.now() } :
+          s.id === "classify" ? { ...s, status: "running" as const, startedAt: Date.now(), detail: labels.pipelineClassifyDetail } :
+          s
+        ));
+      }, 800);
+
       const res = await fetch("/api/evidence/autopilot/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -156,11 +204,24 @@ export function CitationAutopilot({
       if (!res.ok) throw new Error("Analysis failed");
       const data = await res.json();
 
+      // Mark classify done, prepare running
+      setPipelineSteps(prev => prev.map(s =>
+        s.id === "classify" ? { ...s, status: "done" as const, completedAt: Date.now(), detail: `${data.needsCitation} ${labels.pipelineFound}` } :
+        s.id === "prepare" ? { ...s, status: "running" as const, startedAt: Date.now() } :
+        s
+      ));
+
       setSentences(data.sentences);
       const needsCitation = data.sentences.filter(
         (s: AnalyzedSentence) => s.status === "NEEDS_CITATION",
       );
       setNeedsCitationSentences(needsCitation);
+
+      // Small delay to show "prepare" step
+      await new Promise(r => setTimeout(r, 500));
+      setPipelineSteps(prev => prev.map(s =>
+        s.id === "prepare" ? { ...s, status: "done" as const, completedAt: Date.now() } : s
+      ));
 
       if (needsCitation.length === 0) {
         setPhase("complete");
@@ -182,6 +243,11 @@ export function CitationAutopilot({
     section,
     labels.noText,
     labels.analysisFailed,
+    labels.pipelineSplit,
+    labels.pipelineClassify,
+    labels.pipelineClassifyDetail,
+    labels.pipelinePrepare,
+    labels.pipelineFound,
     fetchSuggestions,
     prefetchSuggestions,
   ]);
@@ -361,10 +427,10 @@ export function CitationAutopilot({
   // -- ANALYZING --
   if (phase === "analyzing") {
     return (
-      <div className="p-4 flex flex-col items-center justify-center gap-3 py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="text-sm text-muted-foreground">{labels.analyzing}</p>
-      </div>
+      <AgentPipelineStatus
+        steps={pipelineSteps}
+        title={labels.analyzing}
+      />
     );
   }
 
@@ -483,12 +549,7 @@ export function CitationAutopilot({
       {/* Candidates */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
         {isLoadingCandidates ? (
-          <div className="flex flex-col items-center gap-2 py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            <p className="text-xs text-muted-foreground">
-              {labels.searching}
-            </p>
-          </div>
+          <AgentPipelineStatus steps={pipelineSteps} compact />
         ) : candidates.length === 0 ? (
           <div className="text-center py-8">
             <AlertCircle className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
@@ -600,6 +661,14 @@ function getLabels(locale: string): Record<string, string> {
       analysisFailed: "分析に失敗しました",
       suggestionFailed: "候補の取得に失敗しました",
       acceptFailed: "引用の追加に失敗しました",
+      pipelineSplit: "テキストを文に分割",
+      pipelineClassify: "引用の必要性を判定",
+      pipelineClassifyDetail: "各文をAIが分析中...",
+      pipelinePrepare: "引用チェックを準備",
+      pipelineFound: "文が引用を必要としています",
+      pipelineQuery: "検索クエリを生成",
+      pipelineSearch: "論文データベースを検索",
+      pipelineRank: "関連度でランキング",
     },
     en: {
       title: "Citation Auto-Pilot",
@@ -626,6 +695,14 @@ function getLabels(locale: string): Record<string, string> {
       analysisFailed: "Analysis failed",
       suggestionFailed: "Failed to fetch suggestions",
       acceptFailed: "Failed to accept citation",
+      pipelineSplit: "Splitting text into sentences",
+      pipelineClassify: "Classifying citation needs",
+      pipelineClassifyDetail: "AI analyzing each sentence...",
+      pipelinePrepare: "Preparing citation check",
+      pipelineFound: "sentences need citations",
+      pipelineQuery: "Generating search query",
+      pipelineSearch: "Searching paper databases",
+      pipelineRank: "Ranking by relevance",
     },
   };
   return labels[locale] ?? labels.en;
