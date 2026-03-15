@@ -66,7 +66,7 @@ export function StartPaperDialog({ open, onOpenChange }: StartPaperDialogProps) 
           targetLang,
           journal,
         });
-        router.push(`/documents/${doc.id}`);
+        router.push(`/papers/${doc.id}`);
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "作成に失敗しました");
       }
