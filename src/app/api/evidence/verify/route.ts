@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { providers } from "@/lib/providers";
+import { findOrCreateCanonicalPaper } from "@/lib/evidence/paper-ingest";
 import type {
   EvidenceVerifyRequest,
   EvidenceVerifyResponse,
@@ -51,42 +51,13 @@ export async function POST(request: Request) {
     } satisfies EvidenceVerifyResponse);
   }
 
-  // Step 3: Create or find CanonicalPaper
-  let paper = doi
-    ? await prisma.canonicalPaper.findFirst({
-        where: {
-          identifiers: { some: { provider: "crossref", externalId: doi } },
-        },
-        include: { identifiers: true },
-      })
-    : null;
-
-  if (!paper) {
-    paper = await prisma.canonicalPaper.create({
-      data: {
-        title: crossrefData?.title ?? candidate.title,
-        abstract: crossrefData?.abstract ?? candidate.abstract,
-        authors: (crossrefData?.authors ?? candidate.authors)?.map((a) => ({ name: a.name })) ?? [],
-        year: crossrefData?.year ?? candidate.year,
-        venue: crossrefData?.venue ?? candidate.venue,
-        citationCount: crossrefData?.citationCount ?? candidate.citationCount ?? 0,
-        influentialCount: candidate.influentialCitationCount ?? 0,
-        fieldsOfStudy: candidate.fieldsOfStudy ?? [],
-        identifiers: {
-          create: Object.entries(candidate.externalIds)
-            .filter(
-              (entry): entry is [string, string] =>
-                entry[1] !== undefined && entry[1] !== null,
-            )
-            .map(([provider, externalId]) => ({
-              provider: mapProviderKey(provider),
-              externalId,
-            })),
-        },
-      },
-      include: { identifiers: true },
-    });
-  }
+  // Step 3: Find or create CanonicalPaper (unified service)
+  const { paper } = await findOrCreateCanonicalPaper(candidate, {
+    enrichment: crossrefData,
+    providerSnapshot: crossrefData
+      ? { provider: "crossref", data: crossrefData }
+      : undefined,
+  });
 
   const identifiers: Record<string, string> = {};
   for (const id of paper.identifiers) {
@@ -104,17 +75,4 @@ export async function POST(request: Request) {
     evidenceSnippets: [],
     claimCards: [],
   } satisfies EvidenceVerifyResponse);
-}
-
-function mapProviderKey(key: string): string {
-  switch (key) {
-    case "doi":
-      return "crossref";
-    case "pmid":
-      return "pubmed";
-    case "arxiv_id":
-      return "arxiv";
-    default:
-      return key;
-  }
 }
