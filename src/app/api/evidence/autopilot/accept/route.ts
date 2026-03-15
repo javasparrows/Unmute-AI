@@ -4,6 +4,7 @@ import { providers } from "@/lib/providers";
 import { generateCiteKey } from "@/lib/evidence/cite-key";
 import { generateBibTeXEntry, renderBibTeX } from "@/lib/evidence/bibtex";
 import { findOrCreateCanonicalPaper } from "@/lib/evidence/paper-ingest";
+import { addPaperRelation } from "@/lib/evidence/paper-relations";
 import type { PaperCandidate } from "@/types/evidence";
 
 interface AcceptRequest {
@@ -127,6 +128,19 @@ export async function POST(request: Request) {
     },
     citeKey
   );
+
+  // Background: create relations between this paper and other cited papers
+  const otherCitations = await prisma.manuscriptCitation.findMany({
+    where: { documentId, paperId: { not: paper.id } },
+    select: { paperId: true },
+  });
+
+  // Fire-and-forget: don't await
+  Promise.allSettled(
+    otherCitations.map((other) =>
+      addPaperRelation(paper.id, other.paperId, "related"),
+    ),
+  ).catch(() => {});
 
   return Response.json({
     action: "ACCEPT",
