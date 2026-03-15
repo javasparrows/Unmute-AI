@@ -7,6 +7,7 @@ import {
   FileType,
   AlertTriangle,
   BookOpen,
+  FileImage,
 } from "lucide-react";
 import {
   Dialog,
@@ -34,13 +35,17 @@ export function ExportDialog({
 }: ExportDialogProps) {
   const [downloading, setDownloading] = useState<string | null>(null);
 
-  const handleExport = async (format: "latex" | "docx" | "bibtex") => {
+  const handleExport = async (
+    format: "latex" | "docx" | "bibtex" | "evidence-pptx",
+  ) => {
     setDownloading(format);
     try {
       const endpoint =
         format === "bibtex"
           ? `/api/evidence/bibtex?documentId=${documentId}`
-          : `/api/export/${format}?documentId=${documentId}`;
+          : format === "evidence-pptx"
+            ? `/api/export/evidence-pptx?documentId=${documentId}`
+            : `/api/export/${format}?documentId=${documentId}`;
 
       const res = await fetch(endpoint);
       if (!res.ok) throw new Error("Export failed");
@@ -54,7 +59,9 @@ export function ExportDialog({
           ? "manuscript.tex"
           : format === "docx"
             ? "manuscript.docx"
-            : "references.bib";
+            : format === "evidence-pptx"
+              ? "evidence_report.pptx"
+              : "references.bib";
       a.click();
       URL.revokeObjectURL(url);
     } catch {
@@ -136,6 +143,21 @@ export function ExportDialog({
               <div className="font-medium">BibTeX (.bib)</div>
               <div className="text-xs text-muted-foreground">
                 Reference list. Use alongside LaTeX export
+              </div>
+            </div>
+          </Button>
+
+          <Button
+            variant="outline"
+            className="w-full justify-start gap-3 h-auto py-3"
+            onClick={() => handleExport("evidence-pptx")}
+            disabled={citationCount === 0 || downloading !== null}
+          >
+            <FileImage className="h-5 w-5 shrink-0" />
+            <div className="text-left">
+              <div className="font-medium">Evidence Report (.pptx)</div>
+              <div className="text-xs text-muted-foreground">
+                Citation evidence mapped to source passages. For advisor review
               </div>
             </div>
           </Button>
