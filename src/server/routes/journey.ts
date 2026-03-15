@@ -19,15 +19,25 @@ export const journeyRoutes = new Hono<AuthEnv>()
   .get("/:documentId", async (c) => {
     const documentId = c.req.param("documentId");
 
+    // Auto-create journey if it doesn't exist
+    let journey = await prisma.paperJourney.findUnique({
+      where: { documentId },
+    });
+
+    if (!journey) {
+      const { createJourney } = await import("@/lib/journey/auto-complete");
+      await createJourney(documentId);
+    }
+
     await refreshJourneyStatus(documentId);
 
-    const journey = await prisma.paperJourney.findUnique({
+    journey = await prisma.paperJourney.findUnique({
       where: { documentId },
       include: { taskCompletions: { orderBy: { createdAt: "desc" } } },
     });
 
     if (!journey) {
-      return c.json({ error: "Journey not found" }, 404);
+      return c.json({ error: "Document not found" }, 404);
     }
 
     return c.json(journey);

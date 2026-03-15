@@ -448,9 +448,9 @@ export function EditorPageClient({
   );
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Journey Sidebar — hidden on mobile */}
-      <div className="hidden md:block">
+      <div className="hidden md:flex shrink-0">
         <JourneySidebar
           documentId={documentId}
           onTaskClick={handleJourneyTaskClick}
@@ -459,7 +459,7 @@ export function EditorPageClient({
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
       {/* Header */}
       <header className="flex items-center justify-between px-3 sm:px-6 py-2 sm:py-3 bg-secondary text-secondary-foreground shadow-md gap-2">
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
