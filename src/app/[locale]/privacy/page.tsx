@@ -172,10 +172,10 @@ export default function PrivacyPage() {
             <p className="mt-2">
               メール:{" "}
               <a
-                href="mailto:info@ai-driven.jp"
+                href="mailto:support@unmute-ai.com"
                 className="text-primary hover:underline"
               >
-                info@ai-driven.jp
+                support@unmute-ai.com
               </a>
             </p>
           </Section>
