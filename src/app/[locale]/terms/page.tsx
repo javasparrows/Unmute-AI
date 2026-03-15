@@ -400,16 +400,14 @@ export default function TermsPage() {
           {/* ── 第18条 お問い合わせ先 ── */}
           <Section title="第18条（お問い合わせ先）">
             <p>
-              本規約に関するお問い合わせは、以下までご連絡ください。
-            </p>
-            <p className="mt-2">
-              メール:{" "}
-              <a
-                href="mailto:info@ai-driven.jp"
+              本規約に関するお問い合わせは、
+              <Link
+                href="/privacy"
                 className="text-primary hover:underline"
               >
-                info@ai-driven.jp
-              </a>
+                プライバシーポリシー
+              </Link>
+              に記載の連絡先までご連絡ください。
             </p>
           </Section>
         </article>

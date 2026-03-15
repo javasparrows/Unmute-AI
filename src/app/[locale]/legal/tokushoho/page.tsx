@@ -47,7 +47,7 @@ const rows = [
   },
   {
     label: "連絡先",
-    value: "info@ai-driven.jp",
+    value: "support@unmute-ai.com",
   },
   {
     label: "販売価格",
