@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { X, Search, Library, ShieldCheck, Maximize2, Minimize2 } from "lucide-react";
+import { X, Search, Library, ShieldCheck, Zap, Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EvidenceSearch } from "./evidence-search";
 import { EvidenceLibrary } from "./evidence-library";
 import { EvidenceReview } from "./evidence-review";
+import { CitationAutopilot } from "./citation-autopilot";
 
 interface EvidencePanelProps {
   isOpen: boolean;
@@ -13,7 +14,7 @@ interface EvidencePanelProps {
   documentId: string;
 }
 
-type TabId = "search" | "library" | "review";
+type TabId = "search" | "library" | "review" | "autopilot";
 type PanelWidth = "normal" | "wide";
 
 const STORAGE_KEY_WIDTH = "unmute:evidence-panel-width";
@@ -22,6 +23,7 @@ const TABS = [
   { id: "search" as const, label: "Search", icon: Search },
   { id: "library" as const, label: "Library", icon: Library },
   { id: "review" as const, label: "Review", icon: ShieldCheck },
+  { id: "autopilot" as const, label: "Auto-Pilot", icon: Zap },
 ] as const;
 
 export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProps) {
@@ -59,7 +61,7 @@ export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProp
   if (!isOpen) return null;
 
   return (
-    <div className={`${panelWidth === "wide" ? "w-[600px]" : "w-[380px]"} border-l bg-background flex flex-col h-full shrink-0 transition-[width] duration-200`}>
+    <div className={`${panelWidth === "wide" ? "md:w-[600px]" : "md:w-[380px]"} fixed inset-0 z-50 md:relative md:inset-auto md:z-auto w-full border-l bg-background flex flex-col h-full shrink-0 transition-[width] duration-200`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex gap-1">
@@ -95,6 +97,13 @@ export function EvidencePanel({ isOpen, onClose, documentId }: EvidencePanelProp
         {activeTab === "search" && <EvidenceSearch documentId={documentId} />}
         {activeTab === "library" && <EvidenceLibrary documentId={documentId} />}
         {activeTab === "review" && <EvidenceReview documentId={documentId} />}
+        {activeTab === "autopilot" && (
+          <CitationAutopilot
+            documentId={documentId}
+            draftText="" // TODO: Connect to editor text
+            section="INTRODUCTION"
+          />
+        )}
       </div>
     </div>
   );
