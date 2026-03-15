@@ -51,14 +51,14 @@ interface OverviewData {
 
 const signupChartConfig: ChartConfig = {
   count: {
-    label: "Signups",
+    label: "登録数",
     color: "var(--chart-1)",
   },
 };
 
 const tokenChartConfig: ChartConfig = {
   tokens: {
-    label: "Tokens",
+    label: "トークン",
     color: "var(--chart-2)",
   },
 };
@@ -111,25 +111,25 @@ export function OverviewClient() {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <KPICard
-          title="Total Users"
+          title="総ユーザー数"
           value={loading ? "..." : data?.kpis.totalUsers.toLocaleString() ?? "0"}
           href="/admin/users"
         />
         <KPICard
-          title="Signups Today"
+          title="本日の登録数"
           value={loading ? "..." : String(data?.kpis.signupsToday ?? 0)}
           subtitle={
             loading
               ? undefined
-              : `${data?.kpis.signupsThisWeek ?? 0} this week`
+              : `今週 ${data?.kpis.signupsThisWeek ?? 0} 件`
           }
         />
         <KPICard
-          title="Active Users Today"
+          title="本日のアクティブ"
           value={loading ? "..." : String(data?.kpis.activeUsersToday ?? 0)}
         />
         <KPICard
-          title="Tokens Today"
+          title="本日のトークン数"
           value={
             loading
               ? "..."
@@ -137,7 +137,7 @@ export function OverviewClient() {
           }
         />
         <KPICard
-          title="Est. Cost Today"
+          title="本日の推定コスト"
           value={
             loading
               ? "..."
@@ -149,17 +149,17 @@ export function OverviewClient() {
       {/* Signup Trend Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Signup Trend</CardTitle>
-          <CardDescription>New user signups over the last 30 days</CardDescription>
+          <CardTitle>登録推移</CardTitle>
+          <CardDescription>過去30日間の新規登録数</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-              Loading...
+              読み込み中...
             </div>
           ) : (data?.signupTrend.length ?? 0) === 0 ? (
             <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-              No data available
+              データなし
             </div>
           ) : (
             <ChartContainer config={signupChartConfig} className="h-[300px] w-full">
@@ -192,14 +192,14 @@ export function OverviewClient() {
       {/* Plan Distribution */}
       <Card>
         <CardHeader>
-          <CardTitle>Plan Distribution</CardTitle>
-          <CardDescription>Users by effective plan</CardDescription>
+          <CardTitle>プラン分布</CardTitle>
+          <CardDescription>有効プラン別ユーザー数</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <p className="text-sm text-muted-foreground">Loading...</p>
+            <p className="text-sm text-muted-foreground">読み込み中...</p>
           ) : (data?.planDistribution.length ?? 0) === 0 ? (
-            <p className="text-sm text-muted-foreground">No data available</p>
+            <p className="text-sm text-muted-foreground">データなし</p>
           ) : (
             <div className="space-y-3">
               {data?.planDistribution.map((item) => {
@@ -236,19 +236,19 @@ export function OverviewClient() {
       {/* Token Usage Trend Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Token Usage Trend</CardTitle>
+          <CardTitle>トークン使用推移</CardTitle>
           <CardDescription>
-            Total token consumption over the last 30 days
+            過去30日間の総トークン消費量
           </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-              Loading...
+              読み込み中...
             </div>
           ) : (data?.tokenTrend.length ?? 0) === 0 ? (
             <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-              No data available
+              データなし
             </div>
           ) : (
             <ChartContainer config={tokenChartConfig} className="h-[300px] w-full">
