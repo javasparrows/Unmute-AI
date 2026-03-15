@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Merriweather, Fira_Code } from "next/font/google";
+import { Outfit, Merriweather, Fira_Code, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
 const fontSans = Outfit({
@@ -16,6 +16,14 @@ const fontSerif = Merriweather({
 const fontMono = Fira_Code({
   variable: "--font-mono",
   subsets: ["latin"],
+});
+
+const fontCJK = Noto_Sans_JP({
+  variable: "--font-cjk",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -35,4 +43,4 @@ export default function RootLayout({
   return children;
 }
 
-export { fontSans, fontSerif, fontMono };
+export { fontSans, fontSerif, fontMono, fontCJK };
