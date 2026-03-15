@@ -128,6 +128,7 @@ model Document {
   complianceReports    ComplianceReport[]
   milestones           DocumentMilestone[]
   writingSessions      WritingSession[]
+  submissionPlan       SubmissionPlan?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
 
@@ -688,4 +689,22 @@ model LiteratureWatch {
 
   @@index([userId])
   @@index([userId, enabled])
+}
+
+model SubmissionPlan {
+  id              String   @id @default(cuid())
+  documentId      String   @unique
+  targetJournal   String?
+  targetDate      DateTime?
+  coverLetter     String?  @db.Text
+  checklist       Json     @default("[]")  // SubmissionCheckItem[]
+  reviewerCandidates Json  @default("[]")  // ReviewerCandidate[]
+  notes           String?  @db.Text
+
+  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([documentId])
 }
