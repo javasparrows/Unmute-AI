@@ -114,11 +114,11 @@ const SOURCE_LABELS: Record<string, string> = {
 
 const trendChartConfig: ChartConfig = {
   upgrades: {
-    label: "Upgrades",
+    label: "アップグレード",
     color: "var(--chart-1)",
   },
   downgrades: {
-    label: "Downgrades",
+    label: "ダウングレード",
     color: "var(--chart-2)",
   },
 };
@@ -135,13 +135,13 @@ export function PlansClient() {
       try {
         const res = await fetch("/api/admin/plans");
         if (!res.ok) {
-          setError(`Failed to load data (${res.status})`);
+          setError(`データの読み込みに失敗しました (${res.status})`);
           return;
         }
         const json: PlansData = await res.json();
         setData(json);
       } catch {
-        setError("Failed to load data");
+        setError("データの読み込みに失敗しました");
       } finally {
         setLoading(false);
       }
@@ -186,25 +186,25 @@ export function PlansClient() {
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          title="Total Plan Changes"
-          description="Last 30 days"
+          title="プラン変更数"
+          description="過去30日間"
           value={summary.totalChanges30d}
         />
         <KpiCard
-          title="Upgrades"
-          description="Last 30 days"
+          title="アップグレード"
+          description="過去30日間"
           value={summary.upgrades30d}
           accent="green"
         />
         <KpiCard
-          title="Downgrades"
-          description="Last 30 days"
+          title="ダウングレード"
+          description="過去30日間"
           value={summary.downgrades30d}
           accent="red"
         />
         <KpiCard
-          title="Net Growth"
-          description="Last 30 days"
+          title="純増減"
+          description="過去30日間"
           value={summary.netGrowth30d}
           accent={summary.netGrowth30d >= 0 ? "green" : "red"}
           prefix={summary.netGrowth30d > 0 ? "+" : ""}
@@ -214,14 +214,14 @@ export function PlansClient() {
       {/* Plan Distribution */}
       <Card>
         <CardHeader>
-          <CardTitle>Plan Distribution</CardTitle>
+          <CardTitle>プラン分布</CardTitle>
           <CardDescription>
-            Current plan breakdown across {totalDistribution} users
+            全 {totalDistribution} ユーザーのプラン内訳
           </CardDescription>
         </CardHeader>
         <CardContent>
           {distribution.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No user data</p>
+            <p className="text-sm text-muted-foreground">ユーザーデータなし</p>
           ) : (
             <div className="space-y-3">
               {distribution.map((d) => (
@@ -229,7 +229,7 @@ export function PlansClient() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="font-medium">{d.plan}</span>
                     <span className="text-muted-foreground">
-                      {d.count} users ({d.percentage}%)
+                      {d.count} 人 ({d.percentage}%)
                     </span>
                   </div>
                   <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
@@ -252,12 +252,12 @@ export function PlansClient() {
       {/* Plan Changes Trend Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Plan Changes Trend</CardTitle>
-          <CardDescription>Upgrades vs downgrades over the last 30 days</CardDescription>
+          <CardTitle>プラン変更推移</CardTitle>
+          <CardDescription>過去30日間のアップグレード vs ダウングレード</CardDescription>
         </CardHeader>
         <CardContent>
           {changeTrend.every((d) => d.upgrades === 0 && d.downgrades === 0) ? (
-            <p className="text-sm text-muted-foreground">No plan changes in the last 30 days</p>
+            <p className="text-sm text-muted-foreground">過去30日間のプラン変更なし</p>
           ) : (
             <ChartContainer config={trendChartConfig} className="h-[300px] w-full">
               <BarChart data={changeTrend} accessibilityLayer>
@@ -295,22 +295,22 @@ export function PlansClient() {
       {/* Recent Plan Changes Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Plan Changes</CardTitle>
-          <CardDescription>Last 50 plan change events</CardDescription>
+          <CardTitle>最近のプラン変更</CardTitle>
+          <CardDescription>直近50件のプラン変更履歴</CardDescription>
         </CardHeader>
         <CardContent>
           {recentChanges.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No plan changes recorded yet</p>
+            <p className="text-sm text-muted-foreground">プラン変更の記録なし</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left text-muted-foreground">
-                    <th className="pb-2 pr-4 font-medium">Date</th>
-                    <th className="pb-2 pr-4 font-medium">User</th>
-                    <th className="pb-2 pr-4 font-medium">Change</th>
-                    <th className="pb-2 pr-4 font-medium">Source</th>
-                    <th className="pb-2 font-medium">Note</th>
+                    <th className="pb-2 pr-4 font-medium">日時</th>
+                    <th className="pb-2 pr-4 font-medium">ユーザー</th>
+                    <th className="pb-2 pr-4 font-medium">変更</th>
+                    <th className="pb-2 pr-4 font-medium">ソース</th>
+                    <th className="pb-2 font-medium">メモ</th>
                   </tr>
                 </thead>
                 <tbody>
