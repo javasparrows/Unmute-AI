@@ -101,7 +101,7 @@ export function VersionPanel({
           <SheetTrigger asChild>
             <Button variant="ghost" size="sm" className="gap-1.5">
               <History className="h-4 w-4" />
-              v{currentVersionNumber}
+              <span className="hidden sm:inline">v{currentVersionNumber}</span>
             </Button>
           </SheetTrigger>
         </TooltipTrigger>
