@@ -14,8 +14,8 @@ interface OpenAlexWork {
     source?: { display_name?: string };
   };
   authorships?: {
-    author?: { display_name?: string };
-    institutions?: { display_name?: string }[];
+    author?: { display_name?: string; orcid?: string };
+    institutions?: { display_name?: string; ror?: string }[];
   }[];
   ids?: {
     doi?: string;
@@ -68,6 +68,22 @@ function toCandidate(work: OpenAlexWork): PaperCandidate {
     ...(work.topics?.map((t) => t.display_name).filter(Boolean) ?? []),
   ] as string[];
 
+  // Extract unique ORCID and ROR identifiers from authorships
+  const orcids: string[] = [];
+  const rorIds: string[] = [];
+  for (const authorship of work.authorships ?? []) {
+    if (authorship.author?.orcid) {
+      const orcid = authorship.author.orcid.replace("https://orcid.org/", "");
+      if (!orcids.includes(orcid)) orcids.push(orcid);
+    }
+    for (const inst of authorship.institutions ?? []) {
+      if (inst.ror) {
+        const ror = inst.ror.replace("https://ror.org/", "");
+        if (!rorIds.includes(ror)) rorIds.push(ror);
+      }
+    }
+  }
+
   return {
     title: work.display_name ?? work.title ?? "",
     authors:
@@ -89,6 +105,8 @@ function toCandidate(work: OpenAlexWork): PaperCandidate {
     fieldsOfStudy: fieldsOfStudy.length > 0 ? fieldsOfStudy : undefined,
     source: "openalex",
     relevanceScore: work.relevance_score,
+    orcids: orcids.length > 0 ? orcids : undefined,
+    rorIds: rorIds.length > 0 ? rorIds : undefined,
   };
 }
 

@@ -55,12 +55,6 @@ export interface TranslationUsage {
   outputTokens: number;
 }
 
-export interface TranslationCosts {
-  inputTokens: number;
-  outputTokens: number;
-  lastReset: string;
-}
-
 export interface SentenceTranslationRequest {
   sentences: string[];
   sourceLang: LanguageCode;

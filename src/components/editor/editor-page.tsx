@@ -7,13 +7,13 @@ import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { useCostTracking } from "@/hooks/use-cost-tracking";
+
 import { splitSentences, computeSentenceRanges } from "@/lib/split-sentences";
 import { getGroupIndices } from "@/lib/alignment";
 import { historyStore } from "@/lib/history-store";
 import { EditorPanel } from "./editor-panel";
 import { TranslationStatus } from "./translation-status";
-import { CostDisplay } from "./cost-display";
+
 import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
 import { SettingsPanel } from "../settings/settings-panel";
@@ -59,8 +59,6 @@ export function EditorPage() {
 
   const alignmentRef = useRef<AlignmentGroup[]>([]);
 
-  const { costs, addUsage } = useCostTracking();
-
   const {
     isSyncing,
     syncingDirection,
@@ -68,7 +66,7 @@ export function EditorPage() {
     syncLeftToRight,
     syncRightToLeft,
     initSnapshots,
-  } = useSyncTranslation({ onUsage: addUsage });
+  } = useSyncTranslation();
 
   const initialSourceTextRef = useRef(leftText);
   const initialTranslatedTextRef = useRef(rightText);
@@ -298,8 +296,6 @@ export function EditorPage() {
             Unmute AI
           </h1>
           <TranslationStatus isTranslating={isSyncing} error={error} />
-          <Separator orientation="vertical" className="h-6 bg-secondary-foreground/20" />
-          <CostDisplay costs={costs} />
         </div>
         <div className="flex items-center gap-2">
           <StructureCheckDialog
