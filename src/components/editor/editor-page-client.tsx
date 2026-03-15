@@ -23,6 +23,8 @@ import { LanguageSelector } from "../settings/language-selector";
 import { JournalSelector } from "../settings/journal-selector";
 
 import { renameDocument } from "@/app/actions/document";
+import { JourneyNav } from "./journey-nav";
+import type { TaskDefinition } from "@/lib/journey/task-registry";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { ExportDialog } from "./export-dialog";
 import { SaveButton } from "./save-button";
@@ -366,6 +368,12 @@ export function EditorPageClient({
     initSnapshots(rightText, tmpText);
   }, [leftLang, rightLang, leftText, rightText, initSnapshots]);
 
+  const handleJourneyTaskClick = useCallback((task: TaskDefinition) => {
+    if (task.linkedTab) {
+      setActiveTab(task.linkedTab);
+    }
+  }, []);
+
   const handleCiteInsert = useCallback((sentenceIndex: number, citeCommand: string) => {
     setRightText(prev => {
       const sentences = prev.split(/(?<=[.!?])\s+/);
@@ -588,6 +596,7 @@ export function EditorPageClient({
 
       {/* Workflow tabs */}
       <WorkflowTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <JourneyNav documentId={documentId} onTaskClick={handleJourneyTaskClick} />
       <SectionRail sections={sections} activeSection={activeSection} onSectionClick={setActiveSection} />
 
       {/* Write tab: Editor panels with sync buttons */}
