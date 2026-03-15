@@ -4,7 +4,11 @@ import { useTransition, useState, useRef } from "react";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { FileText, Trash2, Pencil, Check, X } from "lucide-react";
-import { deleteDocument, renameDocument } from "@/app/actions/document";
+import {
+  deleteDocument,
+  renameDocument,
+  startJourney,
+} from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,18 +16,30 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getProgress, PHASES } from "@/lib/journey/task-registry";
 
 interface DocumentItem {
   id: string;
   title: string;
   updatedAt: Date;
-  versions: { versionNumber: number; sourceLang: string; targetLang: string; journal: string | null }[];
-  _count: { manuscriptCitations: number };
+  versions: {
+    versionNumber: number;
+    sourceLang: string;
+    targetLang: string;
+    journal: string | null;
+    translatedText: string;
+  }[];
   journey: {
     currentPhase: number;
     currentTask: string;
     taskStatuses: unknown;
+    phaseStatuses: unknown;
   } | null;
+  _count: {
+    manuscriptCitations: number;
+    evidenceMappings: number;
+    writingSessions: number;
+  };
 }
 
 interface DocumentListProps {
@@ -39,6 +55,16 @@ function formatDate(date: Date) {
   }).format(date);
 }
 
+function getPhaseName(phaseNumber: number): string {
+  const phase = PHASES.find((p) => p.phase === phaseNumber);
+  return phase ? phase.name : `Phase ${phaseNumber}`;
+}
+
+function getWordCount(text: string | undefined | null): number {
+  if (!text) return 0;
+  return text.trim().length;
+}
+
 function DocumentCard({
   doc,
   onDelete,
@@ -51,9 +77,19 @@ function DocumentCard({
   const [isEditing, setIsEditing] = useState(false);
   const [displayTitle, setDisplayTitle] = useState(doc.title);
   const [editTitle, setEditTitle] = useState(doc.title);
+  const [isStartingJourney, setIsStartingJourney] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const latestVersion = doc.versions[0];
   const versionNumber = latestVersion?.versionNumber ?? 0;
+  const wordCount = getWordCount(latestVersion?.translatedText);
+
+  // Calculate journey progress
+  const progressPercent = doc.journey
+    ? getProgress(doc.journey.taskStatuses as Record<string, string>).percentage
+    : 0;
+  const phaseName = doc.journey
+    ? getPhaseName(doc.journey.currentPhase)
+    : "";
 
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -91,6 +127,18 @@ function DocumentCard({
       handleSave();
     } else if (e.key === "Escape") {
       handleCancel();
+    }
+  };
+
+  const handleStartJourney = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsStartingJourney(true);
+    try {
+      await startJourney(doc.id);
+      window.location.reload();
+    } catch {
+      setIsStartingJourney(false);
     }
   };
 
@@ -151,44 +199,80 @@ function DocumentCard({
   return (
     <Link
       href={`/papers/${doc.id}`}
-      className="group flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/50"
+      className="group flex items-start justify-between rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent/50"
     >
-      <div className="flex items-center gap-3 min-w-0">
-        <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
-        <div className="min-w-0">
-          <p className="font-medium truncate">
-            {displayTitle}
-            {versionNumber > 0 && (
-              <span className="ms-2 text-xs text-muted-foreground">
-                (v{versionNumber})
-              </span>
+      <div className="flex items-start gap-3 min-w-0">
+        <FileText className="h-5 w-5 shrink-0 text-muted-foreground mt-0.5" />
+        <div className="flex-1 min-w-0">
+          {/* Title + version */}
+          <div className="flex items-center gap-2">
+            <p className="font-medium truncate">
+              {displayTitle}
+              {versionNumber > 0 && (
+                <span className="ms-2 text-xs text-muted-foreground">
+                  (v{versionNumber})
+                </span>
+              )}
+            </p>
+          </div>
+
+          {/* Journey progress */}
+          {doc.journey ? (
+            <div className="mt-1.5">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="h-1.5 flex-1 rounded-full bg-muted max-w-[200px]">
+                  <div
+                    className="h-full rounded-full bg-primary transition-all"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-[10px] text-muted-foreground">
+                  {progressPercent}%
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Phase {doc.journey.currentPhase}: {phaseName} — タスク{" "}
+                {doc.journey.currentTask}
+              </p>
+            </div>
+          ) : (
+            <button
+              onClick={handleStartJourney}
+              disabled={isStartingJourney}
+              className="mt-1.5 text-xs text-primary hover:underline disabled:opacity-50"
+            >
+              {isStartingJourney ? "開始中..." : "ジャーニーを開始 →"}
+            </button>
+          )}
+
+          {/* Metrics row */}
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            {doc._count.manuscriptCitations > 0 && (
+              <Badge variant="secondary" className="text-[10px] py-0">
+                {doc._count.manuscriptCitations} 引用
+              </Badge>
             )}
-          </p>
-          <p className="text-xs text-muted-foreground">
+            {doc._count.evidenceMappings > 0 && (
+              <Badge variant="secondary" className="text-[10px] py-0">
+                {doc._count.evidenceMappings} 検証
+              </Badge>
+            )}
+            {wordCount > 0 && (
+              <Badge variant="outline" className="text-[10px] py-0">
+                {wordCount.toLocaleString()} 文字
+              </Badge>
+            )}
+            {latestVersion?.journal && (
+              <Badge variant="outline" className="text-[10px] py-0">
+                {latestVersion.journal}
+              </Badge>
+            )}
+          </div>
+
+          {/* Updated date */}
+          <p className="text-[10px] text-muted-foreground mt-1">
             {t("updated")} {formatDate(doc.updatedAt)}
           </p>
-          {latestVersion && (
-            <div className="flex items-center gap-2 mt-1">
-              {latestVersion.journal && (
-                <Badge variant="outline" className="text-xs">
-                  {latestVersion.journal}
-                </Badge>
-              )}
-              <span className="text-xs text-muted-foreground">
-                {latestVersion.sourceLang} → {latestVersion.targetLang}
-              </span>
-              {doc._count.manuscriptCitations > 0 && (
-                <Badge variant="secondary" className="text-xs">
-                  {doc._count.manuscriptCitations} 引用
-                </Badge>
-              )}
-              {doc.journey && (
-                <Badge variant="outline" className="text-xs">
-                  Phase {doc.journey.currentPhase}: タスク {doc.journey.currentTask}
-                </Badge>
-              )}
-            </div>
-          )}
         </div>
       </div>
 
@@ -238,7 +322,7 @@ export function DocumentList({ documents }: DocumentListProps) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
         <FileText className="h-12 w-12 text-muted-foreground/50 mb-4" />
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground font-medium">
           {t("noDocuments")}
         </p>
         <p className="text-sm text-muted-foreground/70 mt-1">

@@ -26,11 +26,7 @@ export async function getDocuments() {
           sourceLang: true,
           targetLang: true,
           journal: true,
-        },
-      },
-      _count: {
-        select: {
-          manuscriptCitations: true,
+          translatedText: true,
         },
       },
       journey: {
@@ -38,6 +34,14 @@ export async function getDocuments() {
           currentPhase: true,
           currentTask: true,
           taskStatuses: true,
+          phaseStatuses: true,
+        },
+      },
+      _count: {
+        select: {
+          manuscriptCitations: true,
+          evidenceMappings: true,
+          writingSessions: true,
         },
       },
     },
@@ -104,4 +108,22 @@ export async function renameDocument(documentId: string, title: string) {
   });
   revalidatePath("/dashboard");
   revalidatePath(`/papers/${documentId}`);
+}
+
+export async function startJourney(documentId: string): Promise<void> {
+  const userId = await getUserId();
+  // Verify document belongs to user
+  const doc = await prisma.document.findFirst({
+    where: { id: documentId, userId },
+  });
+  if (!doc) throw new Error("Document not found");
+
+  // Check if journey already exists
+  const existing = await prisma.paperJourney.findUnique({
+    where: { documentId },
+  });
+  if (existing) return;
+
+  await createJourney(documentId);
+  revalidatePath("/dashboard");
 }
