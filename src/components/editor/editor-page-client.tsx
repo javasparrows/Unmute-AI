@@ -215,7 +215,7 @@ export function EditorPageClient({
     syncLeftToRight,
     syncRightToLeft,
     initSnapshots,
-  } = useSyncTranslation({});
+  } = useSyncTranslation();
 
   const initialSourceTextRef = useRef(initialVersion?.sourceText ?? "");
   const initialTranslatedTextRef = useRef(initialVersion?.translatedText ?? "");

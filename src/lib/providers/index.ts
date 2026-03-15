@@ -1,6 +1,8 @@
 import { openAlexAdapter } from "./openalex";
 import { crossrefAdapter } from "./crossref";
 import { pubmedAdapter } from "./pubmed";
+import { jstageAdapter } from "./jstage";
+import { ciniiAdapter } from "./cinii";
 import type { PaperCandidate } from "@/types/evidence";
 import type { SearchOptions } from "./types";
 
@@ -8,6 +10,12 @@ export const providers = {
   openalex: openAlexAdapter,
   crossref: crossrefAdapter,
   pubmed: pubmedAdapter,
+};
+
+/** Secondary providers for Japan-specific academic searches */
+export const secondaryProviders = {
+  jstage: jstageAdapter,
+  cinii: ciniiAdapter,
 };
 
 export async function searchAllProviders(
@@ -51,6 +59,29 @@ function deduplicateCandidates(
   return Array.from(seen.values());
 }
 
+/**
+ * Search Japan-specific providers (J-STAGE and CiNii).
+ * Useful for queries involving Japanese academic literature.
+ */
+export async function searchJapanProviders(
+  query: string,
+  options?: SearchOptions,
+): Promise<PaperCandidate[]> {
+  const results = await Promise.allSettled([
+    jstageAdapter.search(query, options),
+    ciniiAdapter.search(query, options),
+  ]);
+
+  const candidates: PaperCandidate[] = [];
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      candidates.push(...result.value);
+    }
+  }
+
+  return deduplicateCandidates(candidates);
+}
+
 export type {
   ProviderAdapter,
   SearchOptions,
@@ -58,6 +89,8 @@ export type {
   PaperSection,
   FullTextProvider,
 } from "./types";
+export { jstageAdapter } from "./jstage";
+export { ciniiAdapter } from "./cinii";
 export { unpaywallAdapter } from "./unpaywall";
 export { pmcAdapter } from "./pmc";
 export { s2orcAdapter } from "./s2orc";

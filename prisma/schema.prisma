@@ -281,6 +281,11 @@ model CanonicalPaper {
   citationCount   Int               @default(0)
   influentialCount Int              @default(0)
   fieldsOfStudy   String[]
+  isRetracted     Boolean           @default(false)
+  retractionNote  String?           @db.Text
+  lastCheckedAt   DateTime?
+  orcids          String[]
+  rorIds          String[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 

@@ -74,6 +74,8 @@ export async function findOrCreateCanonicalPaper(
       citationCount: source.citationCount ?? candidate.citationCount ?? 0,
       influentialCount: candidate.influentialCitationCount ?? 0,
       fieldsOfStudy: candidate.fieldsOfStudy ?? [],
+      orcids: candidate.orcids ?? [],
+      rorIds: candidate.rorIds ?? [],
       identifiers: {
         create: Object.entries(candidate.externalIds)
           .filter(

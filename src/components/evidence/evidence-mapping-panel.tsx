@@ -39,6 +39,7 @@ interface EvidenceMapping {
       authors: unknown;
       year: number | null;
       venue: string | null;
+      isRetracted?: boolean;
       identifiers: { provider: string; externalId: string }[];
     };
   };
@@ -281,6 +282,12 @@ function EvidenceMappingCard({
             {(mapping.confidence * 100).toFixed(0)}%
           </Badge>
         </div>
+        {mapping.manuscriptCitation.paper.isRetracted && (
+          <div className="flex items-center gap-1 text-xs text-red-600 bg-red-50 dark:bg-red-950/30 rounded px-2 py-0.5">
+            <AlertTriangle className="h-3 w-3" />
+            This paper has been retracted
+          </div>
+        )}
       </CardHeader>
       <CardContent className="px-4 pb-3 space-y-3">
         {/* Manuscript sentence */}

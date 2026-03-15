@@ -4,7 +4,6 @@ import { useState, useRef, useCallback } from "react";
 import { toast } from "sonner";
 import type {
   LanguageCode,
-  TranslationUsage,
   SentenceTranslationResponse,
   AlignmentGroup,
 } from "@/types";
@@ -27,10 +26,6 @@ interface SyncResult {
   text: string;
   sentenceRanges: { from: number; to: number }[];
   alignment: AlignmentGroup[];
-}
-
-interface UseSyncTranslationOptions {
-  onUsage?: (usage: TranslationUsage) => void;
 }
 
 export type SyncDirection = "left" | "right" | null;
@@ -58,10 +53,7 @@ interface UseSyncTranslationReturn {
   initSnapshots: (leftText: string, rightText: string) => void;
 }
 
-export function useSyncTranslation(
-  options: UseSyncTranslationOptions = {},
-): UseSyncTranslationReturn {
-  const { onUsage } = options;
+export function useSyncTranslation(): UseSyncTranslationReturn {
   const [syncingDirection, setSyncingDirection] = useState<SyncDirection>(null);
   const [error, setError] = useState<string | null>(null);
   const isSyncing = syncingDirection !== null;
@@ -69,8 +61,6 @@ export function useSyncTranslation(
   const leftSnapshotRef = useRef<string[]>([]);
   const rightSnapshotRef = useRef<string[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const onUsageRef = useRef(onUsage);
-  onUsageRef.current = onUsage;
 
   const initSnapshots = useCallback(
     (leftText: string, rightText: string) => {
@@ -250,10 +240,6 @@ export function useSyncTranslation(
         const data = (await response.json()) as SentenceTranslationResponse;
 
         if (controller.signal.aborted) return null;
-
-        if (data.usage && onUsageRef.current) {
-          onUsageRef.current(data.usage);
-        }
 
         const translatedTexts = data.translations;
         const apiAlignment =

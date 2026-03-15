@@ -25,7 +25,9 @@ export type Provider =
   | "semantic_scholar"
   | "crossref"
   | "pubmed"
-  | "arxiv";
+  | "arxiv"
+  | "jstage"
+  | "cinii";
 
 export interface PaperCandidate {
   title: string;
@@ -41,6 +43,8 @@ export interface PaperCandidate {
   fieldsOfStudy?: string[];
   source: Provider;
   relevanceScore?: number;
+  orcids?: string[];
+  rorIds?: string[];
 }
 
 // Verification types
