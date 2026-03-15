@@ -218,3 +218,10 @@
 .citation-highlight:hover {
   background-color: hsl(var(--primary) / 0.25);
 }
+
+/* Journey sidebar connection lines */
+.journey-sidebar {
+  --journey-completed: #22c55e;
+  --journey-active: hsl(var(--primary));
+  --journey-pending: hsl(var(--muted-foreground) / 0.15);
+}
