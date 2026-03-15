@@ -27,6 +27,7 @@ import { JourneyNav } from "./journey-nav";
 import type { TaskDefinition } from "@/lib/journey/task-registry";
 import { StructureCheckDialog } from "../structure-check/structure-check-dialog";
 import { ExportDialog } from "./export-dialog";
+import { PomodoroTimer } from "./pomodoro-timer";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
 import { EvidencePanel } from "@/components/evidence/evidence-panel";
@@ -486,6 +487,7 @@ export function EditorPageClient({
             </TooltipTrigger>
             <TooltipContent>エビデンスパネル (Cmd+E)</TooltipContent>
           </Tooltip>
+          <PomodoroTimer documentId={documentId} />
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
