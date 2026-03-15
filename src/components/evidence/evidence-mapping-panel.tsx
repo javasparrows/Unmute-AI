@@ -9,6 +9,7 @@ import {
   MapPin,
   RefreshCw,
   ExternalLink,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,6 +27,7 @@ interface EvidenceMapping {
   citedPaperPage: number | null;
   confidence: number;
   mappingRationale: string | null;
+  screenshotUrl: string | null;
   humanVerified: boolean;
   verificationStatus: string;
   verificationNote: string | null;
@@ -322,6 +324,19 @@ function EvidenceMappingCard({
           >
             <ExternalLink className="h-3 w-3" />
             doi:{doi}
+          </a>
+        )}
+
+        {/* PDF link */}
+        {mapping.screenshotUrl && (
+          <a
+            href={mapping.screenshotUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-primary flex items-center gap-1 hover:underline"
+          >
+            <FileText className="h-3 w-3" />
+            PDFで確認 {mapping.citedPaperPage && `(p.${mapping.citedPaperPage})`}
           </a>
         )}
 

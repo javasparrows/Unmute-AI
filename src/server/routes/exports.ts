@@ -125,6 +125,7 @@ export const exportRoutes = new Hono<AuthEnv>()
           paperSection: m.citedPaperSection,
           paperPage: m.citedPaperPage,
           doi,
+          pdfUrl: m.screenshotUrl,
           confidence: m.confidence,
           rationale: m.mappingRationale,
           humanVerified: m.humanVerified,

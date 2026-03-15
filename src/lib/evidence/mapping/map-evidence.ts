@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { retrieveCitedPaperText } from "./pdf-retriever";
 import { matchPassage } from "./passage-matcher";
+import { resolvePdfUrl } from "./pdf-url-resolver";
 
 interface MapEvidenceInput {
   documentId: string;
@@ -18,6 +19,7 @@ interface MapEvidenceResult {
   confidence: number;
   mappingRationale: string | null;
   screenshotUrl: string | null;
+  pdfUrl: string | null;
   humanVerified: boolean;
   verificationStatus: string;
 }
@@ -92,6 +94,7 @@ export async function mapEvidence(
       confidence: 0,
       mappingRationale: mapping.mappingRationale,
       screenshotUrl: null,
+      pdfUrl: null,
       humanVerified: false,
       verificationStatus: "pending",
     };
@@ -104,7 +107,24 @@ export async function mapEvidence(
     citation.paper.title,
   );
 
-  // 4. Store the mapping (upsert for idempotency)
+  // 4. Resolve PDF URL for the cited paper
+  let pdfUrl: string | null = null;
+  const paperIds = await prisma.canonicalPaper.findUnique({
+    where: { id: citation.paperId },
+    include: { identifiers: true },
+  });
+
+  if (paperIds) {
+    const doi =
+      paperIds.identifiers.find((i) => i.provider === "crossref")
+        ?.externalId ?? null;
+    const pmid =
+      paperIds.identifiers.find((i) => i.provider === "pubmed")
+        ?.externalId ?? null;
+    pdfUrl = await resolvePdfUrl(doi, pmid);
+  }
+
+  // 5. Store the mapping (upsert for idempotency)
   const mapping = await prisma.evidenceMapping.upsert({
     where: {
       documentId_manuscriptCitationId_sentenceIndex: {
@@ -124,6 +144,7 @@ export async function mapEvidence(
       citedPaperPage: match.citedPaperPage,
       confidence: match.confidence,
       mappingRationale: match.rationale,
+      screenshotUrl: pdfUrl,
       verificationStatus: "pending",
     },
     update: {
@@ -134,6 +155,7 @@ export async function mapEvidence(
       citedPaperPage: match.citedPaperPage,
       confidence: match.confidence,
       mappingRationale: match.rationale,
+      screenshotUrl: pdfUrl,
     },
   });
 
@@ -145,6 +167,7 @@ export async function mapEvidence(
     confidence: mapping.confidence,
     mappingRationale: mapping.mappingRationale,
     screenshotUrl: mapping.screenshotUrl,
+    pdfUrl: mapping.screenshotUrl,
     humanVerified: mapping.humanVerified,
     verificationStatus: mapping.verificationStatus,
   };

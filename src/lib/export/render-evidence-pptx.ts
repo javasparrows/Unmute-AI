@@ -10,6 +10,7 @@ interface EvidenceSlide {
   paperSection: string | null;
   paperPage: number | null;
   doi: string | null;
+  pdfUrl?: string | null;
   confidence: number;
   rationale: string | null;
   humanVerified: boolean;
@@ -183,6 +184,19 @@ export async function renderEvidencePptx(
         h: 0.25,
         fontSize: 9,
         color: "777777",
+      });
+    }
+
+    // PDF link
+    if (evidence.pdfUrl) {
+      slide.addText(`PDF: ${evidence.pdfUrl}`, {
+        x: 0.3,
+        y: 4.35,
+        w: 9.4,
+        h: 0.2,
+        fontSize: 8,
+        color: "4444cc",
+        hyperlink: { url: evidence.pdfUrl },
       });
     }
 
