@@ -403,13 +403,12 @@ export default function TermsPage() {
               本規約に関するお問い合わせは、以下までご連絡ください。
             </p>
             <p className="mt-2">
-              {/* TODO: 正式なメールアドレスに置き換え */}
               メール:{" "}
               <a
-                href="mailto:support@unmute-ai.com"
+                href="mailto:info@ai-driven.jp"
                 className="text-primary hover:underline"
               >
-                support@unmute-ai.com
+                info@ai-driven.jp
               </a>
             </p>
           </Section>
