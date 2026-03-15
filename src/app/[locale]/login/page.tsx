@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 export default async function LoginPage() {
   const t = await getTranslations("login");
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <main className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-sm space-y-8 px-6">
         <div className="text-center space-y-2">
           <a href="/" className="text-3xl font-serif font-bold tracking-tight hover:opacity-80 transition-opacity">
@@ -47,6 +47,6 @@ export default async function LoginPage() {
           </button>
         </form>
       </div>
-    </div>
+    </main>
   );
 }

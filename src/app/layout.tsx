@@ -5,17 +5,20 @@ import "./globals.css";
 const fontSans = Outfit({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const fontSerif = Merriweather({
   variable: "--font-serif",
   subsets: ["latin"],
   weight: ["300", "400", "700"],
+  display: "swap",
 });
 
 const fontMono = Fira_Code({
   variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const fontCJK = Noto_Sans_JP({

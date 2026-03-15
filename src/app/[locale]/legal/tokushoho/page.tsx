@@ -23,6 +23,7 @@ export async function generateMetadata({
     const prefix = loc === routing.defaultLocale ? "" : `/${loc}`;
     languages[loc] = `${BASE_URL}${prefix}/legal/tokushoho`;
   }
+  languages["x-default"] = `${BASE_URL}/legal/tokushoho`;
 
   const url =
     locale === routing.defaultLocale
