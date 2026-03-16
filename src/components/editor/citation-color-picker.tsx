@@ -10,18 +10,26 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CITATION_COLORS, type CitationColorId } from "@/hooks/use-citation-color";
+import { HIGHLIGHT_COLORS, type HighlightColorId } from "@/hooks/use-highlight-colors";
 import { Check } from "lucide-react";
 
-interface CitationColorPickerProps {
-  colorId: CitationColorId;
-  onColorChange: (id: CitationColorId) => void;
+interface HighlightColorPickerProps {
+  citationColorId: HighlightColorId;
+  sentenceColorId: HighlightColorId;
+  citationColor: string;
+  sentenceColor: string;
+  onCitationColorChange: (id: HighlightColorId) => void;
+  onSentenceColorChange: (id: HighlightColorId) => void;
 }
 
-export function CitationColorPicker({
-  colorId,
-  onColorChange,
-}: CitationColorPickerProps) {
+export function HighlightColorPicker({
+  citationColorId,
+  sentenceColorId,
+  citationColor,
+  sentenceColor,
+  onCitationColorChange,
+  onSentenceColorChange,
+}: HighlightColorPickerProps) {
   return (
     <Popover>
       <Tooltip>
@@ -29,36 +37,64 @@ export function CitationColorPicker({
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="flex items-center justify-center h-5 w-5 rounded-full border border-border/50 transition-transform hover:scale-110 shrink-0"
-              style={{
-                backgroundColor: CITATION_COLORS.find((c) => c.id === colorId)
-                  ?.color,
-              }}
+              className="flex items-center h-6 gap-0.5 px-1 rounded-full border border-border/50 transition-transform hover:scale-110 shrink-0"
             >
-              <span className="sr-only">Change citation highlight color</span>
+              <span
+                className="h-3.5 w-3.5 rounded-full"
+                style={{ backgroundColor: citationColor }}
+              />
+              <span
+                className="h-3.5 w-3.5 rounded-full"
+                style={{ backgroundColor: sentenceColor }}
+              />
+              <span className="sr-only">Change highlight colors</span>
             </button>
           </PopoverTrigger>
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          引用ハイライトの色
+          ハイライトの色
         </TooltipContent>
       </Tooltip>
-      <PopoverContent className="w-auto p-2" align="start">
-        <div className="flex items-center gap-1.5">
-          {CITATION_COLORS.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => onColorChange(c.id)}
-              className="relative flex items-center justify-center h-7 w-7 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
-              style={{ backgroundColor: c.color }}
-              title={c.label}
-            >
-              {c.id === colorId && (
-                <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
-              )}
-            </button>
-          ))}
+      <PopoverContent className="w-auto p-3" align="start">
+        <div className="space-y-2">
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">引用</div>
+            <div className="flex items-center gap-1.5">
+              {HIGHLIGHT_COLORS.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => onCitationColorChange(c.id)}
+                  className="relative flex items-center justify-center h-7 w-7 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
+                  style={{ backgroundColor: c.color }}
+                  title={c.label}
+                >
+                  {c.id === citationColorId && (
+                    <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">文章</div>
+            <div className="flex items-center gap-1.5">
+              {HIGHLIGHT_COLORS.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => onSentenceColorChange(c.id)}
+                  className="relative flex items-center justify-center h-7 w-7 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
+                  style={{ backgroundColor: c.color }}
+                  title={c.label}
+                >
+                  {c.id === sentenceColorId && (
+                    <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </PopoverContent>
     </Popover>

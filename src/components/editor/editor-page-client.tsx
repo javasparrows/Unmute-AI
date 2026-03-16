@@ -33,8 +33,8 @@ import { PomodoroTimer } from "./pomodoro-timer";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
 import { EvidencePanel } from "@/components/evidence/evidence-panel";
-import { CitationColorPicker } from "./citation-color-picker";
-import { useCitationColor } from "@/hooks/use-citation-color";
+import { HighlightColorPicker } from "./citation-color-picker";
+import { useHighlightColors } from "@/hooks/use-highlight-colors";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -94,7 +94,14 @@ export function EditorPageClient({
     initialVersion?.versionNumber ?? 1,
   );
 
-  const { colorId, setColor, currentColor } = useCitationColor();
+  const {
+    citationColorId,
+    setCitationColor,
+    citationColor,
+    sentenceColorId,
+    setSentenceColor,
+    sentenceColor,
+  } = useHighlightColors();
 
   const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -665,12 +672,24 @@ export function EditorPageClient({
         <CoverageBar
           citationCount={citationCount}
           onOpenEvidence={() => setIsEvidencePanelOpen(true)}
-          extra={<CitationColorPicker colorId={colorId} onColorChange={setColor} />}
+          extra={
+            <HighlightColorPicker
+              citationColorId={citationColorId}
+              sentenceColorId={sentenceColorId}
+              citationColor={citationColor.color}
+              sentenceColor={sentenceColor.color}
+              onCitationColorChange={setCitationColor}
+              onSentenceColorChange={setSentenceColor}
+            />
+          }
         />
         <div
           ref={splitContainerRef}
           className="flex flex-col md:flex-row flex-1 min-h-0"
-          style={{ "--citation-color": currentColor.color } as React.CSSProperties}
+          style={{
+            "--citation-color": citationColor.color,
+            "--sentence-color": sentenceColor.color,
+          } as React.CSSProperties}
         >
           {/* Left panel (draft) - percentage width on desktop, full width on mobile */}
           <div
