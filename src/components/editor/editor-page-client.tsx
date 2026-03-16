@@ -137,6 +137,23 @@ export function EditorPageClient({
     return matches?.length ?? 0;
   }, [rightText]);
 
+  const textStats = useMemo(() => {
+    const leftParas = leftText.trim() ? leftText.split(/\n\n+/) : [];
+    const rightParas = rightText.trim() ? rightText.split(/\n\n+/) : [];
+    const paragraphCount = Math.max(leftParas.length, rightParas.length);
+
+    const countSentences = (para: string): number => {
+      if (!para.trim()) return 0;
+      const ends = para.match(/[.。!?！？]/g);
+      return ends?.length ?? (para.trim() ? 1 : 0);
+    };
+
+    const leftSentenceCounts = leftParas.map(countSentences);
+    const rightSentenceCounts = rightParas.map(countSentences);
+
+    return { paragraphCount, leftSentenceCounts, rightSentenceCounts };
+  }, [leftText, rightText]);
+
   const toggleEvidencePanel = useCallback(() => {
     setIsEvidencePanelOpen((prev) => {
       const next = !prev;
@@ -671,6 +688,9 @@ export function EditorPageClient({
         <>
         <CoverageBar
           citationCount={citationCount}
+          paragraphCount={textStats.paragraphCount}
+          leftSentenceCounts={textStats.leftSentenceCounts}
+          rightSentenceCounts={textStats.rightSentenceCounts}
           onOpenEvidence={() => setIsEvidencePanelOpen(true)}
           extra={
             <HighlightColorPicker
@@ -697,7 +717,7 @@ export function EditorPageClient({
             style={{ width: `${splitRatio * 100}%` }}
           >
             <EditorPanel
-              label="下書き"
+              label="原文"
               content={leftText}
               onTextChange={handleLeftChange}
               onSentenceChange={handleLeftSentence}
@@ -705,7 +725,7 @@ export function EditorPageClient({
               onPaste={handlePaste}
               activeSentenceIndices={activeLeftIndices}
               sentenceRanges={sourceSentenceRanges}
-              placeholder="ここに下書きを入力..."
+              placeholder="ここに原文を入力..."
               containerRef={setLeftEditorRef}
             />
           </div>
@@ -742,7 +762,7 @@ export function EditorPageClient({
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right">
-                  下書きの変更を原稿に反映
+                  原文を翻訳に反映
                 </TooltipContent>
               </Tooltip>
 
@@ -768,7 +788,7 @@ export function EditorPageClient({
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  原稿の変更を下書きに反映
+                  翻訳を原文に反映
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -793,7 +813,7 @@ export function EditorPageClient({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                下書きの変更を原稿に反映
+                原文を翻訳に反映
               </TooltipContent>
             </Tooltip>
             <Tooltip>
@@ -813,7 +833,7 @@ export function EditorPageClient({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                原稿の変更を下書きに反映
+                翻訳を原文に反映
               </TooltipContent>
             </Tooltip>
           </div>
@@ -821,14 +841,14 @@ export function EditorPageClient({
           {/* Right panel (manuscript) - takes remaining space on desktop */}
           <div className="flex-1 min-w-0 min-h-0 flex flex-col">
             <EditorPanel
-              label="原稿"
+              label="翻訳"
               content={rightText}
               onTextChange={handleRightChange}
               onSentenceChange={handleRightSentence}
               onBlur={handleBlur}
               activeSentenceIndices={activeRightIndices}
               sentenceRanges={translatedSentenceRanges}
-              placeholder="原稿がここに表示されます..."
+              placeholder="翻訳がここに表示されます..."
               containerRef={setRightEditorRef}
               actions={
                 <ParagraphActions
