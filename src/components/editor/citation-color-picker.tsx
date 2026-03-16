@@ -41,11 +41,11 @@ export function HighlightColorPicker({
             >
               <span
                 className="h-3.5 w-3.5 rounded-full"
-                style={{ backgroundColor: citationColor }}
+                style={{ backgroundColor: sentenceColor }}
               />
               <span
                 className="h-3.5 w-3.5 rounded-full"
-                style={{ backgroundColor: sentenceColor }}
+                style={{ backgroundColor: citationColor }}
               />
               <span className="sr-only">Change highlight colors</span>
             </button>
@@ -57,25 +57,6 @@ export function HighlightColorPicker({
       </Tooltip>
       <PopoverContent className="w-auto p-3" align="start">
         <div className="space-y-2">
-          <div>
-            <div className="text-xs text-muted-foreground mb-1">引用</div>
-            <div className="flex items-center gap-1.5">
-              {HIGHLIGHT_COLORS.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => onCitationColorChange(c.id)}
-                  className="relative flex items-center justify-center h-7 w-7 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
-                  style={{ backgroundColor: c.color }}
-                  title={c.label}
-                >
-                  {c.id === citationColorId && (
-                    <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
           <div>
             <div className="text-xs text-muted-foreground mb-1">文章</div>
             <div className="flex items-center gap-1.5">
@@ -89,6 +70,25 @@ export function HighlightColorPicker({
                   title={c.label}
                 >
                   {c.id === sentenceColorId && (
+                    <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-muted-foreground mb-1">引用</div>
+            <div className="flex items-center gap-1.5">
+              {HIGHLIGHT_COLORS.map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  onClick={() => onCitationColorChange(c.id)}
+                  className="relative flex items-center justify-center h-7 w-7 rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
+                  style={{ backgroundColor: c.color }}
+                  title={c.label}
+                >
+                  {c.id === citationColorId && (
                     <Check className="h-3.5 w-3.5 text-white drop-shadow-sm" />
                   )}
                 </button>
