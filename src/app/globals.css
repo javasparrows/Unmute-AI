@@ -206,17 +206,17 @@
 
 /* Citation highlight in editor */
 .citation-highlight {
-  background-color: color-mix(in oklch, var(--primary) 12%, transparent);
-  color: var(--primary);
+  background-color: color-mix(in oklch, var(--citation-color, var(--primary)) 12%, transparent);
+  color: var(--citation-color, var(--primary));
   border-radius: 3px;
   padding: 1px 4px;
   font-size: 0.9em;
   cursor: pointer;
-  transition: background-color 0.15s;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .citation-highlight:hover {
-  background-color: color-mix(in oklch, var(--primary) 25%, transparent);
+  background-color: color-mix(in oklch, var(--citation-color, var(--primary)) 25%, transparent);
 }
 
 /* Journey sidebar connection lines */
