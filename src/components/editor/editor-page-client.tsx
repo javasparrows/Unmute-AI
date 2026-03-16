@@ -33,6 +33,8 @@ import { PomodoroTimer } from "./pomodoro-timer";
 import { SaveButton } from "./save-button";
 import { VersionPanel } from "../version/version-panel";
 import { EvidencePanel } from "@/components/evidence/evidence-panel";
+import { CitationColorPicker } from "./citation-color-picker";
+import { useCitationColor } from "@/hooks/use-citation-color";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -91,6 +93,8 @@ export function EditorPageClient({
   const [currentVersionNumber, setCurrentVersionNumber] = useState(
     initialVersion?.versionNumber ?? 1,
   );
+
+  const { colorId, setColor, currentColor } = useCitationColor();
 
   const [isEvidencePanelOpen, setIsEvidencePanelOpen] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -658,8 +662,16 @@ export function EditorPageClient({
       {/* Write tab: Editor panels with sync buttons */}
       {activeTab === "write" && (
         <>
-        <CoverageBar citationCount={citationCount} onOpenEvidence={() => setIsEvidencePanelOpen(true)} />
-        <div ref={splitContainerRef} className="flex flex-col md:flex-row flex-1 min-h-0">
+        <CoverageBar
+          citationCount={citationCount}
+          onOpenEvidence={() => setIsEvidencePanelOpen(true)}
+          extra={<CitationColorPicker colorId={colorId} onColorChange={setColor} />}
+        />
+        <div
+          ref={splitContainerRef}
+          className="flex flex-col md:flex-row flex-1 min-h-0"
+          style={{ "--citation-color": currentColor.color } as React.CSSProperties}
+        >
           {/* Left panel (draft) - percentage width on desktop, full width on mobile */}
           <div
             className="flex-1 md:flex-none min-w-0 min-h-0 flex flex-col"

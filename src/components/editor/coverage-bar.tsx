@@ -1,14 +1,17 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { BookOpen, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CoverageBarProps {
   citationCount: number;
   onOpenEvidence: () => void;
+  /** Optional slot rendered after the citation count (e.g. color picker) */
+  extra?: ReactNode;
 }
 
-export function CoverageBar({ citationCount, onOpenEvidence }: CoverageBarProps) {
+export function CoverageBar({ citationCount, onOpenEvidence, extra }: CoverageBarProps) {
   return (
     <div className="flex items-center justify-between border-b bg-muted/20 px-4 py-1.5">
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -24,6 +27,7 @@ export function CoverageBar({ citationCount, onOpenEvidence }: CoverageBarProps)
             引用を追加しましょう
           </span>
         )}
+        {extra}
       </div>
       <Button
         variant="ghost"
