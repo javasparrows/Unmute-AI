@@ -64,7 +64,7 @@ export function EvidencePanel({ isOpen, onClose, documentId, draftText, onCiteIn
   if (!isOpen) return null;
 
   return (
-    <div className={fullWidth ? "flex flex-col h-full w-full" : `${panelWidth === "wide" ? "md:w-[600px]" : "md:w-[380px]"} fixed inset-0 z-50 md:relative md:inset-auto md:z-auto w-full border-l bg-background flex flex-col h-full shrink-0 transition-[width] duration-200`}>
+    <div className={fullWidth ? "flex flex-col h-full w-full" : `${panelWidth === "wide" ? "md:w-[600px]" : "md:w-[380px]"} absolute inset-0 z-40 md:relative md:inset-auto md:z-auto w-full border-l bg-background flex flex-col h-full shrink-0 transition-[width] duration-200`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <div className="flex gap-1">
