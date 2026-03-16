@@ -206,8 +206,8 @@
 
 /* Citation highlight in editor */
 .citation-highlight {
-  background-color: hsl(var(--primary) / 0.12);
-  color: hsl(var(--primary));
+  background-color: color-mix(in oklch, var(--primary) 12%, transparent);
+  color: var(--primary);
   border-radius: 3px;
   padding: 1px 4px;
   font-size: 0.9em;
@@ -216,12 +216,12 @@
 }
 
 .citation-highlight:hover {
-  background-color: hsl(var(--primary) / 0.25);
+  background-color: color-mix(in oklch, var(--primary) 25%, transparent);
 }
 
 /* Journey sidebar connection lines */
 .journey-sidebar {
   --journey-completed: #22c55e;
-  --journey-active: hsl(var(--primary));
-  --journey-pending: hsl(var(--muted-foreground) / 0.15);
+  --journey-active: var(--primary);
+  --journey-pending: color-mix(in oklch, var(--muted-foreground) 15%, transparent);
 }
