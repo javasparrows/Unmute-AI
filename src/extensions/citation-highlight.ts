@@ -72,6 +72,22 @@ export const CitationHighlight = Extension.create({
           decorations(state) {
             return citationPluginKey.getState(state) as DecorationSet;
           },
+          handleClick(_view, _pos, event) {
+            const target = event.target as HTMLElement;
+            if (target.classList.contains("citation-highlight")) {
+              const citeKey = target.getAttribute("data-cite-key");
+              if (citeKey) {
+                target.dispatchEvent(
+                  new CustomEvent("cite-click", {
+                    detail: { citeKey },
+                    bubbles: true,
+                  }),
+                );
+                return true;
+              }
+            }
+            return false;
+          },
         },
       }),
     ];

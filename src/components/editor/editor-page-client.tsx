@@ -146,6 +146,19 @@ export function EditorPageClient({
     return () => document.removeEventListener("keydown", handleEvidenceShortcut);
   }, [toggleEvidencePanel]);
 
+  // Open evidence panel when a citation is clicked in the editor
+  useEffect(() => {
+    const container = splitContainerRef.current;
+    if (!container) return;
+
+    const handleCiteClick = () => {
+      setIsEvidencePanelOpen(true);
+    };
+
+    container.addEventListener("cite-click", handleCiteClick);
+    return () => container.removeEventListener("cite-click", handleCiteClick);
+  }, [splitContainerRef]);
+
   const [currentPhase, setCurrentPhase] = useState<number | null>(null);
 
   useEffect(() => {
