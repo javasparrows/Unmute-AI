@@ -532,7 +532,7 @@ export function EditorPageClient({
             </button>
           )}
           {currentPhase && (
-            <Badge variant="outline" className="text-xs shrink-0">
+            <Badge variant="outline" className="text-xs shrink-0 border-secondary-foreground/30 text-secondary-foreground">
               Phase {currentPhase}/7
             </Badge>
           )}
