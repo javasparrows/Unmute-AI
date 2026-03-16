@@ -74,6 +74,28 @@ interface EditorPageClientProps {
   planLimits?: PlanLimitsProps;
 }
 
+/**
+ * Convert a global sentence index (0-based) to a paragraph + sentence position.
+ * Uses the same sentence-ending heuristic as the textStats useMemo.
+ */
+function sentenceIndexToPosition(
+  text: string,
+  globalIndex: number,
+): { paragraphIndex: number; sentenceInParagraph: number } {
+  const paragraphs = text.trim() ? text.split(/\n\n+/) : [];
+  let remaining = globalIndex;
+  for (let i = 0; i < paragraphs.length; i++) {
+    const ends = paragraphs[i].match(/[.。!?！？]/g);
+    const count = ends?.length ?? (paragraphs[i].trim() ? 1 : 0);
+    if (remaining < count) {
+      return { paragraphIndex: i + 1, sentenceInParagraph: remaining + 1 };
+    }
+    remaining -= count;
+  }
+  // Fallback: last paragraph
+  return { paragraphIndex: Math.max(paragraphs.length, 1), sentenceInParagraph: 1 };
+}
+
 export function EditorPageClient({
   documentId,
   documentTitle,
@@ -309,6 +331,13 @@ export function EditorPageClient({
     clearHighlight,
   } = useSentenceSync();
 
+  const [cursorInfo, setCursorInfo] = useState<{
+    panel: "left" | "right";
+    paragraphIndex: number;
+    sentenceInParagraph: number;
+    globalSentenceIndex: number;
+  } | null>(null);
+
   const {
     leftRef: leftScrollRef,
     rightRef: rightScrollRef,
@@ -369,6 +398,9 @@ export function EditorPageClient({
 
   const handleLeftSentence = useCallback(
     (index: number) => {
+      const pos = sentenceIndexToPosition(leftText, index);
+      setCursorInfo({ panel: "left", ...pos, globalSentenceIndex: index });
+
       const alignment = alignmentRef.current;
       if (alignment.length > 0) {
         const group = getGroupIndices(alignment, index, "left");
@@ -380,11 +412,14 @@ export function EditorPageClient({
       // Fallback: highlight same index on both sides
       setSentenceGroup([index], [index], "left");
     },
-    [setSentenceGroup],
+    [setSentenceGroup, leftText],
   );
 
   const handleRightSentence = useCallback(
     (index: number) => {
+      const pos = sentenceIndexToPosition(rightText, index);
+      setCursorInfo({ panel: "right", ...pos, globalSentenceIndex: index });
+
       const alignment = alignmentRef.current;
       if (alignment.length > 0) {
         const group = getGroupIndices(alignment, index, "right");
@@ -396,10 +431,13 @@ export function EditorPageClient({
       // Fallback: highlight same index on both sides
       setSentenceGroup([index], [index], "right");
     },
-    [setSentenceGroup],
+    [setSentenceGroup, rightText],
   );
 
-  const handleBlur = useCallback(() => clearHighlight(), [clearHighlight]);
+  const handleBlur = useCallback(() => {
+    clearHighlight();
+    setCursorInfo(null);
+  }, [clearHighlight]);
 
   const handlePaste = useCallback(
     async (pastedText: string) => {
@@ -691,6 +729,7 @@ export function EditorPageClient({
           paragraphCount={textStats.paragraphCount}
           leftSentenceCounts={textStats.leftSentenceCounts}
           rightSentenceCounts={textStats.rightSentenceCounts}
+          cursorInfo={cursorInfo}
           onOpenEvidence={() => setIsEvidencePanelOpen(true)}
           extra={
             <HighlightColorPicker
