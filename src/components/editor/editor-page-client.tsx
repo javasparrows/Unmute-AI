@@ -7,7 +7,7 @@ import { CitationsView } from "./citations-view";
 import { ReviewView } from "./review-view";
 import { normalizeSections, type SectionType } from "@/lib/sections";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, GripVertical, Loader2, Pencil, Settings, BookOpenCheck, Map, X } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowLeftIcon, Download, GripVertical, Loader2, Pencil, Settings, BookOpenCheck, Map, X } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
 import { useResizablePanels } from "@/hooks/use-resizable-panels";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
@@ -744,7 +744,7 @@ export function EditorPageClient({
         />
         <div
           ref={splitContainerRef}
-          className="flex flex-col md:flex-row flex-1 min-h-0"
+          className="flex flex-row flex-1 min-h-0"
           style={{
             "--citation-color": citationColor.color,
             "--sentence-color": sentenceColor.color,
@@ -752,7 +752,7 @@ export function EditorPageClient({
         >
           {/* Left panel (draft) - percentage width on desktop, full width on mobile */}
           <div
-            className="flex-1 md:flex-none min-w-0 min-h-0 flex flex-col"
+            className="flex-none min-w-0 min-h-0 flex flex-col"
             style={{ width: `${splitRatio * 100}%` }}
           >
             <EditorPanel
@@ -771,7 +771,7 @@ export function EditorPageClient({
 
           {/* Resizable splitter - desktop only */}
           <div
-            className="hidden md:flex relative items-center justify-center select-none shrink-0"
+            className="flex relative items-center justify-center select-none shrink-0"
             onMouseDown={handleSplitMouseDown}
             onTouchStart={handleSplitTouchStart}
             style={{ cursor: "col-resize", width: "1px" }}
@@ -833,51 +833,7 @@ export function EditorPageClient({
             </div>
           </div>
 
-          {/* Mobile sync buttons - horizontal row */}
-          <div className="flex md:hidden flex-row items-center justify-center gap-3 px-2 py-2 bg-muted/30 border-y">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleSyncLeftToRight}
-                  disabled={isSyncing || !leftText.trim()}
-                  className="h-10 w-10 rounded-full"
-                >
-                  {syncingDirection === "left" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <ArrowDown className="h-4 w-4" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                原文を翻訳に反映
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleSyncRightToLeft}
-                  disabled={isSyncing || !rightText.trim()}
-                  className="h-10 w-10 rounded-full"
-                >
-                  {syncingDirection === "right" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <ArrowUp className="h-4 w-4" />
-                  )}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                翻訳を原文に反映
-              </TooltipContent>
-            </Tooltip>
-          </div>
-
-          {/* Right panel (manuscript) - takes remaining space on desktop */}
+          {/* Right panel (manuscript) - takes remaining space */}
           <div className="flex-1 min-w-0 min-h-0 flex flex-col">
             <EditorPanel
               label="翻訳"

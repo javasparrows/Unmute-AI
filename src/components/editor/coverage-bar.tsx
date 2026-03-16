@@ -62,8 +62,8 @@ export function CoverageBar({
   const rightActive = cursorInfo?.panel === "right" ? cursorInfo.paragraphIndex : undefined;
 
   return (
-    <div className="flex items-center justify-between border-b bg-muted/20 px-4 py-1.5">
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+    <div className="flex flex-wrap items-center justify-between gap-y-1 border-b bg-muted/20 px-4 py-1.5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <FileText className="h-3.5 w-3.5" />
           {paragraphCount} 段落
