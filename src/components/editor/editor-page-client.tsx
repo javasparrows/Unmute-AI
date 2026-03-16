@@ -7,8 +7,9 @@ import { CitationsView } from "./citations-view";
 import { ReviewView } from "./review-view";
 import { normalizeSections, type SectionType } from "@/lib/sections";
 import Link from "next/link";
-import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, Loader2, Pencil, Settings, BookOpenCheck, Map, X } from "lucide-react";
+import { ArrowRight, ArrowLeft, ArrowDown, ArrowUp, ArrowLeftIcon, Download, GripVertical, Loader2, Pencil, Settings, BookOpenCheck, Map, X } from "lucide-react";
 import type { LanguageCode, AlignmentGroup } from "@/types";
+import { useResizablePanels } from "@/hooks/use-resizable-panels";
 import { useSyncTranslation } from "@/hooks/use-sync-translation";
 import { useSentenceSync } from "@/hooks/use-sentence-sync";
 import { useScrollSync } from "@/hooks/use-scroll-sync";
@@ -102,6 +103,18 @@ export function EditorPageClient({
   const [activeSection, setActiveSection] = useState<SectionType | null>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [mobileJourneyOpen, setMobileJourneyOpen] = useState(false);
+
+  const {
+    ratio: splitRatio,
+    containerRef: splitContainerRef,
+    handleMouseDown: handleSplitMouseDown,
+    handleTouchStart: handleSplitTouchStart,
+  } = useResizablePanels({
+    storageKey: "unmute:split-ratio",
+    defaultRatio: 0.5,
+    minRatio: 0.2,
+    maxRatio: 0.8,
+  });
 
   const sections = useMemo(
     () => normalizeSections(initialVersion?.sections ?? null, rightText),
@@ -633,22 +646,92 @@ export function EditorPageClient({
       {activeTab === "write" && (
         <>
         <CoverageBar citationCount={citationCount} onOpenEvidence={() => setIsEvidencePanelOpen(true)} />
-        <div className="flex flex-col md:flex-row flex-1 min-h-0">
-          <EditorPanel
-            label="下書き"
-            content={leftText}
-            onTextChange={handleLeftChange}
-            onSentenceChange={handleLeftSentence}
-            onBlur={handleBlur}
-            onPaste={handlePaste}
-            activeSentenceIndices={activeLeftIndices}
-            sentenceRanges={sourceSentenceRanges}
-            placeholder="ここに下書きを入力..."
-            containerRef={setLeftEditorRef}
-          />
+        <div ref={splitContainerRef} className="flex flex-col md:flex-row flex-1 min-h-0">
+          {/* Left panel (draft) - percentage width on desktop, full width on mobile */}
+          <div
+            className="flex-1 md:flex-none min-w-0 min-h-0 flex flex-col"
+            style={{ width: `${splitRatio * 100}%` }}
+          >
+            <EditorPanel
+              label="下書き"
+              content={leftText}
+              onTextChange={handleLeftChange}
+              onSentenceChange={handleLeftSentence}
+              onBlur={handleBlur}
+              onPaste={handlePaste}
+              activeSentenceIndices={activeLeftIndices}
+              sentenceRanges={sourceSentenceRanges}
+              placeholder="ここに下書きを入力..."
+              containerRef={setLeftEditorRef}
+            />
+          </div>
 
-          {/* Sync buttons - horizontal on mobile, vertical on desktop */}
-          <div className="flex flex-row md:flex-col items-center justify-center gap-3 px-2 py-2 md:py-0 bg-muted/30 border-y md:border-y-0 md:border-x">
+          {/* Resizable splitter - desktop only */}
+          <div
+            className="hidden md:flex relative items-center justify-center select-none shrink-0"
+            onMouseDown={handleSplitMouseDown}
+            onTouchStart={handleSplitTouchStart}
+            style={{ cursor: "col-resize", width: "1px" }}
+          >
+            {/* Invisible wider gutter for easier grabbing (16px hit area) */}
+            <div className="absolute inset-y-0 -left-2 -right-2 z-10" />
+
+            {/* Visible thin divider line */}
+            <div className="w-px h-full bg-border" />
+
+            {/* Center capsule handle with sync buttons */}
+            <div className="absolute z-20 flex flex-col items-center gap-1">
+              {/* Sync button: draft -> manuscript */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleSyncLeftToRight(); }}
+                    disabled={isSyncing || !leftText.trim()}
+                    className="flex items-center justify-center h-6 w-6 rounded-full bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {syncingDirection === "left" ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <ArrowRight className="h-3 w-3" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  下書きの変更を原稿に反映
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Capsule resize handle */}
+              <div className="flex items-center justify-center w-6 h-10 rounded-full bg-gray-800 dark:bg-gray-600 text-white shadow-md pointer-events-none">
+                <GripVertical className="h-4 w-4" />
+              </div>
+
+              {/* Sync button: manuscript -> draft */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); handleSyncRightToLeft(); }}
+                    disabled={isSyncing || !rightText.trim()}
+                    className="flex items-center justify-center h-6 w-6 rounded-full bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    {syncingDirection === "right" ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <ArrowLeft className="h-3 w-3" />
+                    )}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  原稿の変更を下書きに反映
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          </div>
+
+          {/* Mobile sync buttons - horizontal row */}
+          <div className="flex md:hidden flex-row items-center justify-center gap-3 px-2 py-2 bg-muted/30 border-y">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -661,14 +744,11 @@ export function EditorPageClient({
                   {syncingDirection === "left" ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <ArrowRight className="h-4 w-4 hidden md:block" />
-                  )}
-                  {syncingDirection !== "left" && (
-                    <ArrowDown className="h-4 w-4 md:hidden" />
+                    <ArrowDown className="h-4 w-4" />
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">
+              <TooltipContent>
                 下書きの変更を原稿に反映
               </TooltipContent>
             </Tooltip>
@@ -684,37 +764,37 @@ export function EditorPageClient({
                   {syncingDirection === "right" ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <ArrowLeft className="h-4 w-4 hidden md:block" />
-                  )}
-                  {syncingDirection !== "right" && (
-                    <ArrowUp className="h-4 w-4 md:hidden" />
+                    <ArrowUp className="h-4 w-4" />
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="left">
+              <TooltipContent>
                 原稿の変更を下書きに反映
               </TooltipContent>
             </Tooltip>
           </div>
 
-          <EditorPanel
-            label="原稿"
-            content={rightText}
-            onTextChange={handleRightChange}
-            onSentenceChange={handleRightSentence}
-            onBlur={handleBlur}
-            activeSentenceIndices={activeRightIndices}
-            sentenceRanges={translatedSentenceRanges}
-            placeholder="原稿がここに表示されます..."
-            containerRef={setRightEditorRef}
-            actions={
-              <ParagraphActions
-                onFindCitations={() => setIsEvidencePanelOpen(true)}
-                onCheckEvidence={() => setIsEvidencePanelOpen(true)}
-                onDraftWithAI={() => setIsEvidencePanelOpen(true)}
-              />
-            }
-          />
+          {/* Right panel (manuscript) - takes remaining space on desktop */}
+          <div className="flex-1 min-w-0 min-h-0 flex flex-col">
+            <EditorPanel
+              label="原稿"
+              content={rightText}
+              onTextChange={handleRightChange}
+              onSentenceChange={handleRightSentence}
+              onBlur={handleBlur}
+              activeSentenceIndices={activeRightIndices}
+              sentenceRanges={translatedSentenceRanges}
+              placeholder="原稿がここに表示されます..."
+              containerRef={setRightEditorRef}
+              actions={
+                <ParagraphActions
+                  onFindCitations={() => setIsEvidencePanelOpen(true)}
+                  onCheckEvidence={() => setIsEvidencePanelOpen(true)}
+                  onDraftWithAI={() => setIsEvidencePanelOpen(true)}
+                />
+              }
+            />
+          </div>
 
           {/* Evidence side panel */}
           <EvidencePanel
