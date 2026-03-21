@@ -32,6 +32,12 @@ export async function SiteHeader() {
             </Link>
           )}
           <Link
+            href="/paste-cleaner"
+            className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
+          >
+            {t("pasteCleaner")}
+          </Link>
+          <Link
             href="/pricing"
             className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors"
           >

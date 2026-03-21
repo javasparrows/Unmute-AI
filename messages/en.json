@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - Clean Up Paper Text | Unmute AI",
+      "description": "Automatically clean up unwanted line breaks from PDF-copied academic text. Free tool with direct DeepL translation."
     }
   },
   "landing": {
@@ -111,6 +115,7 @@
     "dashboard": "My Papers",
     "features": "Features",
     "pricing": "Pricing",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Log in",
     "getStarted": "Get Started"
   },
@@ -241,6 +246,18 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "Clean up unwanted line breaks from PDF-copied academic text. Paragraph breaks are preserved.",
+    "inputPlaceholder": "Paste your paper text here",
+    "outputPlaceholder": "Cleaned text will appear here",
+    "translateWithDeepL": "Translate with DeepL",
+    "copyToClipboard": "Copy to Clipboard",
+    "copied": "Copied!",
+    "ctaTitle": "Want a better paper writing experience?",
+    "ctaDescription": "Unmute AI is an AI-powered paper writing platform with citation management, journal style formatting, and more.",
+    "ctaButton": "Start Writing for Free"
   },
   "common": {
     "loading": "Loading...",

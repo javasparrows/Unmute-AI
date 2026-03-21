@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - 论文文本整理工具 | Unmute AI",
+      "description": "自动清理从PDF复制的论文文本中多余的换行符。免费工具，支持直接DeepL翻译。"
     }
   },
   "landing": {
@@ -89,6 +93,7 @@
     "dashboard": "工作台",
     "features": "功能",
     "pricing": "定价",
+    "pasteCleaner": "Paste Cleaner",
     "login": "登录",
     "getStarted": "开始使用"
   },
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "清理从PDF复制的论文文本中多余的换行符。段落分隔将被保留。",
+    "inputPlaceholder": "在此粘贴论文文本",
+    "outputPlaceholder": "整理后的文本将显示在此处",
+    "translateWithDeepL": "用DeepL翻译",
+    "copyToClipboard": "复制到剪贴板",
+    "copied": "已复制！",
+    "ctaTitle": "想要更好的论文写作体验？",
+    "ctaDescription": "Unmute AI 是一个配备引用管理、期刊样式格式化等功能的AI论文写作平台。",
+    "ctaButton": "免费开始"
   }
 }

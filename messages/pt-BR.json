@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - Ferramenta de limpeza de texto acadêmico | Unmute AI",
+      "description": "Limpe automaticamente quebras de linha indesejadas de textos acadêmicos copiados de PDF. Ferramenta gratuita com tradução direta pelo DeepL."
     }
   },
   "landing": {
@@ -89,6 +93,7 @@
     "dashboard": "Painel",
     "features": "Recursos",
     "pricing": "Preços",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Entrar",
     "getStarted": "Começar"
   },
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "Limpe quebras de linha indesejadas de textos acadêmicos copiados de PDF. As quebras de parágrafo são preservadas.",
+    "inputPlaceholder": "Cole seu texto acadêmico aqui",
+    "outputPlaceholder": "O texto limpo aparecerá aqui",
+    "translateWithDeepL": "Traduzir com DeepL",
+    "copyToClipboard": "Copiar para área de transferência",
+    "copied": "Copiado!",
+    "ctaTitle": "Quer uma experiência melhor de escrita acadêmica?",
+    "ctaDescription": "Unmute AI é uma plataforma de escrita acadêmica com IA, gestão de citações e formatação de estilo de periódico.",
+    "ctaButton": "Comece gratuitamente"
   }
 }

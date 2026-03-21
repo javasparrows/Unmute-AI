@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - Akademik Metin Temizleme Aracı | Unmute AI",
+      "description": "PDF'den kopyalanan akademik metindeki istenmeyen satır sonlarını otomatik olarak temizleyin. Doğrudan DeepL çevirisi ile ücretsiz araç."
     }
   },
   "landing": {
@@ -89,6 +93,7 @@
     "dashboard": "Kontrol Paneli",
     "features": "Özellikler",
     "pricing": "Fiyatlandırma",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Giriş Yap",
     "getStarted": "Başlayın"
   },
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "PDF'den kopyalanan akademik metindeki istenmeyen satır sonlarını temizleyin. Paragraf sonları korunur.",
+    "inputPlaceholder": "Makale metninizi buraya yapıştırın",
+    "outputPlaceholder": "Temizlenmiş metin burada görüntülenecek",
+    "translateWithDeepL": "DeepL ile çevir",
+    "copyToClipboard": "Panoya kopyala",
+    "copied": "Kopyalandı!",
+    "ctaTitle": "Daha iyi bir yazma deneyimi ister misiniz?",
+    "ctaDescription": "Unmute AI, alıntı yönetimi ve dergi stili biçimlendirmesi ile yapay zeka destekli akademik yazma platformudur.",
+    "ctaButton": "Ücretsiz başla"
   }
 }
