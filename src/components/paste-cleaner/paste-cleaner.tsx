@@ -147,8 +147,8 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
 
       {/* CTA to main app */}
       <div className="mt-8 text-center p-6 rounded-2xl bg-secondary">
-        <p className="text-lg font-medium">{translations.ctaTitle}</p>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-lg font-medium text-secondary-foreground">{translations.ctaTitle}</p>
+        <p className="mt-2 text-secondary-foreground/70">
           {translations.ctaDescription}
         </p>
         <Link href="/login">

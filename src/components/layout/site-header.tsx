@@ -60,12 +60,20 @@ export async function SiteHeader() {
       </div>
 
       <div className="flex items-center gap-3">
-        <MobileNav links={navLinks} />
-        <LocaleSwitcher />
+        <MobileNav
+          links={navLinks}
+          loginLabel={t("login")}
+          getStartedLabel={t("getStarted")}
+        />
+        <div className="hidden sm:block">
+          <LocaleSwitcher />
+        </div>
         {session?.user ? (
-          <UserMenu user={session.user} role={session.user.role} />
+          <div className="hidden sm:block">
+            <UserMenu user={session.user} role={session.user.role} />
+          </div>
         ) : (
-          <>
+          <div className="hidden sm:flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" size="sm">
                 {t("login")}
@@ -76,7 +84,7 @@ export async function SiteHeader() {
                 {t("getStarted")}
               </Button>
             </Link>
-          </>
+          </div>
         )}
       </div>
     </header>
