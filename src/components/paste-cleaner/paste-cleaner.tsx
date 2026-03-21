@@ -87,7 +87,7 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
   }, [locale, shapedText]);
 
   return (
-    <div className="mx-auto max-w-4xl px-6">
+    <div className="mx-auto max-w-6xl px-6">
       {/* Title + description */}
       <div className="text-center mb-3">
         <h1 className="font-serif text-2xl font-bold tracking-tight sm:text-3xl">
@@ -98,44 +98,52 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
         </p>
       </div>
 
-      {/* Input area */}
-      <div className="relative">
-        <textarea
-          value={inputText}
-          onChange={handleChange}
-          placeholder={translations.inputPlaceholder}
-          className="w-full h-[30vh] p-3 pr-10 border rounded-lg bg-background font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
-        />
-        {inputText && (
-          <button
-            onClick={handleClear}
-            className="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Clear"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
-      </div>
+      {/* Textareas container - stacked on mobile, side-by-side on lg */}
+      <div className="flex flex-col lg:flex-row gap-3">
+        {/* Left column: Input + Buttons */}
+        <div className="flex-1 min-w-0">
+          {/* Input area */}
+          <div className="relative">
+            <textarea
+              value={inputText}
+              onChange={handleChange}
+              placeholder={translations.inputPlaceholder}
+              className="w-full h-[30vh] p-3 pr-10 border border-muted-foreground/30 rounded-lg bg-background font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
+            />
+            {inputText && (
+              <button
+                onClick={handleClear}
+                className="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
 
-      {/* Buttons */}
-      <div className="flex gap-3 mt-2.5">
-        <Button size="sm" onClick={handleDeepL} disabled={!shapedText}>
-          <ExternalLink className="h-4 w-4 mr-1.5" />
-          {translations.translateWithDeepL}
-        </Button>
-        <Button size="sm" variant="outline" onClick={handleCopy} disabled={!shapedText}>
-          <Copy className="h-4 w-4 mr-1.5" />
-          {translations.copyToClipboard}
-        </Button>
-      </div>
+          {/* Buttons */}
+          <div className="flex gap-3 mt-2.5">
+            <Button size="sm" onClick={handleDeepL} disabled={!shapedText}>
+              <ExternalLink className="h-4 w-4 mr-1.5" />
+              {translations.translateWithDeepL}
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleCopy} disabled={!shapedText}>
+              <Copy className="h-4 w-4 mr-1.5" />
+              {translations.copyToClipboard}
+            </Button>
+          </div>
+        </div>
 
-      {/* Output area */}
-      <textarea
-        value={shapedText}
-        readOnly
-        placeholder={translations.outputPlaceholder}
-        className="w-full h-[30vh] p-3 mt-2.5 border rounded-lg bg-muted/50 font-mono text-sm resize-none"
-      />
+        {/* Right column: Output */}
+        <div className="flex-1 min-w-0">
+          <textarea
+            value={shapedText}
+            readOnly
+            placeholder={translations.outputPlaceholder}
+            className="w-full h-[30vh] p-3 mt-2.5 lg:mt-0 border border-muted-foreground/30 rounded-lg bg-muted/50 font-mono text-sm resize-none"
+          />
+        </div>
+      </div>
 
       {/* CTA to main app */}
       <div className="mt-8 text-center p-6 rounded-2xl bg-secondary">

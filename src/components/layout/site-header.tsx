@@ -2,12 +2,25 @@ import { Link } from "@/i18n/navigation";
 import { auth } from "@/lib/auth";
 import { UserMenu } from "@/components/auth/user-menu";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
 
 export async function SiteHeader() {
   const session = await auth();
   const t = await getTranslations("header");
+
+  const navLinks = session?.user
+    ? [
+        { href: "/dashboard", label: t("dashboard") },
+        { href: "/paste-cleaner", label: t("pasteCleaner") },
+        { href: "/pricing", label: t("pricing") },
+      ]
+    : [
+        { href: "/#features", label: t("features") },
+        { href: "/paste-cleaner", label: t("pasteCleaner") },
+        { href: "/pricing", label: t("pricing") },
+      ];
 
   return (
     <header className="flex items-center justify-between px-6 py-3 bg-secondary text-secondary-foreground shadow-md">
@@ -47,6 +60,7 @@ export async function SiteHeader() {
       </div>
 
       <div className="flex items-center gap-3">
+        <MobileNav links={navLinks} />
         <LocaleSwitcher />
         {session?.user ? (
           <UserMenu user={session.user} role={session.user.role} />
