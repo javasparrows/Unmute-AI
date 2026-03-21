@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Metin Temizleme Araci | Unmute AI",
-      "description": "PDF den kopyalanan akademik metindeki gereksiz satir sonlarini otomatik olarak temizleyin. DeepL cevirisi ile ucretsiz arac."
+      "title": "Paste Cleaner - Akademik Metin Temizleme Aracı | Unmute AI",
+      "description": "PDF'den kopyalanan akademik metindeki istenmeyen satır sonlarını otomatik olarak temizleyin. Doğrudan DeepL çevirisi ile ücretsiz araç."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Kontrol Paneli",
     "features": "Özellikler",
     "pricing": "Fiyatlandırma",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Giriş Yap",
-    "getStarted": "Başlayın",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Başlayın"
   },
   "login": {
     "tagline": "Araştırmaya odaklanın. Dili biz hallederiz.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "PDF den kopyalanan akademik metindeki gereksiz satir sonlarini temizleyin. Paragraf sonlari korunur.",
-    "inputPlaceholder": "Metninizi buraya yapiştirin",
-    "outputPlaceholder": "Temizlenmis metin burada gorunecek",
-    "translateWithDeepL": "DeepL ile cevir",
+    "description": "PDF'den kopyalanan akademik metindeki istenmeyen satır sonlarını temizleyin. Paragraf sonları korunur.",
+    "inputPlaceholder": "Makale metninizi buraya yapıştırın",
+    "outputPlaceholder": "Temizlenmiş metin burada görüntülenecek",
+    "translateWithDeepL": "DeepL ile çevir",
     "copyToClipboard": "Panoya kopyala",
-    "copied": "Kopyalandi!",
-    "ctaTitle": "Daha iyi bir makale yazma deneyimi ister misiniz?",
-    "ctaDescription": "Unmute AI, alinti yonetimi ve dergi stili formatlama ile akademik yazma platformudur.",
-    "ctaButton": "Ucretsiz basla"
+    "copied": "Kopyalandı!",
+    "ctaTitle": "Daha iyi bir yazma deneyimi ister misiniz?",
+    "ctaDescription": "Unmute AI, alıntı yönetimi ve dergi stili biçimlendirmesi ile yapay zeka destekli akademik yazma platformudur.",
+    "ctaButton": "Ücretsiz başla"
   }
 }

@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Strumento di pulizia del testo | Unmute AI",
-      "description": "Pulisci automaticamente le interruzioni di riga indesiderate dal testo accademico copiato da PDF. Strumento gratuito con traduzione DeepL."
+      "title": "Paste Cleaner - Strumento di pulizia testo accademico | Unmute AI",
+      "description": "Pulisci automaticamente le interruzioni di riga indesiderate dal testo accademico copiato da PDF. Strumento gratuito con traduzione diretta DeepL."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Dashboard",
     "features": "Funzionalità",
     "pricing": "Prezzi",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Accedi",
-    "getStarted": "Inizia",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Inizia"
   },
   "login": {
     "tagline": "Concentratevi sulla ricerca. Alla lingua pensiamo noi.",
@@ -232,13 +232,13 @@
   "pasteCleaner": {
     "title": "Paste Cleaner",
     "description": "Pulisci le interruzioni di riga indesiderate dal testo accademico copiato da PDF. Le interruzioni di paragrafo vengono preservate.",
-    "inputPlaceholder": "Incolla il tuo testo qui",
-    "outputPlaceholder": "Il testo pulito apparira qui",
+    "inputPlaceholder": "Incolla qui il testo del tuo articolo",
+    "outputPlaceholder": "Il testo pulito apparirà qui",
     "translateWithDeepL": "Traduci con DeepL",
     "copyToClipboard": "Copia negli appunti",
     "copied": "Copiato!",
-    "ctaTitle": "Vuoi una migliore esperienza di scrittura?",
-    "ctaDescription": "Unmute AI e una piattaforma di scrittura accademica con gestione delle citazioni e formattazione dello stile della rivista.",
+    "ctaTitle": "Vuoi un'esperienza di scrittura migliore?",
+    "ctaDescription": "Unmute AI è una piattaforma di scrittura accademica con IA, gestione citazioni e formattazione stile rivista.",
     "ctaButton": "Inizia gratis"
   }
 }

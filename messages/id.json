@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Alat Pembersih Teks | Unmute AI",
-      "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF secara otomatis. Alat gratis dengan terjemahan DeepL."
+      "title": "Paste Cleaner - Alat Pembersih Teks Akademik | Unmute AI",
+      "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF secara otomatis. Alat gratis dengan terjemahan DeepL langsung."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Dasbor",
     "features": "Fitur",
     "pricing": "Harga",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Masuk",
-    "getStarted": "Mulai",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Mulai"
   },
   "login": {
     "tagline": "Fokus pada penelitian. Bahasa kami yang urus.",
@@ -231,13 +231,13 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF. Jeda paragraf tetap dipertahankan.",
-    "inputPlaceholder": "Tempel teks Anda di sini",
+    "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF. Jeda paragraf dipertahankan.",
+    "inputPlaceholder": "Tempel teks makalah Anda di sini",
     "outputPlaceholder": "Teks yang dibersihkan akan muncul di sini",
     "translateWithDeepL": "Terjemahkan dengan DeepL",
     "copyToClipboard": "Salin ke clipboard",
     "copied": "Disalin!",
-    "ctaTitle": "Ingin pengalaman menulis paper yang lebih baik?",
+    "ctaTitle": "Ingin pengalaman menulis yang lebih baik?",
     "ctaDescription": "Unmute AI adalah platform penulisan akademik bertenaga AI dengan manajemen sitasi dan pemformatan gaya jurnal.",
     "ctaButton": "Mulai gratis"
   }

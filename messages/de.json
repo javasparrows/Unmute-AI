@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Text-Bereinigungstool | Unmute AI",
-      "description": "Bereinigen Sie automatisch unerwuenschte Zeilenumbrueche aus PDF-kopiertem akademischem Text. Kostenloses Tool mit DeepL-Uebersetzung."
+      "title": "Paste Cleaner - Textbereinigung für Fachartikel | Unmute AI",
+      "description": "Automatische Bereinigung unerwünschter Zeilenumbrüche aus PDF-kopierten Fachtexten. Kostenloses Tool mit direkter DeepL-Übersetzung."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Dashboard",
     "features": "Funktionen",
     "pricing": "Preise",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Anmelden",
-    "getStarted": "Loslegen",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Loslegen"
   },
   "login": {
     "tagline": "Konzentrieren Sie sich auf die Forschung. Die Sprache übernehmen wir.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "Bereinigen Sie unerwuenschte Zeilenumbrueche aus PDF-kopiertem akademischem Text. Absatzumbrueche bleiben erhalten.",
-    "inputPlaceholder": "Fuegen Sie hier Ihren Text ein",
+    "description": "Bereinigen Sie unerwünschte Zeilenumbrüche aus PDF-kopierten Fachtexten. Absatzumbrüche bleiben erhalten.",
+    "inputPlaceholder": "Fügen Sie hier Ihren Fachartikeltext ein",
     "outputPlaceholder": "Bereinigter Text wird hier angezeigt",
-    "translateWithDeepL": "Mit DeepL uebersetzen",
+    "translateWithDeepL": "Mit DeepL übersetzen",
     "copyToClipboard": "In Zwischenablage kopieren",
     "copied": "Kopiert!",
-    "ctaTitle": "Moechten Sie ein besseres Schreiberlebnis?",
-    "ctaDescription": "Unmute AI ist eine KI-gestuetzte Plattform fuer wissenschaftliches Schreiben mit Zitatverwaltung und Journalstil-Formatierung.",
+    "ctaTitle": "Möchten Sie ein besseres Schreiberlebnis?",
+    "ctaDescription": "Unmute AI ist eine KI-gestützte Plattform für wissenschaftliches Schreiben mit Zitierverwaltung und Journalstil-Formatierung.",
     "ctaButton": "Kostenlos starten"
   }
 }

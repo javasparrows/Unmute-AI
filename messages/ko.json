@@ -30,7 +30,7 @@
     },
     "pasteCleaner": {
       "title": "Paste Cleaner - 논문 텍스트 정리 도구 | Unmute AI",
-      "description": "PDF에서 복사한 논문 텍스트의 불필요한 줄바꿈을 자동 정리합니다. DeepL로 바로 번역 가능한 무료 도구."
+      "description": "PDF에서 복사한 논문 텍스트의 불필요한 줄바꿈을 자동으로 정리합니다. DeepL 번역 직접 연결 무료 도구."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "대시보드",
     "features": "기능",
     "pricing": "요금제",
+    "pasteCleaner": "Paste Cleaner",
     "login": "로그인",
-    "getStarted": "시작하기",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "시작하기"
   },
   "login": {
     "tagline": "연구에 집중하세요. 언어는 저희가 맡겠습니다.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "PDF에서 복사한 논문 텍스트의 불필요한 줄바꿈을 정리합니다. 문단 구분은 유지됩니다.",
+    "description": "PDF에서 복사한 논문 텍스트의 불필요한 줄바꿈을 정리합니다. 단락 구분은 유지됩니다.",
     "inputPlaceholder": "여기에 논문 텍스트를 붙여넣기",
     "outputPlaceholder": "정리된 텍스트가 여기에 표시됩니다",
     "translateWithDeepL": "DeepL로 번역",
     "copyToClipboard": "클립보드에 복사",
-    "copied": "복사되었습니다",
+    "copied": "복사됨!",
     "ctaTitle": "더 나은 논문 작성 경험을 원하시나요?",
-    "ctaDescription": "Unmute AI는 인용 관리, 저널 스타일 포맷, AI 작성 지원을 제공하는 논문 작성 플랫폼입니다.",
+    "ctaDescription": "Unmute AI는 인용 관리, 저널 스타일 포맷팅 등을 갖춘 AI 논문 작성 플랫폼입니다.",
     "ctaButton": "무료로 시작하기"
   }
 }

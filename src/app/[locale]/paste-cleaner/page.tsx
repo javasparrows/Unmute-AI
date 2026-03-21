@@ -57,7 +57,7 @@ export default async function PasteCleanerPage({
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
-      <main className="py-16 sm:py-24">
+      <main className="py-6">
         <PasteCleaner translations={translations} locale={locale} />
       </main>
       <footer className="border-t py-8">

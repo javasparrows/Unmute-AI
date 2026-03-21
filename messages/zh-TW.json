@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - 論文文字整理工具 | Unmute AI",
-      "description": "自動清理從PDF複製的論文文字中的多餘換行。可直接用DeepL翻譯的免費工具。"
+      "title": "Paste Cleaner - 論文文本整理工具 | Unmute AI",
+      "description": "自動清理從PDF複製的論文文本中多餘的換行符。免費工具，支援直接DeepL翻譯。"
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "儀表板",
     "features": "功能",
     "pricing": "方案價格",
+    "pasteCleaner": "Paste Cleaner",
     "login": "登入",
-    "getStarted": "開始使用",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "開始使用"
   },
   "login": {
     "tagline": "專注於研究。語言交給我們。",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "清理從PDF複製的學術文字中的多餘換行。段落分隔會被保留。",
-    "inputPlaceholder": "在此貼上論文文字",
-    "outputPlaceholder": "整理後的文字將顯示在此處",
+    "description": "清理從PDF複製的論文文本中多餘的換行符。段落分隔將被保留。",
+    "inputPlaceholder": "在此貼上論文文本",
+    "outputPlaceholder": "整理後的文本將顯示在此處",
     "translateWithDeepL": "用DeepL翻譯",
     "copyToClipboard": "複製到剪貼簿",
-    "copied": "已複製",
+    "copied": "已複製！",
     "ctaTitle": "想要更好的論文寫作體驗？",
-    "ctaDescription": "Unmute AI 是一個提供引用管理、期刊風格格式化和AI寫作輔助的論文寫作平台。",
+    "ctaDescription": "Unmute AI 是一個配備引用管理、期刊樣式格式化等功能的AI論文寫作平台。",
     "ctaButton": "免費開始"
   }
 }

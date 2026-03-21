@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Text Cleanup Tool | Unmute AI",
-      "description": "PDF se copy kiye gaye academic text ki unwanted line breaks ko automatically clean karein. DeepL translation ke saath free tool."
+      "title": "Paste Cleaner - शोध पत्र टेक्स्ट सफाई उपकरण | Unmute AI",
+      "description": "PDF से कॉपी किए गए शोध पत्र टेक्स्ट से अनावश्यक लाइन ब्रेक को स्वचालित रूप से साफ करें। DeepL अनुवाद के साथ मुफ्त उपकरण।"
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "डैशबोर्ड",
     "features": "विशेषताएँ",
     "pricing": "मूल्य निर्धारण",
+    "pasteCleaner": "Paste Cleaner",
     "login": "लॉग इन",
-    "getStarted": "शुरू करें",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "शुरू करें"
   },
   "login": {
     "tagline": "शोध पर ध्यान दीजिए। भाषा हम सँभाल लेंगे।",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "PDF se copy kiye gaye academic text ki unwanted line breaks ko clean karein. Paragraph breaks preserve rehte hain.",
-    "inputPlaceholder": "Apna text yahan paste karein",
-    "outputPlaceholder": "Clean kiya hua text yahan dikhega",
-    "translateWithDeepL": "DeepL se translate karein",
-    "copyToClipboard": "Clipboard mein copy karein",
-    "copied": "Copy ho gaya!",
-    "ctaTitle": "Better paper writing experience chahiye?",
-    "ctaDescription": "Unmute AI ek AI-powered paper writing platform hai jo citation management aur journal style formatting provide karta hai.",
-    "ctaButton": "Free mein shuru karein"
+    "description": "PDF से कॉपी किए गए शोध पत्र टेक्स्ट से अनावश्यक लाइन ब्रेक साफ करें। पैराग्राफ ब्रेक संरक्षित रहते हैं।",
+    "inputPlaceholder": "यहाँ अपना शोध पत्र टेक्स्ट पेस्ट करें",
+    "outputPlaceholder": "साफ किया गया टेक्स्ट यहाँ दिखाई देगा",
+    "translateWithDeepL": "DeepL से अनुवाद करें",
+    "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें",
+    "copied": "कॉपी हो गया!",
+    "ctaTitle": "बेहतर लेखन अनुभव चाहते हैं?",
+    "ctaDescription": "Unmute AI उद्धरण प्रबंधन और जर्नल स्टाइल फॉर्मेटिंग के साथ AI-संचालित शोध लेखन प्लेटफॉर्म है।",
+    "ctaButton": "मुफ्त में शुरू करें"
   }
 }

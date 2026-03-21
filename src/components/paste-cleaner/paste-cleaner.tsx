@@ -89,11 +89,11 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
   return (
     <div className="mx-auto max-w-4xl px-6">
       {/* Title + description */}
-      <div className="text-center mb-8">
-        <h1 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+      <div className="text-center mb-3">
+        <h1 className="font-serif text-2xl font-bold tracking-tight sm:text-3xl">
           {translations.title}
         </h1>
-        <p className="mt-4 text-muted-foreground text-lg">
+        <p className="mt-1.5 text-muted-foreground text-sm">
           {translations.description}
         </p>
       </div>
@@ -104,27 +104,27 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
           value={inputText}
           onChange={handleChange}
           placeholder={translations.inputPlaceholder}
-          className="w-full h-48 p-4 pr-12 border rounded-lg bg-background font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="w-full h-[30vh] p-3 pr-10 border rounded-lg bg-background font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
         {inputText && (
           <button
             onClick={handleClear}
-            className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground transition-colors"
             aria-label="Clear"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         )}
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-3 mt-4">
-        <Button onClick={handleDeepL} disabled={!shapedText}>
-          <ExternalLink className="h-4 w-4 mr-2" />
+      <div className="flex gap-3 mt-2.5">
+        <Button size="sm" onClick={handleDeepL} disabled={!shapedText}>
+          <ExternalLink className="h-4 w-4 mr-1.5" />
           {translations.translateWithDeepL}
         </Button>
-        <Button variant="outline" onClick={handleCopy} disabled={!shapedText}>
-          <Copy className="h-4 w-4 mr-2" />
+        <Button size="sm" variant="outline" onClick={handleCopy} disabled={!shapedText}>
+          <Copy className="h-4 w-4 mr-1.5" />
           {translations.copyToClipboard}
         </Button>
       </div>
@@ -134,11 +134,11 @@ export function PasteCleaner({ translations, locale }: PasteCleanerProps) {
         value={shapedText}
         readOnly
         placeholder={translations.outputPlaceholder}
-        className="w-full h-48 p-4 mt-4 border rounded-lg bg-muted/50 font-mono text-sm resize-none"
+        className="w-full h-[30vh] p-3 mt-2.5 border rounded-lg bg-muted/50 font-mono text-sm resize-none"
       />
 
       {/* CTA to main app */}
-      <div className="mt-12 text-center p-8 rounded-2xl bg-secondary">
+      <div className="mt-8 text-center p-6 rounded-2xl bg-secondary">
         <p className="text-lg font-medium">{translations.ctaTitle}</p>
         <p className="mt-2 text-muted-foreground">
           {translations.ctaDescription}

@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - ابزار پاکسازی متن | Unmute AI",
-      "description": "شکست خطوط ناخواسته را از متن آکادمیک کپی شده از PDF به طور خودکار پاکسازی کنید. ابزار رایگان با ترجمه DeepL."
+      "title": "Paste Cleaner - ابزار پاکسازی متن مقاله | Unmute AI",
+      "description": "پاکسازی خودکار شکست‌های خط ناخواسته از متن مقاله کپی شده از PDF. ابزار رایگان با ترجمه مستقیم DeepL."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "داشبورد",
     "features": "قابلیت‌ها",
     "pricing": "قیمت‌گذاری",
+    "pasteCleaner": "Paste Cleaner",
     "login": "ورود",
-    "getStarted": "شروع کنید",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "شروع کنید"
   },
   "login": {
     "tagline": "بر پژوهش تمرکز کنید. زبان با ما.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "شکست خطوط ناخواسته را از متن آکادمیک کپی شده از PDF پاکسازی کنید. شکست پاراگراف ها حفظ می شوند.",
-    "inputPlaceholder": "متن خود را اینجا بچسبانید",
-    "outputPlaceholder": "متن پاکسازی شده اینجا نمایش داده می شود",
+    "description": "شکست‌های خط ناخواسته را از متن مقاله کپی شده از PDF پاک کنید. شکست‌های پاراگراف حفظ می‌شوند.",
+    "inputPlaceholder": "متن مقاله خود را اینجا بچسبانید",
+    "outputPlaceholder": "متن پاک‌شده اینجا نمایش داده می‌شود",
     "translateWithDeepL": "ترجمه با DeepL",
-    "copyToClipboard": "کپی به کلیپبورد",
+    "copyToClipboard": "کپی در کلیپ‌بورد",
     "copied": "کپی شد!",
-    "ctaTitle": "تجربه بهتری از نوشتن مقاله می خواهید؟",
-    "ctaDescription": "Unmute AI یک پلتفرم نوشتن آکادمیک مبتنی بر هوش مصنوعی با مدیریت استنادات و قالب بندی سبک ژورنال است.",
+    "ctaTitle": "تجربه نوشتن بهتری می‌خواهید؟",
+    "ctaDescription": "Unmute AI یک پلتفرم نوشتن مقاله مبتنی بر هوش مصنوعی با مدیریت استناد و قالب‌بندی سبک مجله است.",
     "ctaButton": "شروع رایگان"
   }
 }

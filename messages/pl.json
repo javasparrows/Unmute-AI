@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Narzedzie do czyszczenia tekstu | Unmute AI",
-      "description": "Automatycznie usun niechciane podzialy wierszy z tekstu akademickiego skopiowanego z PDF. Darmowe narzedzie z tlumaczeniem DeepL."
+      "title": "Paste Cleaner - Narzędzie do czyszczenia tekstu naukowego | Unmute AI",
+      "description": "Automatyczne czyszczenie niechcianych podziałów wierszy z tekstu naukowego skopiowanego z PDF. Darmowe narzędzie z bezpośrednim tłumaczeniem DeepL."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Panel",
     "features": "Funkcje",
     "pricing": "Cennik",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Zaloguj się",
-    "getStarted": "Rozpocznij",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Rozpocznij"
   },
   "login": {
     "tagline": "Skup się na badaniach. Język zostawcie nam.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "Usun niechciane podzialy wierszy z tekstu akademickiego skopiowanego z PDF. Podzialy akapitow sa zachowane.",
-    "inputPlaceholder": "Wklej tekst tutaj",
-    "outputPlaceholder": "Oczyszczony tekst pojawi sie tutaj",
-    "translateWithDeepL": "Przetlumacz w DeepL",
-    "copyToClipboard": "Skopiuj do schowka",
+    "description": "Oczyść niechciane podziały wierszy z tekstu naukowego skopiowanego z PDF. Podziały akapitów są zachowane.",
+    "inputPlaceholder": "Wklej tutaj tekst artykułu",
+    "outputPlaceholder": "Oczyszczony tekst pojawi się tutaj",
+    "translateWithDeepL": "Przetłumacz w DeepL",
+    "copyToClipboard": "Kopiuj do schowka",
     "copied": "Skopiowano!",
-    "ctaTitle": "Chcesz lepsze doswiadczenie pisania artykulow?",
-    "ctaDescription": "Unmute AI to platforma do pisania akademickiego z zarzadzaniem cytatami i formatowaniem stylu czasopisma.",
+    "ctaTitle": "Chcesz lepszego doświadczenia pisania?",
+    "ctaDescription": "Unmute AI to platforma do pisania naukowego z AI, zarządzaniem cytatami i formatowaniem w stylu czasopisma.",
     "ctaButton": "Zacznij za darmo"
   }
 }

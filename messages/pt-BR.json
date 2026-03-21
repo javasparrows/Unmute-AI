@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Ferramenta de limpeza de texto | Unmute AI",
-      "description": "Limpe automaticamente quebras de linha indesejadas de texto academico copiado de PDF. Ferramenta gratuita com traducao DeepL."
+      "title": "Paste Cleaner - Ferramenta de limpeza de texto acadêmico | Unmute AI",
+      "description": "Limpe automaticamente quebras de linha indesejadas de textos acadêmicos copiados de PDF. Ferramenta gratuita com tradução direta pelo DeepL."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Painel",
     "features": "Recursos",
     "pricing": "Preços",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Entrar",
-    "getStarted": "Começar",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Começar"
   },
   "login": {
     "tagline": "Foque na pesquisa. A língua fica por nossa conta.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "Limpe quebras de linha indesejadas de texto academico copiado de PDF. As quebras de paragrafo sao preservadas.",
-    "inputPlaceholder": "Cole seu texto aqui",
-    "outputPlaceholder": "O texto limpo aparecera aqui",
+    "description": "Limpe quebras de linha indesejadas de textos acadêmicos copiados de PDF. As quebras de parágrafo são preservadas.",
+    "inputPlaceholder": "Cole seu texto acadêmico aqui",
+    "outputPlaceholder": "O texto limpo aparecerá aqui",
     "translateWithDeepL": "Traduzir com DeepL",
-    "copyToClipboard": "Copiar para area de transferencia",
+    "copyToClipboard": "Copiar para área de transferência",
     "copied": "Copiado!",
-    "ctaTitle": "Quer uma melhor experiencia de escrita?",
-    "ctaDescription": "Unmute AI e uma plataforma de escrita academica com gerenciamento de citacoes e formatacao de estilo de revista.",
-    "ctaButton": "Comecar gratuitamente"
+    "ctaTitle": "Quer uma experiência melhor de escrita acadêmica?",
+    "ctaDescription": "Unmute AI é uma plataforma de escrita acadêmica com IA, gestão de citações e formatação de estilo de periódico.",
+    "ctaButton": "Comece gratuitamente"
   }
 }

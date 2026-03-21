@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - اداة تنظيف النص | Unmute AI",
-      "description": "قم بتنظيف فواصل الاسطر غير المرغوب فيها من النص الاكاديمي المنسوخ من PDF تلقائيا. اداة مجانية مع ترجمة DeepL."
+      "title": "Paste Cleaner - أداة تنظيف النص الأكاديمي | Unmute AI",
+      "description": "تنظيف تلقائي لفواصل الأسطر غير المرغوب فيها من النص الأكاديمي المنسوخ من PDF. أداة مجانية مع ترجمة DeepL مباشرة."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "لوحة التحكم",
     "features": "المزايا",
     "pricing": "الأسعار",
+    "pasteCleaner": "Paste Cleaner",
     "login": "تسجيل الدخول",
-    "getStarted": "ابدأ الآن",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "ابدأ الآن"
   },
   "login": {
     "tagline": "ركّز على البحث. نحن نتولّى اللغة.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "قم بتنظيف فواصل الاسطر غير المرغوب فيها من النص الاكاديمي المنسوخ من PDF. يتم الحفاظ على فواصل الفقرات.",
-    "inputPlaceholder": "الصق النص هنا",
-    "outputPlaceholder": "سيظهر النص المنظف هنا",
-    "translateWithDeepL": "ترجم مع DeepL",
-    "copyToClipboard": "نسخ الى الحافظة",
+    "description": "نظّف فواصل الأسطر غير المرغوب فيها من النص الأكاديمي المنسوخ من PDF. يتم الحفاظ على فواصل الفقرات.",
+    "inputPlaceholder": "الصق نص بحثك هنا",
+    "outputPlaceholder": "سيظهر النص المنظّف هنا",
+    "translateWithDeepL": "ترجم باستخدام DeepL",
+    "copyToClipboard": "نسخ إلى الحافظة",
     "copied": "تم النسخ!",
-    "ctaTitle": "هل تريد تجربة كتابة افضل؟",
-    "ctaDescription": "Unmute AI هي منصة كتابة اكاديمية مدعومة بالذكاء الاصطناعي مع ادارة الاستشهادات وتنسيق اسلوب المجلات.",
-    "ctaButton": "ابدا مجانا"
+    "ctaTitle": "هل تريد تجربة كتابة أفضل؟",
+    "ctaDescription": "Unmute AI هي منصة كتابة أكاديمية مدعومة بالذكاء الاصطناعي مع إدارة الاستشهادات وتنسيق أنماط المجلات.",
+    "ctaButton": "ابدأ مجاناً"
   }
 }

@@ -29,8 +29,8 @@
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
     },
     "pasteCleaner": {
-      "title": "Paste Cleaner - Outil de nettoyage de texte | Unmute AI",
-      "description": "Nettoyez automatiquement les sauts de ligne indesirables du texte academique copie depuis un PDF. Outil gratuit avec traduction DeepL."
+      "title": "Paste Cleaner - Outil de nettoyage de texte académique | Unmute AI",
+      "description": "Nettoyez automatiquement les sauts de ligne indésirables des textes académiques copiés depuis un PDF. Outil gratuit avec traduction DeepL directe."
     }
   },
   "landing": {
@@ -93,9 +93,9 @@
     "dashboard": "Tableau de bord",
     "features": "Fonctionnalités",
     "pricing": "Tarifs",
+    "pasteCleaner": "Paste Cleaner",
     "login": "Connexion",
-    "getStarted": "Commencer",
-    "pasteCleaner": "Paste Cleaner"
+    "getStarted": "Commencer"
   },
   "login": {
     "tagline": "Concentrez-vous sur la recherche. Nous nous occupons de la langue.",
@@ -231,14 +231,14 @@
   },
   "pasteCleaner": {
     "title": "Paste Cleaner",
-    "description": "Nettoyez les sauts de ligne indesirables du texte academique copie depuis un PDF. Les sauts de paragraphe sont preserves.",
-    "inputPlaceholder": "Collez votre texte ici",
-    "outputPlaceholder": "Le texte nettoye apparaitra ici",
+    "description": "Nettoyez les sauts de ligne indésirables des textes académiques copiés depuis un PDF. Les sauts de paragraphe sont préservés.",
+    "inputPlaceholder": "Collez votre texte académique ici",
+    "outputPlaceholder": "Le texte nettoyé apparaîtra ici",
     "translateWithDeepL": "Traduire avec DeepL",
     "copyToClipboard": "Copier dans le presse-papiers",
-    "copied": "Copie !",
-    "ctaTitle": "Envie d une meilleure experience de redaction ?",
-    "ctaDescription": "Unmute AI est une plateforme de redaction scientifique avec gestion des citations et formatage de style de journal.",
+    "copied": "Copié !",
+    "ctaTitle": "Envie d'une meilleure expérience de rédaction ?",
+    "ctaDescription": "Unmute AI est une plateforme de rédaction académique alimentée par l'IA avec gestion des citations et formatage de style de journal.",
     "ctaButton": "Commencer gratuitement"
   }
 }
