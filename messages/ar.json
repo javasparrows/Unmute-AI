@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - اداة تنظيف النص | Unmute AI",
+      "description": "قم بتنظيف فواصل الاسطر غير المرغوب فيها من النص الاكاديمي المنسوخ من PDF تلقائيا. اداة مجانية مع ترجمة DeepL."
     }
   },
   "landing": {
@@ -90,7 +94,8 @@
     "features": "المزايا",
     "pricing": "الأسعار",
     "login": "تسجيل الدخول",
-    "getStarted": "ابدأ الآن"
+    "getStarted": "ابدأ الآن",
+    "pasteCleaner": "Paste Cleaner"
   },
   "login": {
     "tagline": "ركّز على البحث. نحن نتولّى اللغة.",
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "قم بتنظيف فواصل الاسطر غير المرغوب فيها من النص الاكاديمي المنسوخ من PDF. يتم الحفاظ على فواصل الفقرات.",
+    "inputPlaceholder": "الصق النص هنا",
+    "outputPlaceholder": "سيظهر النص المنظف هنا",
+    "translateWithDeepL": "ترجم مع DeepL",
+    "copyToClipboard": "نسخ الى الحافظة",
+    "copied": "تم النسخ!",
+    "ctaTitle": "هل تريد تجربة كتابة افضل؟",
+    "ctaDescription": "Unmute AI هي منصة كتابة اكاديمية مدعومة بالذكاء الاصطناعي مع ادارة الاستشهادات وتنسيق اسلوب المجلات.",
+    "ctaButton": "ابدا مجانا"
   }
 }

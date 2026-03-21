@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - Outil de nettoyage de texte | Unmute AI",
+      "description": "Nettoyez automatiquement les sauts de ligne indesirables du texte academique copie depuis un PDF. Outil gratuit avec traduction DeepL."
     }
   },
   "landing": {
@@ -90,7 +94,8 @@
     "features": "Fonctionnalités",
     "pricing": "Tarifs",
     "login": "Connexion",
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "pasteCleaner": "Paste Cleaner"
   },
   "login": {
     "tagline": "Concentrez-vous sur la recherche. Nous nous occupons de la langue.",
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "Nettoyez les sauts de ligne indesirables du texte academique copie depuis un PDF. Les sauts de paragraphe sont preserves.",
+    "inputPlaceholder": "Collez votre texte ici",
+    "outputPlaceholder": "Le texte nettoye apparaitra ici",
+    "translateWithDeepL": "Traduire avec DeepL",
+    "copyToClipboard": "Copier dans le presse-papiers",
+    "copied": "Copie !",
+    "ctaTitle": "Envie d une meilleure experience de redaction ?",
+    "ctaDescription": "Unmute AI est une plateforme de redaction scientifique avec gestion des citations et formatage de style de journal.",
+    "ctaButton": "Commencer gratuitement"
   }
 }

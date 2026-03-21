@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - ابزار پاکسازی متن | Unmute AI",
+      "description": "شکست خطوط ناخواسته را از متن آکادمیک کپی شده از PDF به طور خودکار پاکسازی کنید. ابزار رایگان با ترجمه DeepL."
     }
   },
   "landing": {
@@ -90,7 +94,8 @@
     "features": "قابلیت‌ها",
     "pricing": "قیمت‌گذاری",
     "login": "ورود",
-    "getStarted": "شروع کنید"
+    "getStarted": "شروع کنید",
+    "pasteCleaner": "Paste Cleaner"
   },
   "login": {
     "tagline": "بر پژوهش تمرکز کنید. زبان با ما.",
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "شکست خطوط ناخواسته را از متن آکادمیک کپی شده از PDF پاکسازی کنید. شکست پاراگراف ها حفظ می شوند.",
+    "inputPlaceholder": "متن خود را اینجا بچسبانید",
+    "outputPlaceholder": "متن پاکسازی شده اینجا نمایش داده می شود",
+    "translateWithDeepL": "ترجمه با DeepL",
+    "copyToClipboard": "کپی به کلیپبورد",
+    "copied": "کپی شد!",
+    "ctaTitle": "تجربه بهتری از نوشتن مقاله می خواهید؟",
+    "ctaDescription": "Unmute AI یک پلتفرم نوشتن آکادمیک مبتنی بر هوش مصنوعی با مدیریت استنادات و قالب بندی سبک ژورنال است.",
+    "ctaButton": "شروع رایگان"
   }
 }

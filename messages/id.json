@@ -27,6 +27,10 @@
     "faq": {
       "title": "FAQ - Unmute AI",
       "description": "Frequently asked questions about Unmute AI: pricing, supported languages, LaTeX support, citation features, and more."
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - Alat Pembersih Teks | Unmute AI",
+      "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF secara otomatis. Alat gratis dengan terjemahan DeepL."
     }
   },
   "landing": {
@@ -90,7 +94,8 @@
     "features": "Fitur",
     "pricing": "Harga",
     "login": "Masuk",
-    "getStarted": "Mulai"
+    "getStarted": "Mulai",
+    "pasteCleaner": "Paste Cleaner"
   },
   "login": {
     "tagline": "Fokus pada penelitian. Bahasa kami yang urus.",
@@ -223,5 +228,17 @@
         "answer": "Yes. The Citation Auto-Pilot analyzes each sentence, suggests relevant papers, and lets you insert citations with one click. All cited papers are verified via DOI/PMID. BibTeX entries are auto-generated."
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "Bersihkan jeda baris yang tidak diinginkan dari teks akademik yang disalin dari PDF. Jeda paragraf tetap dipertahankan.",
+    "inputPlaceholder": "Tempel teks Anda di sini",
+    "outputPlaceholder": "Teks yang dibersihkan akan muncul di sini",
+    "translateWithDeepL": "Terjemahkan dengan DeepL",
+    "copyToClipboard": "Salin ke clipboard",
+    "copied": "Disalin!",
+    "ctaTitle": "Ingin pengalaman menulis paper yang lebih baik?",
+    "ctaDescription": "Unmute AI adalah platform penulisan akademik bertenaga AI dengan manajemen sitasi dan pemformatan gaya jurnal.",
+    "ctaButton": "Mulai gratis"
   }
 }

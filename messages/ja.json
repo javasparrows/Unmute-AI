@@ -27,6 +27,10 @@
     "faq": {
       "title": "よくある質問 - Unmute AI",
       "description": "Unmute AI の使い方、料金、対応言語、LaTeX対応、引用機能などについてのよくある質問。論文執筆AIツールの疑問を解決します。"
+    },
+    "pasteCleaner": {
+      "title": "Paste Cleaner - 論文テキスト整形ツール | Unmute AI",
+      "description": "PDFからコピーした論文テキストの不要な改行を自動整理。DeepLで即翻訳できる無料ツール。"
     }
   },
   "landing": {
@@ -111,6 +115,7 @@
     "dashboard": "マイペーパー",
     "features": "機能",
     "pricing": "料金",
+    "pasteCleaner": "Paste Cleaner",
     "login": "ログイン",
     "getStarted": "始める"
   },
@@ -241,6 +246,18 @@
         "answer": "はい。Citation Auto-Pilot 機能を使うと、論文の各文を自動で分析し、引用が必要な箇所に候補論文を提案します。クリックするだけで \\cite{} コマンドと BibTeX エントリが自動生成されます。すべての引用論文は DOI/PMID で存在を検証済みです。"
       }
     ]
+  },
+  "pasteCleaner": {
+    "title": "Paste Cleaner",
+    "description": "PDFからコピーした論文テキストの不要な改行を整理します。段落の区切りは保持されます。",
+    "inputPlaceholder": "ここに論文テキストをペースト",
+    "outputPlaceholder": "整形後のテキストがここに表示されます",
+    "translateWithDeepL": "DeepLで翻訳",
+    "copyToClipboard": "クリップボードにコピー",
+    "copied": "コピーしました",
+    "ctaTitle": "もっと便利な論文執筆を体験しませんか？",
+    "ctaDescription": "Unmute AI は引用管理、ジャーナルスタイル対応、AI執筆支援を備えた論文執筆プラットフォームです。",
+    "ctaButton": "無料で始める"
   },
   "common": {
     "loading": "読み込み中...",
